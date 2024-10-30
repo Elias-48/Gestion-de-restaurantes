@@ -39,16 +39,46 @@ public class MENU_PRICIPAL extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         btnCliente.setText("CLIENTES");
+        btnCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnClienteActionPerformed(evt);
+            }
+        });
 
         btnMenu.setText("MENU PLATOS");
+        btnMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMenuActionPerformed(evt);
+            }
+        });
 
         btnPedidos.setText("INGRESO PEDIDOS");
+        btnPedidos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPedidosActionPerformed(evt);
+            }
+        });
 
         btnEmpleados.setText("INFORMACION EMPLEADOS");
+        btnEmpleados.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEmpleadosActionPerformed(evt);
+            }
+        });
 
         btnFactura.setText("FACTURA");
+        btnFactura.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFacturaActionPerformed(evt);
+            }
+        });
 
         btnSalir.setText("SALIR");
+        btnSalir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSalirActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -57,41 +87,83 @@ public class MENU_PRICIPAL extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(50, 50, 50)
-                        .addComponent(btnEmpleados)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnFactura))
+                        .addGap(31, 31, 31)
+                        .addComponent(btnSalir))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(11, 11, 11)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnSalir)
+                        .addGap(29, 29, 29)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(btnEmpleados)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(btnCliente)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnMenu)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(btnPedidos)))))
-                .addContainerGap(52, Short.MAX_VALUE))
+                                .addGap(18, 18, 18)
+                                .addComponent(btnMenu)))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnPedidos)
+                            .addComponent(btnFactura))))
+                .addContainerGap(16, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(62, 62, 62)
+                .addContainerGap(118, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnCliente)
+                    .addComponent(btnPedidos)
                     .addComponent(btnMenu)
-                    .addComponent(btnPedidos))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addComponent(btnCliente))
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnEmpleados)
                     .addComponent(btnFactura))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 103, Short.MAX_VALUE)
+                .addGap(51, 51, 51)
                 .addComponent(btnSalir)
-                .addGap(54, 54, 54))
+                .addGap(44, 44, 44))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClienteActionPerformed
+        REGISTRO_CLIENTES mREGISTRO_CLIENTES = new REGISTRO_CLIENTES();
+        mREGISTRO_CLIENTES.setVisible(true);
+        mREGISTRO_CLIENTES.setLocationRelativeTo(null);
+                this.dispose();
+    }//GEN-LAST:event_btnClienteActionPerformed
+
+    private void btnMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuActionPerformed
+        MENÚ_PLATOS mMENÚ_PLATOS = new MENÚ_PLATOS();
+        mMENÚ_PLATOS.setVisible(true);
+        mMENÚ_PLATOS.setLocationRelativeTo(null);
+                this.dispose();
+    }//GEN-LAST:event_btnMenuActionPerformed
+
+    private void btnPedidosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPedidosActionPerformed
+        INGRESO_PEDIDOS mINGRESO_PEDIDOS = new INGRESO_PEDIDOS();
+        mINGRESO_PEDIDOS.setVisible(true);
+        mINGRESO_PEDIDOS.setLocationRelativeTo(null);
+                this.dispose();
+    }//GEN-LAST:event_btnPedidosActionPerformed
+
+    private void btnEmpleadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEmpleadosActionPerformed
+        INFORMACION_EMPLEADO mINFORMACIO_EMPLEADO = new INFORMACION_EMPLEADO();
+        mINFORMACIO_EMPLEADO.setVisible(true);
+        mINFORMACIO_EMPLEADO.setLocationRelativeTo(null);
+                this.dispose();
+    }//GEN-LAST:event_btnEmpleadosActionPerformed
+
+    private void btnFacturaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFacturaActionPerformed
+        FACTURA mFACTURA = new FACTURA();
+        mFACTURA.setVisible(true);
+        mFACTURA.setLocationRelativeTo(null);
+                this.dispose();
+    }//GEN-LAST:event_btnFacturaActionPerformed
+
+    private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
+        LOGIN mLOGIN = new LOGIN();
+        mLOGIN.setVisible(true);
+        mLOGIN.setLocationRelativeTo(null);
+                this.dispose();
+    }//GEN-LAST:event_btnSalirActionPerformed
 
     /**
      * @param args the command line arguments

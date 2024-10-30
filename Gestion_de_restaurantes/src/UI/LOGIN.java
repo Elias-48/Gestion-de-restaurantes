@@ -4,6 +4,8 @@
  */
 package UI;
 
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Usuario
@@ -15,6 +17,7 @@ public class LOGIN extends javax.swing.JFrame {
      */
     public LOGIN() {
         initComponents();
+        setLocationRelativeTo(null);
     }
 
     /**
@@ -51,6 +54,11 @@ public class LOGIN extends javax.swing.JFrame {
         });
 
         btnIngresar.setText("INGRESAR");
+        btnIngresar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnIngresarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -94,6 +102,20 @@ public class LOGIN extends javax.swing.JFrame {
     private void txtContraseñaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtContraseñaActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtContraseñaActionPerformed
+
+    private void btnIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIngresarActionPerformed
+        String nombre = txtUsuario.getText();
+        String contra = txtContraseña.getText();
+
+        if ((nombre.equals("Administrador")) && (contra.equals("admin"))) {
+            MENU_PRICIPAL mMENU_PRICIPAL = new MENU_PRICIPAL();
+            mMENU_PRICIPAL.setVisible(true);
+            mMENU_PRICIPAL.setLocationRelativeTo(null);
+                this.dispose();
+        }else {
+            JOptionPane.showMessageDialog(null, "Usuario o Contraseña incorrecta, verifique nuevamente.");
+        }
+    }//GEN-LAST:event_btnIngresarActionPerformed
 
     /**
      * @param args the command line arguments

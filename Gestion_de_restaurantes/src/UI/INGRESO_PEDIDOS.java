@@ -4,17 +4,25 @@
  */
 package UI;
 
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author Usuario
  */
 public class INGRESO_PEDIDOS extends javax.swing.JFrame {
-
+    DefaultTableModel modeloTabla=new DefaultTableModel();
     /**
      * Creates new form INGRESO_PEDIDOS
      */
     public INGRESO_PEDIDOS() {
         initComponents();
+        modeloTabla.addColumn("MESA");
+        modeloTabla.addColumn("CODIGOPLATO");
+        modeloTabla.addColumn("CANTIDAD");
+        modeloTabla.addColumn("DETALLE");
+        TablaIngresoDePedidos.setModel(modeloTabla);
     }
 
     /**
@@ -28,27 +36,28 @@ public class INGRESO_PEDIDOS extends javax.swing.JFrame {
 
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        TablaIngresoDePedidos = new javax.swing.JTable();
         jLabel2 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        jComboBoxNumDeMesa = new javax.swing.JComboBox<>();
         jLabel3 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        txtCodigoDelPlato = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
+        txtNumDePlato = new javax.swing.JTextField();
+        btnRegistrar = new javax.swing.JButton();
+        btnAgregar = new javax.swing.JButton();
+        btnEliminar = new javax.swing.JButton();
+        btnNuevoPedido = new javax.swing.JButton();
+        btnEditar = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        TextAreaDetalleDelPlato = new javax.swing.JTextArea();
+        btnSalir = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel1.setText("INGRESO DE PEDIDOS");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        TablaIngresoDePedidos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -59,36 +68,63 @@ public class INGRESO_PEDIDOS extends javax.swing.JFrame {
                 "MESA", "CODIGO DEL PLATO", "CANTIDAD", "DETALLE"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(TablaIngresoDePedidos);
 
         jLabel2.setText("N° MESA:");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "SIN MESA", "MESA 1", "MESA 2", "MESA 3", "MESA 4", "MESA 5", "MESA 6" }));
+        jComboBoxNumDeMesa.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "SIN MESA", "MESA 1", "MESA 2", "MESA 3", "MESA 4", "MESA 5", "MESA 6" }));
 
         jLabel3.setText("CÓDIGO DEL PLATO:");
 
         jLabel4.setText("N° PLATOS:");
 
-        jButton1.setText("REGISTRAR");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnRegistrar.setText("REGISTRAR");
+        btnRegistrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnRegistrarActionPerformed(evt);
             }
         });
 
-        jButton2.setText("AGREGAR");
+        btnAgregar.setText("AGREGAR");
+        btnAgregar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgregarActionPerformed(evt);
+            }
+        });
 
-        jButton3.setText("ELIMINAR");
+        btnEliminar.setText("ELIMINAR");
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarActionPerformed(evt);
+            }
+        });
 
-        jButton4.setText("NUEVO PEDIDO");
+        btnNuevoPedido.setText("NUEVO PEDIDO");
+        btnNuevoPedido.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNuevoPedidoActionPerformed(evt);
+            }
+        });
 
-        jButton5.setText("EDITAR");
+        btnEditar.setText("EDITAR");
+        btnEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditarActionPerformed(evt);
+            }
+        });
 
         jLabel5.setText("DETALLES DEL PEDIDO(opcional):");
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane2.setViewportView(jTextArea1);
+        TextAreaDetalleDelPlato.setColumns(20);
+        TextAreaDetalleDelPlato.setRows(5);
+        jScrollPane2.setViewportView(TextAreaDetalleDelPlato);
+
+        btnSalir.setText("SALIR");
+        btnSalir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSalirActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -104,34 +140,40 @@ public class INGRESO_PEDIDOS extends javax.swing.JFrame {
                                 .addComponent(jLabel5)
                                 .addGap(0, 0, Short.MAX_VALUE))
                             .addComponent(jScrollPane2))
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton5)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton3))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(50, 50, 50)
+                                .addComponent(btnSalir)
+                                .addGap(53, 53, 53))
+                            .addGroup(layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnEditar)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnEliminar))))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jLabel1)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel2)
                                 .addGap(67, 67, 67)
-                                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jComboBoxNumDeMesa, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel3)
                                     .addComponent(jLabel4))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jTextField1)
-                                    .addComponent(jTextField2))))
+                                    .addComponent(txtCodigoDelPlato)
+                                    .addComponent(txtNumDePlato))))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jButton2)
-                                    .addComponent(jButton1))
+                                    .addComponent(btnAgregar)
+                                    .addComponent(btnRegistrar))
                                 .addGap(36, 36, 36))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(jButton4)
+                                .addComponent(btnNuevoPedido)
                                 .addGap(25, 25, 25)))))
                 .addContainerGap())
         );
@@ -145,23 +187,21 @@ public class INGRESO_PEDIDOS extends javax.swing.JFrame {
                         .addGap(13, 13, 13)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel2)
-                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel3)
-                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jButton2))
-                        .addGap(1, 1, 1)
+                            .addComponent(jComboBoxNumDeMesa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(11, 11, 11)
-                                .addComponent(jLabel4))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnAgregar))
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(17, 17, 17)
+                                .addGap(13, 13, 13)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jButton4))))
+                                    .addComponent(txtCodigoDelPlato, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel3))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(btnNuevoPedido)
+                                    .addComponent(jLabel4)
+                                    .addComponent(txtNumDePlato, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jLabel5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
@@ -170,23 +210,80 @@ public class INGRESO_PEDIDOS extends javax.swing.JFrame {
                                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(jButton5)
-                                .addComponent(jButton3)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(15, 15, 15)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(btnEditar)
+                                    .addComponent(btnEliminar))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnSalir)))
                         .addContainerGap())
                     .addGroup(layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton1)
+                        .addComponent(btnRegistrar)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
+        JOptionPane.showMessageDialog(this, "Pedido registrado con éxito.");
+    }//GEN-LAST:event_btnRegistrarActionPerformed
 
+    private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
+        MENU_PRICIPAL mMENU_PRICIPAL = new MENU_PRICIPAL();
+        mMENU_PRICIPAL.setVisible(true);
+        mMENU_PRICIPAL.setLocationRelativeTo(null);
+                this.dispose();
+    }//GEN-LAST:event_btnSalirActionPerformed
+
+    private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
+        String mesa = jComboBoxNumDeMesa.getSelectedItem().toString();
+        String codigoPlato = txtCodigoDelPlato.getText();
+        String cantidad = txtNumDePlato.getText();
+        String detalle = TextAreaDetalleDelPlato.getText();
+
+        // Agregar la fila a la tabla
+        modeloTabla.addRow(new Object[]{mesa, codigoPlato, cantidad, detalle});
+        
+        // Limpiar campos después de agregar
+        limpiarCampos();
+    }//GEN-LAST:event_btnAgregarActionPerformed
+
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+        int filaSeleccionada = TablaIngresoDePedidos.getSelectedRow();
+        if (filaSeleccionada != -1) {
+            modeloTabla.removeRow(filaSeleccionada);
+        } else {
+            // Mostrar mensaje de error o advertencia
+            javax.swing.JOptionPane.showMessageDialog(this, "Selecciona una fila para eliminar.");
+        }
+    }//GEN-LAST:event_btnEliminarActionPerformed
+
+    private void btnNuevoPedidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoPedidoActionPerformed
+        limpiarCampos();
+    }//GEN-LAST:event_btnNuevoPedidoActionPerformed
+
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+        int filaSeleccionada = TablaIngresoDePedidos.getSelectedRow();
+        if (filaSeleccionada != -1) {
+            // Actualizar los datos en la fila seleccionada
+            modeloTabla.setValueAt(jComboBoxNumDeMesa.getSelectedItem().toString(), filaSeleccionada, 0);
+            modeloTabla.setValueAt(txtCodigoDelPlato.getText(), filaSeleccionada, 1);
+            modeloTabla.setValueAt(txtNumDePlato.getText(), filaSeleccionada, 2);
+            modeloTabla.setValueAt(TextAreaDetalleDelPlato.getText(), filaSeleccionada, 3);
+        } else {
+            // Mostrar mensaje de error o advertencia
+            javax.swing.JOptionPane.showMessageDialog(this, "Selecciona una fila para editar.");
+        }
+    }//GEN-LAST:event_btnEditarActionPerformed
+    private void limpiarCampos() {
+        jComboBoxNumDeMesa.setSelectedIndex(0);
+        txtCodigoDelPlato.setText("");
+        txtNumDePlato.setText("");
+        TextAreaDetalleDelPlato.setText("");
+    }
     /**
      * @param args the command line arguments
      */
@@ -223,12 +320,15 @@ public class INGRESO_PEDIDOS extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JTable TablaIngresoDePedidos;
+    private javax.swing.JTextArea TextAreaDetalleDelPlato;
+    private javax.swing.JButton btnAgregar;
+    private javax.swing.JButton btnEditar;
+    private javax.swing.JButton btnEliminar;
+    private javax.swing.JButton btnNuevoPedido;
+    private javax.swing.JButton btnRegistrar;
+    private javax.swing.JButton btnSalir;
+    private javax.swing.JComboBox<String> jComboBoxNumDeMesa;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -236,9 +336,7 @@ public class INGRESO_PEDIDOS extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
+    private javax.swing.JTextField txtCodigoDelPlato;
+    private javax.swing.JTextField txtNumDePlato;
     // End of variables declaration//GEN-END:variables
 }

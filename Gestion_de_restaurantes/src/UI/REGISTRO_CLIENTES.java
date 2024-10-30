@@ -4,17 +4,27 @@
  */
 package UI;
 
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author Usuario
  */
 public class REGISTRO_CLIENTES extends javax.swing.JFrame {
-
+    DefaultTableModel model=new DefaultTableModel();
     /**
      * Creates new form REGISTRO_CLIENTES
      */
     public REGISTRO_CLIENTES() {
         initComponents();
+        model.addColumn("NOMBRE");
+        model.addColumn("DIRECCIÓN");
+        model.addColumn("TELÉFONO");
+        model.addColumn("MESA RESERVADA");
+        model.addColumn("N° ASIENTOS");
+        model.addColumn("FECHA RESERVADA");
+        TablaDeRegistro.setModel(model);
     }
 
     /**
@@ -29,25 +39,26 @@ public class REGISTRO_CLIENTES extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        TablaDeRegistro = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        btnNuevoCliente = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
-        txtCliente = new javax.swing.JTextField();
+        txtNombreCliente = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         txtDireccion = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         txtTelefono = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        jComboBoxNumDeMesa = new javax.swing.JComboBox<>();
         jLabel6 = new javax.swing.JLabel();
-        jComboBox2 = new javax.swing.JComboBox<>();
+        jComboBoxNumDeAsientos = new javax.swing.JComboBox<>();
         btnAgregar = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
         txtFecha = new javax.swing.JTextField();
         btnRegistrar = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        btnEditar = new javax.swing.JButton();
+        btnEliminar = new javax.swing.JButton();
+        btnSalir = new javax.swing.JButton();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -64,7 +75,7 @@ public class REGISTRO_CLIENTES extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        TablaDeRegistro.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null},
                 {null, null, null, null, null, null},
@@ -75,11 +86,16 @@ public class REGISTRO_CLIENTES extends javax.swing.JFrame {
                 "NOMBRE", "DIRECCIÓN", "TELÉFONO", "MESA RESERVADA", "N° ASIENTOS", "FECHA RESERVADA"
             }
         ));
-        jScrollPane2.setViewportView(jTable2);
+        jScrollPane2.setViewportView(TablaDeRegistro);
 
         jLabel1.setText("REGISTRO DE CLIENTES");
 
-        jButton1.setText("NUEVO CLIENTE");
+        btnNuevoCliente.setText("NUEVO CLIENTE");
+        btnNuevoCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNuevoClienteActionPerformed(evt);
+            }
+        });
 
         jLabel2.setText("NOMBRE DEL CLIENTE:");
 
@@ -95,26 +111,48 @@ public class REGISTRO_CLIENTES extends javax.swing.JFrame {
 
         jLabel5.setText("RESERVA DE MESA:");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "SIN MESA", "MESA 1", "MESA 2", "MESA 3", "MESA 4", "MESA 5", "MESA 6" }));
+        jComboBoxNumDeMesa.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "SIN MESA", "MESA 1", "MESA 2", "MESA 3", "MESA 4", "MESA 5", "MESA 6" }));
 
         jLabel6.setText("N° ASIENTOS:");
 
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "SIN ASIENTOS", "1", "2", "3", "4", "5", "6", "7", "8" }));
+        jComboBoxNumDeAsientos.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "SIN ASIENTOS", "1", "2", "3", "4", "5", "6", "7", "8" }));
 
         btnAgregar.setText("AGREGAR");
+        btnAgregar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgregarActionPerformed(evt);
+            }
+        });
 
         jLabel7.setText("FECHA DE RESERVA:");
 
         btnRegistrar.setText("REGISTRAR");
-
-        jButton2.setText("EDITAR");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        btnRegistrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                btnRegistrarActionPerformed(evt);
             }
         });
 
-        jButton3.setText("ELIMINAR");
+        btnEditar.setText("EDITAR");
+        btnEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditarActionPerformed(evt);
+            }
+        });
+
+        btnEliminar.setText("ELIMINAR");
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarActionPerformed(evt);
+            }
+        });
+
+        btnSalir.setText("SALIR");
+        btnSalir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSalirActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -151,30 +189,36 @@ public class REGISTRO_CLIENTES extends javax.swing.JFrame {
                                 .addComponent(jLabel7)
                                 .addGap(26, 26, 26)))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtCliente)
+                            .addComponent(txtNombreCliente)
                             .addComponent(txtDireccion)
                             .addComponent(txtTelefono)
-                            .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jComboBox2, 0, 174, Short.MAX_VALUE)
+                            .addComponent(jComboBoxNumDeMesa, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jComboBoxNumDeAsientos, 0, 174, Short.MAX_VALUE)
                             .addComponent(txtFecha))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(jButton2)
+                                .addComponent(btnEditar)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton3)
+                                .addComponent(btnEliminar)
                                 .addGap(19, 19, 19))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(jButton1)
-                                .addGap(32, 32, 32))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(btnRegistrar)
                                     .addComponent(btnAgregar))
-                                .addGap(51, 51, 51))))))
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 675, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                                .addGap(51, 51, 51))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(btnNuevoCliente)
+                                .addGap(32, 32, 32))))))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(btnSalir)
+                        .addGap(54, 54, 54))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 675, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -186,7 +230,7 @@ public class REGISTRO_CLIENTES extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel2)
-                            .addComponent(txtCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtNombreCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnRegistrar))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -197,23 +241,25 @@ public class REGISTRO_CLIENTES extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel4)
                             .addComponent(txtTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton2)
-                            .addComponent(jButton3))
+                            .addComponent(btnEditar)
+                            .addComponent(btnEliminar))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jLabel5))
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jComboBoxNumDeMesa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
-                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jComboBoxNumDeAsientos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel7)
-                    .addComponent(txtFecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 54, Short.MAX_VALUE)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnNuevoCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel7)
+                        .addComponent(txtFecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnSalir)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         pack();
@@ -223,10 +269,81 @@ public class REGISTRO_CLIENTES extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtDireccionActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+        // Escoger una fila de la tabla para luego escribir en los campos y poder editar despues
+        int filaSeleccionada = TablaDeRegistro.getSelectedRow();
 
+        if (filaSeleccionada >= 0) {
+            // Cambiar los valores de la tabla segun su enumeracion
+            model.setValueAt(txtNombreCliente.getText(), filaSeleccionada, 0);
+            model.setValueAt(txtDireccion.getText(), filaSeleccionada, 1);
+            model.setValueAt(txtTelefono.getText(), filaSeleccionada, 2);
+            model.setValueAt(jComboBoxNumDeMesa.getSelectedItem(), filaSeleccionada, 3);
+            model.setValueAt(jComboBoxNumDeAsientos.getSelectedItem(), filaSeleccionada, 4);
+            model.setValueAt(txtFecha.getText(), filaSeleccionada, 5);
+            JOptionPane.showMessageDialog(this, "Registro editado correctamente.");
+        } else {
+            JOptionPane.showMessageDialog(this, "Por favor, seleccione una fila para editar.");
+        }
+    }//GEN-LAST:event_btnEditarActionPerformed
+
+    private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
+        //Es para salir del formulario e ir a otro, todo centrado y que se elimine este
+        MENU_PRICIPAL mMENU_PRICIPAL = new MENU_PRICIPAL();
+        mMENU_PRICIPAL.setVisible(true);
+        mMENU_PRICIPAL.setLocationRelativeTo(null);
+                this.dispose();
+    }//GEN-LAST:event_btnSalirActionPerformed
+
+    private void btnNuevoClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoClienteActionPerformed
+        limpiarCampos();
+    }//GEN-LAST:event_btnNuevoClienteActionPerformed
+
+    private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
+        //Se esta declarando una variable para poder almacenarlos y asi pueda ser valido
+        String nombre = txtNombreCliente.getText();
+        String direccion = txtDireccion.getText();
+        String telefono = txtTelefono.getText();
+        String mesaReservada = (String) jComboBoxNumDeMesa.getSelectedItem();
+        String numeroAsientos = (String) jComboBoxNumDeAsientos.getSelectedItem();
+        String fecha = txtFecha.getText();
+
+        // Para validar que los campos no esten vacios
+        if (nombre.isEmpty() || direccion.isEmpty() || telefono.isEmpty() || mesaReservada.equals("SIN MESA") || numeroAsientos.equals("SIN ASIENTOS") || fecha.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Por favor, complete todos los campos.");
+        } else {
+            // Si todo esta correcto se agrega automaticamente en la tabla
+            model.addRow(new Object[]{nombre, direccion, telefono, mesaReservada, numeroAsientos, fecha});
+            limpiarCampos();
+        }
+    }//GEN-LAST:event_btnAgregarActionPerformed
+
+    private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
+        //No se necesita mucho codigo porque con la palabra this hace referencia al contexto actual
+        JOptionPane.showMessageDialog(this, "Cliente registrado con éxito.");
+    }//GEN-LAST:event_btnRegistrarActionPerformed
+
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+        //Seleccionamos la fila que se quiera eliminar
+        int filaSeleccionada = TablaDeRegistro.getSelectedRow();
+
+        if (filaSeleccionada >= 0) {
+            // Eliminar la fila de la tabla
+            model.removeRow(filaSeleccionada);
+            JOptionPane.showMessageDialog(this, "Registro eliminado correctamente.");
+        } else {
+            JOptionPane.showMessageDialog(this, "Por favor, seleccione una fila para eliminar.");
+        }
+    }//GEN-LAST:event_btnEliminarActionPerformed
+    private void limpiarCampos() {
+        //Limpiar textos y combobox
+        txtNombreCliente.setText("");
+        txtDireccion.setText("");
+        txtTelefono.setText("");
+        jComboBoxNumDeMesa.setSelectedIndex(0);
+        jComboBoxNumDeAsientos.setSelectedIndex(0);
+        txtFecha.setText("");
+    }
     /**
      * @param args the command line arguments
      */
@@ -263,13 +380,15 @@ public class REGISTRO_CLIENTES extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTable TablaDeRegistro;
     private javax.swing.JButton btnAgregar;
+    private javax.swing.JButton btnEditar;
+    private javax.swing.JButton btnEliminar;
+    private javax.swing.JButton btnNuevoCliente;
     private javax.swing.JButton btnRegistrar;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox2;
+    private javax.swing.JButton btnSalir;
+    private javax.swing.JComboBox<String> jComboBoxNumDeAsientos;
+    private javax.swing.JComboBox<String> jComboBoxNumDeMesa;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -280,10 +399,9 @@ public class REGISTRO_CLIENTES extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable2;
-    private javax.swing.JTextField txtCliente;
     private javax.swing.JTextField txtDireccion;
     private javax.swing.JTextField txtFecha;
+    private javax.swing.JTextField txtNombreCliente;
     private javax.swing.JTextField txtTelefono;
     // End of variables declaration//GEN-END:variables
 }
