@@ -3,18 +3,23 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package UI;
-
+import java.util.HashSet;
+import java.util.HashMap;
 /**
  *
  * @author Usuario
  */
 public class COMPROBANTE extends javax.swing.JFrame {
 
+    private HashSet<String> detallesComprobante;
+    private HashMap<String, Double> productosPrecio;
     /**
      * Creates new form COMPROBANTE
      */
     public COMPROBANTE() {
         initComponents();
+        detallesComprobante = new HashSet<>();
+        productosPrecio = new HashMap<>();
     }
 
     /**
@@ -140,6 +145,22 @@ public class COMPROBANTE extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
+        // Agregar detalles al HashSet
+        detallesComprobante.add("Detalle 1");
+        detallesComprobante.add("Detalle 2");
+
+        // Mostrar los detalles en el TextArea
+        for (String detalle : detallesComprobante) {
+            TextAreaComprobante.append(detalle + "\n");
+        }
+        // Agregar productos y precios al HashMap
+        productosPrecio.put("Producto A", 10.50);
+        productosPrecio.put("Producto B", 20.75);
+
+        // Mostrar los productos y precios en el TextArea
+        for (String producto : productosPrecio.keySet()) {
+            TextAreaComprobante.append(producto + ": " + productosPrecio.get(producto) + "\n");
+        }
         FACTURA mFACTURA = new FACTURA();
         mFACTURA.setVisible(true);
         mFACTURA.setLocationRelativeTo(null);
