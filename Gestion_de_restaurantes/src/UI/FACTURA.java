@@ -6,7 +6,9 @@ package UI;
 
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-
+import java.io.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 /**
  *
  * @author Usuario
@@ -18,12 +20,24 @@ public class FACTURA extends javax.swing.JFrame {
      */
     public FACTURA() {
         initComponents();
-        modelo2.addColumn("IDFACTURA");
-        modelo2.addColumn("NUMERODEMESA");
-        modelo2.addColumn("NOMBRECLIENTE");
-        modelo2.addColumn("FECHARESERVADA");
-        modelo2.addColumn("PRECIOTOTAL");
+        modelo2.addColumn("ID FACTURA");
+        modelo2.addColumn("ID CLIENTE");
+        modelo2.addColumn("NOMBRE CLIENTE");
+        modelo2.addColumn("FECHA RESERVADA");
+        modelo2.addColumn("PRECIO TOTAL");
         TablaFactura.setModel(modelo2);
+        cargarFacturasDesdeCSV();
+        // Agregar el evento para detectar clics en las filas
+        TablaFactura.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                int filaSeleccionada = TablaFactura.getSelectedRow();
+                if (filaSeleccionada >= 0) {
+                    // Obtener los valores de la fila seleccionada y colocarlos en los campos de texto
+                    txtIDFactura.setText(modelo2.getValueAt(filaSeleccionada, 0).toString());
+                    txtIdCliente.setText(modelo2.getValueAt(filaSeleccionada, 1).toString());
+                }
+            }
+        });
     }
 
     /**
@@ -38,15 +52,16 @@ public class FACTURA extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jComboBoxNumDeMesa = new javax.swing.JComboBox<>();
         jScrollPane2 = new javax.swing.JScrollPane();
         TablaFactura = new javax.swing.JTable();
         txtIDFactura = new javax.swing.JTextField();
         btnRegistrar = new javax.swing.JButton();
         btnMostrar = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        btnGenerarComprobante = new javax.swing.JButton();
         btnSalir = new javax.swing.JButton();
         btnNuevoComprobante = new javax.swing.JButton();
+        btnEliminar = new javax.swing.JButton();
+        txtIdCliente = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -54,9 +69,7 @@ public class FACTURA extends javax.swing.JFrame {
 
         jLabel2.setText("ID FACTURA:");
 
-        jLabel3.setText("N° DE MESA:");
-
-        jComboBoxNumDeMesa.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "SIN MESA", "MESA 1", "MESA 2", "MESA 3", "MESA 4", "MESA 5", "MESA 6" }));
+        jLabel3.setText("ID CLIENTE");
 
         TablaFactura.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -66,7 +79,7 @@ public class FACTURA extends javax.swing.JFrame {
                 {null, null, null, null, null}
             },
             new String [] {
-                "ID FACTURA", "MESA RESERVADA", "NOMBRE", "FECHA RESERVADA", "Precio Total"
+                "ID FACTURA", "ID CLIENTE", "NOMBRE", "FECHA RESERVADA", "PRECIO TOTAL"
             }
         ));
         jScrollPane2.setViewportView(TablaFactura);
@@ -85,10 +98,10 @@ public class FACTURA extends javax.swing.JFrame {
             }
         });
 
-        jButton3.setText("GENERAR COMPROBANTE");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        btnGenerarComprobante.setText("GENERAR COMPROBANTE");
+        btnGenerarComprobante.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                btnGenerarComprobanteActionPerformed(evt);
             }
         });
 
@@ -106,6 +119,19 @@ public class FACTURA extends javax.swing.JFrame {
             }
         });
 
+        btnEliminar.setText("ELIMINAR");
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarActionPerformed(evt);
+            }
+        });
+
+        txtIdCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtIdClienteActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -114,78 +140,105 @@ public class FACTURA extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 675, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel1)
-                                .addGap(423, 423, 423)
-                                .addComponent(btnRegistrar)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnMostrar)))
-                        .addContainerGap(20, Short.MAX_VALUE))
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 658, Short.MAX_VALUE)
+                        .addContainerGap())
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel2)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(txtIDFactura))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                .addComponent(jLabel3)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jComboBoxNumDeMesa, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addComponent(jLabel2)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel3)
+                                        .addGap(21, 21, 21)))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(txtIDFactura, javax.swing.GroupLayout.DEFAULT_SIZE, 163, Short.MAX_VALUE)
+                                    .addComponent(txtIdCliente)))
+                            .addComponent(jLabel1))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton3)
-                            .addComponent(btnNuevoComprobante))
-                        .addGap(39, 39, 39))))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnSalir)
-                .addGap(92, 92, 92))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(btnRegistrar)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnMostrar)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnEliminar)
+                                .addGap(22, 22, 22))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(btnSalir)
+                                .addGap(122, 122, 122))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(12, 12, 12)
+                                        .addComponent(btnNuevoComprobante))
+                                    .addComponent(btnGenerarComprobante, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(68, 68, 68))))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(btnMostrar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnRegistrar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(12, 12, 12)
-                        .addComponent(btnNuevoComprobante)
-                        .addGap(6, 6, 6))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addGap(21, 21, 21)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel2)
                             .addComponent(txtIDFactura, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
+                        .addGap(18, 18, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel3)
-                            .addComponent(jComboBoxNumDeMesa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(33, 33, 33))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jButton3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(txtIdCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(30, 30, 30))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(6, 6, 6)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnMostrar)
+                            .addComponent(btnRegistrar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnEliminar))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnNuevoComprobante)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnGenerarComprobante)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnSalir)
-                        .addGap(6, 6, 6)))
+                        .addGap(14, 14, 14)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(20, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void btnGenerarComprobanteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarComprobanteActionPerformed
+        // Verificar si se ha seleccionado una fila
+    int filaSeleccionada = TablaFactura.getSelectedRow();
+    
+    if (filaSeleccionada == -1) {
+        // Si no hay fila seleccionada, mostrar un mensaje de error
+        JOptionPane.showMessageDialog(this, "Por favor, seleccione una fila de la tabla para generar el comprobante.");
+    } else {
+        // Crear instancia de COMPROBANTE
         COMPROBANTE mCOMPROBANTE = new COMPROBANTE();
+        // Mostrar el JFrame Comprobante
         mCOMPROBANTE.setVisible(true);
         mCOMPROBANTE.setLocationRelativeTo(null);
-                this.dispose();
-    }//GEN-LAST:event_jButton3ActionPerformed
+                this.dispose(); // Cerrar la ventana actual si es necesario
+        // Recopilar datos de la fila seleccionada
+        StringBuilder sb = new StringBuilder();
+        
+        sb.append("Factura N°: ").append(TablaFactura.getValueAt(filaSeleccionada, 0)).append("\n");
+        sb.append("Nombre Cliente: ").append(TablaFactura.getValueAt(filaSeleccionada, 2)).append("\n");
+        sb.append("Fecha Reservada: ").append(TablaFactura.getValueAt(filaSeleccionada, 3)).append("\n");
+        sb.append("Precio Total: ").append(TablaFactura.getValueAt(filaSeleccionada, 4)).append("\n");
+        sb.append("------------------------------\n");
+    // Pasar los datos al TextArea del JFrame Comprobante
+    mCOMPROBANTE.getTextAreaComprobante().setText(sb.toString());
+            }
+    }//GEN-LAST:event_btnGenerarComprobanteActionPerformed
 
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
         MENU_PRICIPAL mMENU_PRICIPAL = new MENU_PRICIPAL();
@@ -195,16 +248,29 @@ public class FACTURA extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSalirActionPerformed
 
     private void btnMostrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMostrarActionPerformed
-        String id = txtIDFactura.getText();
-        String mesa = jComboBoxNumDeMesa.getSelectedItem().toString();
-        
+        String idfactura = txtIDFactura.getText();
+        String idcliente = txtIdCliente.getText();
 
-        if (id.isEmpty() || mesa.equals("SIN MESA")) {
+        if (idfactura.isEmpty() || idcliente.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Por favor, complete todos los campos.");
         } else {
-            modelo2.addRow(new Object[]{id, mesa});
-            limpiarCampos();
+            // Busca el nombre del cliente en el archivo CSV según el número de mesa
+        String[] clienteData = buscarClientePorIdCliente(idcliente);
+        if (clienteData != null) {
+            String nombreCliente = clienteData[0];
+            String fechaReservada = clienteData[1];
+            // Buscar el total del precio del cliente en la tabla Ingreso_Pedidos
+            double precioTotal = obtenerPrecioTotalPorCliente(idcliente);
+            
+            // Agrega los datos a la tabla, incluyendo el nombre, la fecha y el precio total
+            modelo2.addRow(new Object[]{idfactura, idcliente, nombreCliente, fechaReservada, precioTotal});
+            
+            // Guardar la tabla en el archivo CSV después de agregar los datos
+            guardarFacturaEnCSV();
+        } else {
+            JOptionPane.showMessageDialog(this, "No se encontró un cliente con ese ID.");
         }
+    }
     }//GEN-LAST:event_btnMostrarActionPerformed
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
@@ -214,9 +280,99 @@ public class FACTURA extends javax.swing.JFrame {
     private void btnNuevoComprobanteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoComprobanteActionPerformed
         limpiarCampos();
     }//GEN-LAST:event_btnNuevoComprobanteActionPerformed
+
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+        //Seleccionamos la fila que se quiera eliminar
+        int filaSeleccionada = TablaFactura.getSelectedRow();
+
+        if (filaSeleccionada >= 0) {
+            // Eliminar la fila de la tabla
+            modelo2.removeRow(filaSeleccionada);
+            JOptionPane.showMessageDialog(this, "Registro eliminado correctamente.");
+            guardarFacturaEnCSV();  // Guardar los cambios después de editar
+        } else {
+            JOptionPane.showMessageDialog(this, "Por favor, seleccione una fila para eliminar.");
+        }
+    }//GEN-LAST:event_btnEliminarActionPerformed
+
+    private void txtIdClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIdClienteActionPerformed
+        String Idcliente = txtIdCliente.getText();
+        String[] clienteData = buscarClientePorIdCliente(Idcliente);
+
+        if (clienteData != null) {
+        // Procesar la información del cliente
+        } else {
+        JOptionPane.showMessageDialog(this, "No se encontró un cliente con ese ID.");
+    }
+    }//GEN-LAST:event_txtIdClienteActionPerformed
+    private String[] buscarClientePorIdCliente(String Idcliente) {
+    String line;
+    try (BufferedReader br = new BufferedReader(new FileReader("clientes.csv"))) {
+        while ((line = br.readLine()) != null) {
+            String[] data = line.split(",");
+            // En el CSV, la posición 0 es el ID del Cliente, y el 1 es el nombre del cliente
+            if (data[0].equals(Idcliente)) {
+                return new String[]{data[1], data[5]}; // Retorna el nombre del cliente y la fecha
+            }
+        }
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+    return null; // Si no se encuentra el cliente
+}
+    
+    private double obtenerPrecioTotalPorCliente(String idcliente) {
+    double precioTotal = 0.0;
+    String line;
+    
+    try (BufferedReader br = new BufferedReader(new FileReader("Pedidos.csv"))) {
+        while ((line = br.readLine()) != null) {
+            String[] data = line.split(",");
+            
+            // El ID del cliente está en la posición 0 y el total del precio en la posición 6
+            if (data[0].equals(idcliente)) {
+                double totalPrecio = Double.parseDouble(data[6]);
+                precioTotal += totalPrecio; // Sumar el total del precio si hay más de un pedido
+            }
+        }
+    } catch (IOException e) {
+        e.printStackTrace();
+         }
+    
+    return precioTotal; // Devolver el total sumado
+    }
+    
+    private void guardarFacturaEnCSV() {
+        try (PrintWriter pw = new PrintWriter(new File("facturas.csv"))) {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < modelo2.getRowCount(); i++) {
+                for (int j = 0; j < modelo2.getColumnCount(); j++) {
+                    sb.append(modelo2.getValueAt(i, j).toString());
+                    sb.append(",");
+                }
+                sb.append("\n");
+            }
+            pw.write(sb.toString());
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    private void cargarFacturasDesdeCSV() {
+    String line;
+        try (BufferedReader br = new BufferedReader(new FileReader("facturas.csv"))) {
+            while ((line = br.readLine()) != null) {
+                String[] data = line.split(",");
+                modelo2.addRow(data);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+    }
+}
+    
     private void limpiarCampos() {
         txtIDFactura.setText("");
-        jComboBoxNumDeMesa.setSelectedIndex(0);  // Vuelve a "SIN MESA"
+        txtIdCliente.setText("");
     }
     /**
      * @param args the command line arguments
@@ -255,16 +411,17 @@ public class FACTURA extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable TablaFactura;
+    private javax.swing.JButton btnEliminar;
+    private javax.swing.JButton btnGenerarComprobante;
     private javax.swing.JButton btnMostrar;
     private javax.swing.JButton btnNuevoComprobante;
     private javax.swing.JButton btnRegistrar;
     private javax.swing.JButton btnSalir;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JComboBox<String> jComboBoxNumDeMesa;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextField txtIDFactura;
+    private javax.swing.JTextField txtIdCliente;
     // End of variables declaration//GEN-END:variables
 }

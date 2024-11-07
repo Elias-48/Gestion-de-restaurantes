@@ -9,7 +9,6 @@ package UI;
  * @author Usuario
  */
 public class MENU_PRICIPAL extends javax.swing.JFrame {
-
     /**
      * Creates new form MENU_PRICIPAL
      */
@@ -152,7 +151,7 @@ public class MENU_PRICIPAL extends javax.swing.JFrame {
     }//GEN-LAST:event_btnEmpleadosActionPerformed
 
     private void btnFacturaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFacturaActionPerformed
-        FACTURA mFACTURA = new FACTURA();
+        FACTURA mFACTURA = new FACTURA(); // Pasar la misma instancia
         mFACTURA.setVisible(true);
         mFACTURA.setLocationRelativeTo(null);
                 this.dispose();

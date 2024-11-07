@@ -6,6 +6,9 @@ package UI;
 
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import java.io.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 /**
  *
@@ -18,10 +21,25 @@ public class MENÚ_PLATOS extends javax.swing.JFrame {
      */
     public MENÚ_PLATOS() {
         initComponents();
-        modelo.addColumn("CODIGO");
-        modelo.addColumn("NOMBRE");
+        modelo.addColumn("ID");
+        modelo.addColumn("MENÚ");
+        modelo.addColumn("INGREDIENTES");
         modelo.addColumn("COSTO");
         TablaMenuPlato.setModel(modelo);
+        cargarMenuDesdeCSV();  // Carga los datos desde el archivo CSV al iniciar la ventana
+        // Agregar evento para seleccionar una fila y llenar los campos
+        TablaMenuPlato.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                int filaSeleccionada = TablaMenuPlato.getSelectedRow();
+                if (filaSeleccionada >= 0) {
+                    // Llenar los campos de texto con los valores de la fila seleccionada
+                    txtIdDelPlato.setText(modelo.getValueAt(filaSeleccionada, 0).toString());
+                    txtNombreDelPlato.setText(modelo.getValueAt(filaSeleccionada, 1).toString());
+                    jTextAreaIngredientes.setText(modelo.getValueAt(filaSeleccionada, 2).toString());
+                    txtPrecioDelPlato.setText(modelo.getValueAt(filaSeleccionada, 3).toString());
+                }
+            }
+        });
     }
 
     /**
@@ -37,9 +55,9 @@ public class MENÚ_PLATOS extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         txtNombreDelPlato = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        txtCodigoDelPlato = new javax.swing.JTextField();
+        txtIdDelPlato = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
-        btnPrecioDelPlato = new javax.swing.JTextField();
+        txtPrecioDelPlato = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         TablaMenuPlato = new javax.swing.JTable();
         btnRegistrar = new javax.swing.JButton();
@@ -48,6 +66,9 @@ public class MENÚ_PLATOS extends javax.swing.JFrame {
         btnEditar = new javax.swing.JButton();
         btnEliminar = new javax.swing.JButton();
         btnSalir = new javax.swing.JButton();
+        jLabel5 = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTextAreaIngredientes = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -55,19 +76,19 @@ public class MENÚ_PLATOS extends javax.swing.JFrame {
 
         jLabel2.setText("NOMBRE DEL PLATO:");
 
-        jLabel3.setText("CÓDIGO:");
+        jLabel3.setText("ID PLATO:");
 
         jLabel4.setText("PRECIO:");
 
         TablaMenuPlato.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
             },
             new String [] {
-                "CÓDIGO", "NOMBRE", "COSTO"
+                "ID", "MENÚ", "INGREDIENTES", "COSTO"
             }
         ));
         jScrollPane1.setViewportView(TablaMenuPlato);
@@ -114,6 +135,12 @@ public class MENÚ_PLATOS extends javax.swing.JFrame {
             }
         });
 
+        jLabel5.setText("INGREDIENTES:");
+
+        jTextAreaIngredientes.setColumns(20);
+        jTextAreaIngredientes.setRows(5);
+        jScrollPane2.setViewportView(jTextAreaIngredientes);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -122,44 +149,43 @@ public class MENÚ_PLATOS extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 488, Short.MAX_VALUE)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 592, Short.MAX_VALUE)
                         .addContainerGap())
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel2)
-                                    .addComponent(jLabel3)
-                                    .addComponent(jLabel4))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(txtNombreDelPlato)
-                                    .addComponent(txtCodigoDelPlato)
-                                    .addComponent(btnPrecioDelPlato, javax.swing.GroupLayout.DEFAULT_SIZE, 183, Short.MAX_VALUE))))
+                            .addComponent(jLabel4))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(btnEditar)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(btnEliminar)
-                                        .addGap(0, 0, Short.MAX_VALUE))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                        .addGap(0, 0, Short.MAX_VALUE)
-                                        .addComponent(btnNuevoPlato)
-                                        .addGap(28, 28, 28))))
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel5))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(txtNombreDelPlato)
+                                .addComponent(txtIdDelPlato)
+                                .addComponent(txtPrecioDelPlato, javax.swing.GroupLayout.DEFAULT_SIZE, 183, Short.MAX_VALUE))
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(btnRegistrar)
-                                    .addComponent(btnAgregar))
-                                .addGap(49, 49, 49))))))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnSalir)
-                .addGap(44, 44, 44))
+                                .addComponent(btnEditar)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnEliminar))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(btnNuevoPlato)
+                                .addGap(41, 41, 41))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(btnSalir)
+                                .addGap(56, 56, 56))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(btnRegistrar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(btnAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(47, 47, 47)))
+                        .addGap(25, 25, 25))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -171,30 +197,34 @@ public class MENÚ_PLATOS extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel3)
-                            .addComponent(txtCodigoDelPlato, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(txtIdDelPlato, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(13, 13, 13)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel2)
                             .addComponent(txtNombreDelPlato, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel4)
-                            .addComponent(btnPrecioDelPlato, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel5)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(23, 23, 23)
+                        .addGap(72, 72, 72)
                         .addComponent(btnRegistrar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnAgregar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnEditar)
-                            .addComponent(btnEliminar))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnNuevoPlato)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnSalir)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 303, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnAgregar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnEliminar)
+                            .addComponent(btnEditar))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnNuevoPlato)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnSalir)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(txtPrecioDelPlato, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -213,16 +243,17 @@ public class MENÚ_PLATOS extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSalirActionPerformed
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
-        String codigo = txtCodigoDelPlato.getText();
+        String idplato = txtIdDelPlato.getText();
         String nombre = txtNombreDelPlato.getText();
-        String precio = btnPrecioDelPlato.getText();
+        String ingredientes = jTextAreaIngredientes.getText().replace("\n", " | ");
+        String precio = txtPrecioDelPlato.getText();
 
-        if (codigo.isEmpty() || nombre.isEmpty() || precio.isEmpty()) {
+        if (idplato.isEmpty() || nombre.isEmpty() || ingredientes.isEmpty() || precio.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Todos los campos deben estar completos");
         } else {
-            modelo.addRow(new Object[]{codigo, nombre, precio});
+            modelo.addRow(new Object[]{idplato, nombre, ingredientes, precio});
             JOptionPane.showMessageDialog(this, "Plato registrado con éxito");
-            limpiarCampos();
+            guardarMenuEnCSV();
         }
     }//GEN-LAST:event_btnAgregarActionPerformed
 
@@ -230,11 +261,12 @@ public class MENÚ_PLATOS extends javax.swing.JFrame {
         int filaSeleccionada = TablaMenuPlato.getSelectedRow();
 
         if (filaSeleccionada >= 0) {
-            modelo.setValueAt(txtCodigoDelPlato.getText(), filaSeleccionada, 0);
+            modelo.setValueAt(txtIdDelPlato.getText(), filaSeleccionada, 0);
             modelo.setValueAt(txtNombreDelPlato.getText(), filaSeleccionada, 1);
-            modelo.setValueAt(btnPrecioDelPlato.getText(), filaSeleccionada, 2);
+            modelo.setValueAt(jTextAreaIngredientes.getText(), filaSeleccionada, 2);
+            modelo.setValueAt(txtPrecioDelPlato.getText(), filaSeleccionada, 3);
+            guardarMenuEnCSV();
             JOptionPane.showMessageDialog(this, "Plato editado con éxito");
-            limpiarCampos();
         } else {
             JOptionPane.showMessageDialog(this, "Debe seleccionar un plato para editar");
         }
@@ -245,6 +277,7 @@ public class MENÚ_PLATOS extends javax.swing.JFrame {
 
         if (filaSeleccionada >= 0) {
             modelo.removeRow(filaSeleccionada);
+            guardarMenuEnCSV();
             JOptionPane.showMessageDialog(this, "Plato eliminado con éxito");
         } else {
             JOptionPane.showMessageDialog(this, "Debe seleccionar un plato para eliminar");
@@ -254,10 +287,45 @@ public class MENÚ_PLATOS extends javax.swing.JFrame {
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
         JOptionPane.showMessageDialog(this, "Plato registrado con éxito.");
     }//GEN-LAST:event_btnRegistrarActionPerformed
+    
+    private void guardarMenuEnCSV() {
+        try (PrintWriter pw = new PrintWriter(new File("Menu.csv"))) {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < modelo.getRowCount(); i++) {
+            for (int j = 0; j < modelo.getColumnCount(); j++) {
+                String value = modelo.getValueAt(i, j).toString();
+                if (j == 2) { // Para la columna de ingredientes (columna 2)
+                    value = value.replace("\n", " | ");  // Reemplazar saltos de línea por |
+                }
+                sb.append(value);
+                sb.append(",");
+            }
+            sb.append("\n");
+        }
+        pw.write(sb.toString());
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Método para cargar los datos desde un archivo CSV
+    private void cargarMenuDesdeCSV() {
+        String line;
+        try (BufferedReader br = new BufferedReader(new FileReader("Menu.csv"))) {
+            while ((line = br.readLine()) != null) {
+                String[] data = line.split(",");
+                modelo.addRow(data);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
     private void limpiarCampos() {
-        txtCodigoDelPlato.setText("");
+        txtIdDelPlato.setText("");
         txtNombreDelPlato.setText("");
-        btnPrecioDelPlato.setText("");
+        jTextAreaIngredientes.setText("");
+        txtPrecioDelPlato.setText("");
     }
     /**
      * @param args the command line arguments
@@ -300,15 +368,18 @@ public class MENÚ_PLATOS extends javax.swing.JFrame {
     private javax.swing.JButton btnEditar;
     private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnNuevoPlato;
-    private javax.swing.JTextField btnPrecioDelPlato;
     private javax.swing.JButton btnRegistrar;
     private javax.swing.JButton btnSalir;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField txtCodigoDelPlato;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTextArea jTextAreaIngredientes;
+    private javax.swing.JTextField txtIdDelPlato;
     private javax.swing.JTextField txtNombreDelPlato;
+    private javax.swing.JTextField txtPrecioDelPlato;
     // End of variables declaration//GEN-END:variables
 }

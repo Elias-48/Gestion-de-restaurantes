@@ -5,7 +5,13 @@
 package UI;
 
 import javax.swing.JOptionPane;
+import java.io.*;
 import javax.swing.table.DefaultTableModel;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  *
@@ -18,13 +24,41 @@ public class REGISTRO_CLIENTES extends javax.swing.JFrame {
      */
     public REGISTRO_CLIENTES() {
         initComponents();
+        model.addColumn("ID");
         model.addColumn("NOMBRE");
+        model.addColumn("GMAIL");
         model.addColumn("DIRECCIÓN");
         model.addColumn("TELÉFONO");
-        model.addColumn("MESA RESERVADA");
-        model.addColumn("N° ASIENTOS");
         model.addColumn("FECHA RESERVADA");
         TablaDeRegistro.setModel(model);
+        cargarDatosDesdeCSV();  // Cargar datos cuando se abre el JFrame
+        // Agregar el evento para detectar clics en las filas
+        TablaDeRegistro.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                int filaSeleccionada = TablaDeRegistro.getSelectedRow();
+                if (filaSeleccionada >= 0) {
+                    // Obtener los valores de la fila seleccionada y colocarlos en los campos de texto
+                    txtIdCLiente.setText(model.getValueAt(filaSeleccionada, 0).toString());
+                    txtNombreCliente.setText(model.getValueAt(filaSeleccionada, 1).toString());
+                    txtCorreo.setText(model.getValueAt(filaSeleccionada, 2).toString());
+                    txtDireccion.setText(model.getValueAt(filaSeleccionada, 3).toString());
+                    txtTelefono.setText(model.getValueAt(filaSeleccionada, 4).toString());
+                    // Obtener la cadena de la tabla en formato de fecha
+                    String fechaEnTabla = model.getValueAt(filaSeleccionada, 5).toString();
+
+                    try {
+                    // Definir el formato en que está la fecha en la tabla
+                    SimpleDateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd");  // Ajusta el formato según tu necesidad
+                    Date fecha = formatoFecha.parse(fechaEnTabla);  // Convertir la cadena a un objeto Date
+
+                    // Establecer la fecha en el JDateChooser
+                    jDateFecha.setDate(fecha);
+                    } catch (ParseException ex) {
+                    JOptionPane.showMessageDialog(null, "Error al convertir la fecha: " + ex.getMessage());
+                    }
+                }
+            }
+        });
     }
 
     /**
@@ -48,17 +82,17 @@ public class REGISTRO_CLIENTES extends javax.swing.JFrame {
         txtDireccion = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         txtTelefono = new javax.swing.JTextField();
-        jLabel5 = new javax.swing.JLabel();
-        jComboBoxNumDeMesa = new javax.swing.JComboBox<>();
-        jLabel6 = new javax.swing.JLabel();
-        jComboBoxNumDeAsientos = new javax.swing.JComboBox<>();
         btnAgregar = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
-        txtFecha = new javax.swing.JTextField();
         btnRegistrar = new javax.swing.JButton();
         btnEditar = new javax.swing.JButton();
         btnEliminar = new javax.swing.JButton();
         btnSalir = new javax.swing.JButton();
+        jLabel8 = new javax.swing.JLabel();
+        txtCorreo = new javax.swing.JTextField();
+        jLabel9 = new javax.swing.JLabel();
+        txtIdCLiente = new javax.swing.JTextField();
+        jDateFecha = new com.toedter.calendar.JDateChooser();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -83,7 +117,7 @@ public class REGISTRO_CLIENTES extends javax.swing.JFrame {
                 {null, null, null, null, null, null}
             },
             new String [] {
-                "NOMBRE", "DIRECCIÓN", "TELÉFONO", "MESA RESERVADA", "N° ASIENTOS", "FECHA RESERVADA"
+                "ID", "NOMBRE", "GMAIL", "DIRECCIÓN", "TELÉFONO", "FECHA RESERVADA"
             }
         ));
         jScrollPane2.setViewportView(TablaDeRegistro);
@@ -108,14 +142,6 @@ public class REGISTRO_CLIENTES extends javax.swing.JFrame {
         });
 
         jLabel4.setText("TELÉFONO:");
-
-        jLabel5.setText("RESERVA DE MESA:");
-
-        jComboBoxNumDeMesa.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "SIN MESA", "MESA 1", "MESA 2", "MESA 3", "MESA 4", "MESA 5", "MESA 6" }));
-
-        jLabel6.setText("N° ASIENTOS:");
-
-        jComboBoxNumDeAsientos.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "SIN ASIENTOS", "1", "2", "3", "4", "5", "6", "7", "8" }));
 
         btnAgregar.setText("AGREGAR");
         btnAgregar.addActionListener(new java.awt.event.ActionListener() {
@@ -154,71 +180,60 @@ public class REGISTRO_CLIENTES extends javax.swing.JFrame {
             }
         });
 
+        jLabel8.setText("CORREO ELECTRONICO:");
+
+        jLabel9.setText("ID DEL CLIENTE:");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(22, 22, 22)
+                .addContainerGap()
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 703, Short.MAX_VALUE)
+                .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addContainerGap())
+                        .addGap(22, 22, 22)
+                        .addComponent(jLabel1))
                     .addGroup(layout.createSequentialGroup()
+                        .addGap(37, 37, 37)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel4)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addComponent(jLabel2)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
-                                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                                .addComponent(jLabel3)
-                                                .addGap(65, 65, 65)))
-                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                            .addComponent(jLabel4)
-                                            .addGap(76, 76, 76)))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                        .addComponent(jLabel5)
-                                        .addGap(31, 31, 31)))
-                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                    .addComponent(jLabel6)
-                                    .addGap(61, 61, 61)))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(jLabel7)
-                                .addGap(26, 26, 26)))
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel2)
+                                    .addComponent(jLabel9))
+                                .addComponent(jLabel7)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtCorreo, javax.swing.GroupLayout.DEFAULT_SIZE, 174, Short.MAX_VALUE)
                             .addComponent(txtNombreCliente)
                             .addComponent(txtDireccion)
                             .addComponent(txtTelefono)
-                            .addComponent(jComboBoxNumDeMesa, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jComboBoxNumDeAsientos, 0, 174, Short.MAX_VALUE)
-                            .addComponent(txtFecha))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(btnEditar)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnEliminar)
-                                .addGap(19, 19, 19))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(btnRegistrar)
-                                    .addComponent(btnAgregar))
-                                .addGap(51, 51, 51))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(btnNuevoCliente)
-                                .addGap(32, 32, 32))))))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(txtIdCLiente)
+                            .addComponent(jDateFecha, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 184, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnRegistrar)
+                            .addComponent(btnAgregar))
+                        .addGap(51, 51, 51))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(btnSalir)
                         .addGap(54, 54, 54))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 675, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())))
+                        .addComponent(btnEditar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnEliminar)
+                        .addGap(19, 19, 19))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(btnNuevoCliente)
+                        .addGap(32, 32, 32))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -228,38 +243,44 @@ public class REGISTRO_CLIENTES extends javax.swing.JFrame {
                 .addGap(16, 16, 16)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnRegistrar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnAgregar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnEditar)
+                            .addComponent(btnEliminar))
+                        .addGap(74, 74, 74)
+                        .addComponent(btnNuevoCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnSalir))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel9)
+                            .addComponent(txtIdCLiente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel2)
-                            .addComponent(txtNombreCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnRegistrar))
+                            .addComponent(txtNombreCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel8)
+                            .addComponent(txtCorreo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel3)
-                            .addComponent(txtDireccion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnAgregar))
+                            .addComponent(txtDireccion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel4)
-                            .addComponent(txtTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnEditar)
-                            .addComponent(btnEliminar))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel5))
-                    .addComponent(jComboBoxNumDeMesa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel6)
-                    .addComponent(jComboBoxNumDeAsientos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnNuevoCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel7)
-                        .addComponent(txtFecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnSalir)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(txtTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel7)
+                            .addComponent(jDateFecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 25, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         pack();
@@ -275,16 +296,28 @@ public class REGISTRO_CLIENTES extends javax.swing.JFrame {
 
         if (filaSeleccionada >= 0) {
             // Cambiar los valores de la tabla segun su enumeracion
-            model.setValueAt(txtNombreCliente.getText(), filaSeleccionada, 0);
-            model.setValueAt(txtDireccion.getText(), filaSeleccionada, 1);
-            model.setValueAt(txtTelefono.getText(), filaSeleccionada, 2);
-            model.setValueAt(jComboBoxNumDeMesa.getSelectedItem(), filaSeleccionada, 3);
-            model.setValueAt(jComboBoxNumDeAsientos.getSelectedItem(), filaSeleccionada, 4);
-            model.setValueAt(txtFecha.getText(), filaSeleccionada, 5);
+            model.setValueAt(txtIdCLiente.getText(), filaSeleccionada, 0);
+            model.setValueAt(txtNombreCliente.getText(), filaSeleccionada, 1);
+            model.setValueAt(txtCorreo.getText(), filaSeleccionada, 2);
+            model.setValueAt(txtDireccion.getText(), filaSeleccionada, 3);
+            model.setValueAt(txtTelefono.getText(), filaSeleccionada, 4);
+            // Obtener la fecha del JDateChooser
+            Date fecha = jDateFecha.getDate();
+            if (fecha != null) {
+            // Definir el formato de fecha que usarás en la tabla
+            SimpleDateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd");
+            String fechaFormateada = formatoFecha.format(fecha);
+            model.setValueAt(fechaFormateada, filaSeleccionada, 5);
+            } else {
+            // Si no se seleccionó ninguna fecha, dejar el valor anterior o manejarlo como quieras
+            JOptionPane.showMessageDialog(this, "Por favor, seleccione una fecha válida.");
+            }
+
             JOptionPane.showMessageDialog(this, "Registro editado correctamente.");
-        } else {
+            guardarDatosEnCSV();  // Guardar los cambios después de editar
+            } else {
             JOptionPane.showMessageDialog(this, "Por favor, seleccione una fila para editar.");
-        }
+            }
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
@@ -300,22 +333,34 @@ public class REGISTRO_CLIENTES extends javax.swing.JFrame {
     }//GEN-LAST:event_btnNuevoClienteActionPerformed
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
-        //Se esta declarando una variable para poder almacenarlos y asi pueda ser valido
-        String nombre = txtNombreCliente.getText();
-        String direccion = txtDireccion.getText();
-        String telefono = txtTelefono.getText();
-        String mesaReservada = (String) jComboBoxNumDeMesa.getSelectedItem();
-        String numeroAsientos = (String) jComboBoxNumDeAsientos.getSelectedItem();
-        String fecha = txtFecha.getText();
+        // Obtener la fecha del componente jDateFecha
+    Date mFecha = jDateFecha.getDate();
+    
+    // Verificar si la fecha es nula
+    if (mFecha == null) {
+        JOptionPane.showMessageDialog(this, "Por favor, seleccione una fecha.");
+        return;  // Salir del método si la fecha no está seleccionada
+    }
+    
+    long fecha = mFecha.getTime();
+    java.sql.Date fecha_sql = new java.sql.Date(fecha);
+    JOptionPane.showMessageDialog(null, fecha_sql);
 
-        // Para validar que los campos no esten vacios
-        if (nombre.isEmpty() || direccion.isEmpty() || telefono.isEmpty() || mesaReservada.equals("SIN MESA") || numeroAsientos.equals("SIN ASIENTOS") || fecha.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Por favor, complete todos los campos.");
-        } else {
-            // Si todo esta correcto se agrega automaticamente en la tabla
-            model.addRow(new Object[]{nombre, direccion, telefono, mesaReservada, numeroAsientos, fecha});
-            limpiarCampos();
-        }
+    // Declarar variables para los campos de texto
+    String id = txtIdCLiente.getText();
+    String nombre = txtNombreCliente.getText();
+    String gmail = txtCorreo.getText();
+    String direccion = txtDireccion.getText();
+    String telefono = txtTelefono.getText();
+
+    // Validar que los campos no estén vacíos
+    if (id.isEmpty() || nombre.isEmpty() || gmail.isEmpty() || direccion.isEmpty() || telefono.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Por favor, complete todos los campos.");
+    } else {
+        // Agregar una nueva fila a la tabla si todo está correcto
+        model.addRow(new Object[]{id, nombre, gmail, direccion, telefono, fecha_sql});
+        guardarDatosEnCSV();  // Guardar los datos en el archivo CSV después de agregar un nuevo registro
+    }
     }//GEN-LAST:event_btnAgregarActionPerformed
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
@@ -331,18 +376,51 @@ public class REGISTRO_CLIENTES extends javax.swing.JFrame {
             // Eliminar la fila de la tabla
             model.removeRow(filaSeleccionada);
             JOptionPane.showMessageDialog(this, "Registro eliminado correctamente.");
+            guardarDatosEnCSV();  // Guardar los cambios después de editar
         } else {
             JOptionPane.showMessageDialog(this, "Por favor, seleccione una fila para eliminar.");
         }
     }//GEN-LAST:event_btnEliminarActionPerformed
+
+    // Método para guardar los datos en un archivo CSV
+    private void guardarDatosEnCSV() {
+        try (PrintWriter pw = new PrintWriter(new File("clientes.csv"))) {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < model.getRowCount(); i++) {
+                for (int j = 0; j < model.getColumnCount(); j++) {
+                    sb.append(model.getValueAt(i, j).toString());
+                    sb.append(",");
+                }
+                sb.append("\n");
+            }
+            pw.write(sb.toString());
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Método para cargar los datos desde un archivo CSV
+    private void cargarDatosDesdeCSV() {
+        String line;
+        try (BufferedReader br = new BufferedReader(new FileReader("clientes.csv"))) {
+            while ((line = br.readLine()) != null) {
+                String[] data = line.split(",");
+                model.addRow(data);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
     private void limpiarCampos() {
-        //Limpiar textos y combobox
+        //Limpiar textos
+        txtIdCLiente.setText("");
         txtNombreCliente.setText("");
+        txtCorreo.setText("");
         txtDireccion.setText("");
         txtTelefono.setText("");
-        jComboBoxNumDeMesa.setSelectedIndex(0);
-        jComboBoxNumDeAsientos.setSelectedIndex(0);
-        txtFecha.setText("");
+        // Limpiar la fecha en el JDateChooser
+        jDateFecha.setDate(null);
     }
     /**
      * @param args the command line arguments
@@ -387,20 +465,20 @@ public class REGISTRO_CLIENTES extends javax.swing.JFrame {
     private javax.swing.JButton btnNuevoCliente;
     private javax.swing.JButton btnRegistrar;
     private javax.swing.JButton btnSalir;
-    private javax.swing.JComboBox<String> jComboBoxNumDeAsientos;
-    private javax.swing.JComboBox<String> jComboBoxNumDeMesa;
+    private com.toedter.calendar.JDateChooser jDateFecha;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
+    private javax.swing.JTextField txtCorreo;
     private javax.swing.JTextField txtDireccion;
-    private javax.swing.JTextField txtFecha;
+    private javax.swing.JTextField txtIdCLiente;
     private javax.swing.JTextField txtNombreCliente;
     private javax.swing.JTextField txtTelefono;
     // End of variables declaration//GEN-END:variables
