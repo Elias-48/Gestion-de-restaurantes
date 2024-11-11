@@ -4,6 +4,7 @@
  */
 package UI;
 
+import java.awt.Color;
 import javax.swing.JOptionPane;
 
 /**
@@ -30,11 +31,12 @@ public class LOGIN extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
+        jPanel2 = new javax.swing.JPanel();
         txtUsuario = new javax.swing.JTextField();
-        jLabel2 = new javax.swing.JLabel();
         txtContraseña = new javax.swing.JTextField();
         btnIngresar = new javax.swing.JButton();
+        perfil = new javax.swing.JLabel();
+        fondo = new javax.swing.JLabel();
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -49,85 +51,139 @@ public class LOGIN extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel1.setText("USUARIO:");
+        jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        txtUsuario.setForeground(new java.awt.Color(153, 153, 153));
+        txtUsuario.setText("Nombre de usuario");
+        txtUsuario.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        txtUsuario.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                txtUsuarioMousePressed(evt);
+            }
+        });
         txtUsuario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtUsuarioActionPerformed(evt);
             }
         });
+        jPanel2.add(txtUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 270, 230, 30));
 
-        jLabel2.setText("CONTRASEÑA:");
-
+        txtContraseña.setForeground(new java.awt.Color(153, 153, 153));
+        txtContraseña.setText("Contraseña");
+        txtContraseña.setToolTipText("");
+        txtContraseña.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        txtContraseña.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                txtContraseñaMousePressed(evt);
+            }
+        });
         txtContraseña.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtContraseñaActionPerformed(evt);
             }
         });
+        jPanel2.add(txtContraseña, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 310, 230, 30));
 
+        btnIngresar.setBackground(new java.awt.Color(255, 102, 0));
+        btnIngresar.setForeground(new java.awt.Color(255, 255, 255));
         btnIngresar.setText("INGRESAR");
+        btnIngresar.setBorder(null);
+        btnIngresar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnIngresar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnIngresarMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnIngresarMouseExited(evt);
+            }
+        });
         btnIngresar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnIngresarActionPerformed(evt);
             }
         });
+        jPanel2.add(btnIngresar, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 360, 110, 40));
+
+        perfil.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/64096_1.png"))); // NOI18N
+        jPanel2.add(perfil, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 90, 160, 160));
+
+        fondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/marco-doodle-comida-sobre-fondo-beige_53876-167977.jpg"))); // NOI18N
+        jPanel2.add(fondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 360, 510));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(63, 63, 63)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnIngresar)
-                    .addComponent(txtContraseña, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(61, Short.MAX_VALUE))
+            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(252, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(txtUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(txtContraseña, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(btnIngresar)
-                .addGap(28, 28, 28))
+            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtUsuarioActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtUsuarioActionPerformed
-
-    private void txtContraseñaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtContraseñaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtContraseñaActionPerformed
-
     private void btnIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIngresarActionPerformed
         String nombre = txtUsuario.getText();
         String contra = txtContraseña.getText();
 
-        if ((nombre.equals("Administrador")) && (contra.equals("admin"))) {
-            MENU_PRICIPAL mMENU_PRICIPAL = new MENU_PRICIPAL();
-            mMENU_PRICIPAL.setVisible(true);
-            mMENU_PRICIPAL.setLocationRelativeTo(null);
+        if (validarUsuarios(txtUsuario.getText().trim())) {
+            if ((nombre.equals("Administrador")) && (contra.equals("admin"))) {
+                MENU_PRICIPAL mMENU_PRICIPAL = new MENU_PRICIPAL();
+                mMENU_PRICIPAL.setVisible(true);
+                mMENU_PRICIPAL.setLocationRelativeTo(null);
                 this.dispose();
-        }else {
+            } else {
+                JOptionPane.showMessageDialog(null, "Usuario o Contraseña incorrecta, verifique nuevamente.");
+            }
+        } else {
             JOptionPane.showMessageDialog(null, "Usuario o Contraseña incorrecta, verifique nuevamente.");
         }
+
     }//GEN-LAST:event_btnIngresarActionPerformed
+    public static boolean validarUsuarios(String datos) {
+
+        return datos.matches("^[a-zA-Z][a-zA-Z0-9._]{2,150}$");
+
+    }
+    private void txtContraseñaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtContraseñaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtContraseñaActionPerformed
+
+    private void txtUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtUsuarioActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtUsuarioActionPerformed
+
+    private void txtUsuarioMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtUsuarioMousePressed
+        if (txtUsuario.getText().equals("Nombre de usuario")) {
+            txtUsuario.setText("");
+            txtUsuario.setForeground(Color.black);
+        }
+        if (String.valueOf(txtContraseña.getText()).isEmpty()) {
+            txtContraseña.setText("Contraseña");
+            txtContraseña.setForeground(Color.gray);
+        }
+    }//GEN-LAST:event_txtUsuarioMousePressed
+
+    private void txtContraseñaMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtContraseñaMousePressed
+        if (txtContraseña.getText().equals("Contraseña")) {
+            txtContraseña.setText("");
+            txtContraseña.setForeground(Color.black);
+        }
+        if (String.valueOf(txtUsuario.getText()).isEmpty()) {
+            txtUsuario.setText("Nombre de usuario");
+            txtUsuario.setForeground(Color.gray);
+        }
+    }//GEN-LAST:event_txtContraseñaMousePressed
+
+    private void btnIngresarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnIngresarMouseEntered
+        btnIngresar.setBackground(Color.orange);
+    }//GEN-LAST:event_btnIngresarMouseEntered
+
+    private void btnIngresarMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnIngresarMouseExited
+        btnIngresar.setBackground(new Color(255, 102, 0));
+    }//GEN-LAST:event_btnIngresarMouseExited
 
     /**
      * @param args the command line arguments
@@ -167,9 +223,10 @@ public class LOGIN extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnIngresar;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel fondo;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JLabel perfil;
     private javax.swing.JTextField txtContraseña;
     private javax.swing.JTextField txtUsuario;
     // End of variables declaration//GEN-END:variables

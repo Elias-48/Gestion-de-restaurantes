@@ -4,17 +4,21 @@
  */
 package UI;
 
+import java.awt.Color;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import java.io.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+
 /**
  *
  * @author Usuario
  */
 public class FACTURA extends javax.swing.JFrame {
-    DefaultTableModel modelo2=new DefaultTableModel();
+
+    DefaultTableModel modelo2 = new DefaultTableModel();
+
     /**
      * Creates new form FACTURA
      */
@@ -49,27 +53,50 @@ public class FACTURA extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
+        txtIDFactura = new javax.swing.JTextField();
+        txtIdCliente = new javax.swing.JTextField();
         jScrollPane2 = new javax.swing.JScrollPane();
         TablaFactura = new javax.swing.JTable();
-        txtIDFactura = new javax.swing.JTextField();
         btnRegistrar = new javax.swing.JButton();
         btnMostrar = new javax.swing.JButton();
+        btnNuevoComprobante = new javax.swing.JButton();
         btnGenerarComprobante = new javax.swing.JButton();
         btnSalir = new javax.swing.JButton();
-        btnNuevoComprobante = new javax.swing.JButton();
         btnEliminar = new javax.swing.JButton();
-        txtIdCliente = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel1.setText("FACTURA");
+        jPanel1.setBackground(new java.awt.Color(204, 204, 204));
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel2.setText("ID FACTURA:");
+        txtIDFactura.setForeground(new java.awt.Color(153, 153, 153));
+        txtIDFactura.setText("ID FACTURA");
+        txtIDFactura.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                txtIDFacturaMousePressed(evt);
+            }
+        });
+        txtIDFactura.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtIDFacturaActionPerformed(evt);
+            }
+        });
+        jPanel1.add(txtIDFactura, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 200, 50));
 
-        jLabel3.setText("ID CLIENTE");
+        txtIdCliente.setForeground(new java.awt.Color(153, 153, 153));
+        txtIdCliente.setText("ID CLIENTE");
+        txtIdCliente.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                txtIdClienteMousePressed(evt);
+            }
+        });
+        txtIdCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtIdClienteActionPerformed(evt);
+            }
+        });
+        jPanel1.add(txtIdCliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 80, 200, 50));
 
         TablaFactura.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -84,130 +111,139 @@ public class FACTURA extends javax.swing.JFrame {
         ));
         jScrollPane2.setViewportView(TablaFactura);
 
+        jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 150, 650, 200));
+
+        btnRegistrar.setBackground(new java.awt.Color(255, 153, 0));
+        btnRegistrar.setForeground(new java.awt.Color(0, 0, 0));
         btnRegistrar.setText("REGISTRAR");
+        btnRegistrar.setBorder(null);
+        btnRegistrar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnRegistrar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnRegistrarMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnRegistrarMouseExited(evt);
+            }
+        });
         btnRegistrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnRegistrarActionPerformed(evt);
             }
         });
+        jPanel1.add(btnRegistrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 10, 160, 40));
 
+        btnMostrar.setBackground(new java.awt.Color(255, 153, 0));
+        btnMostrar.setForeground(new java.awt.Color(0, 0, 0));
         btnMostrar.setText("MOSTRAR");
+        btnMostrar.setBorder(null);
+        btnMostrar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnMostrar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnMostrarMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnMostrarMouseExited(evt);
+            }
+        });
         btnMostrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnMostrarActionPerformed(evt);
             }
         });
+        jPanel1.add(btnMostrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 10, 160, 40));
 
-        btnGenerarComprobante.setText("GENERAR COMPROBANTE");
-        btnGenerarComprobante.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnGenerarComprobanteActionPerformed(evt);
-            }
-        });
-
-        btnSalir.setText("SALIR");
-        btnSalir.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSalirActionPerformed(evt);
-            }
-        });
-
+        btnNuevoComprobante.setBackground(new java.awt.Color(255, 153, 0));
+        btnNuevoComprobante.setForeground(new java.awt.Color(0, 0, 0));
         btnNuevoComprobante.setText("NUEVO COMPROBANTE");
+        btnNuevoComprobante.setBorder(null);
+        btnNuevoComprobante.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnNuevoComprobante.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnNuevoComprobanteMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnNuevoComprobanteMouseExited(evt);
+            }
+        });
         btnNuevoComprobante.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnNuevoComprobanteActionPerformed(evt);
             }
         });
+        jPanel1.add(btnNuevoComprobante, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 60, 180, 40));
 
+        btnGenerarComprobante.setBackground(new java.awt.Color(255, 153, 0));
+        btnGenerarComprobante.setForeground(new java.awt.Color(0, 0, 0));
+        btnGenerarComprobante.setText("GENERAR COMPROBANTE");
+        btnGenerarComprobante.setBorder(null);
+        btnGenerarComprobante.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnGenerarComprobante.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnGenerarComprobanteMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnGenerarComprobanteMouseExited(evt);
+            }
+        });
+        btnGenerarComprobante.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGenerarComprobanteActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnGenerarComprobante, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 60, 180, 40));
+
+        btnSalir.setBackground(java.awt.Color.gray);
+        btnSalir.setForeground(new java.awt.Color(0, 0, 0));
+        btnSalir.setText("SALIR");
+        btnSalir.setBorder(null);
+        btnSalir.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnSalir.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnSalirMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnSalirMouseExited(evt);
+            }
+        });
+        btnSalir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSalirActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnSalir, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 110, 110, 30));
+
+        btnEliminar.setBackground(new java.awt.Color(255, 153, 0));
+        btnEliminar.setForeground(new java.awt.Color(0, 0, 0));
         btnEliminar.setText("ELIMINAR");
+        btnEliminar.setBorder(null);
+        btnEliminar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnEliminar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnEliminarMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnEliminarMouseExited(evt);
+            }
+        });
         btnEliminar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnEliminarActionPerformed(evt);
             }
         });
-
-        txtIdCliente.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtIdClienteActionPerformed(evt);
-            }
-        });
+        jPanel1.add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 110, 120, 30));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 658, Short.MAX_VALUE)
-                        .addContainerGap())
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                        .addComponent(jLabel2)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel3)
-                                        .addGap(21, 21, 21)))
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(txtIDFactura, javax.swing.GroupLayout.DEFAULT_SIZE, 163, Short.MAX_VALUE)
-                                    .addComponent(txtIdCliente)))
-                            .addComponent(jLabel1))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(btnRegistrar)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(btnMostrar)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(btnEliminar)
-                                .addGap(22, 22, 22))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(btnSalir)
-                                .addGap(122, 122, 122))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(12, 12, 12)
-                                        .addComponent(btnNuevoComprobante))
-                                    .addComponent(btnGenerarComprobante, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(68, 68, 68))))))
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 670, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(21, 21, 21)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel2)
-                            .addComponent(txtIDFactura, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel3)
-                            .addComponent(txtIdCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(30, 30, 30))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(6, 6, 6)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnMostrar)
-                            .addComponent(btnRegistrar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnEliminar))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnNuevoComprobante)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnGenerarComprobante)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnSalir)
-                        .addGap(14, 14, 14)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(20, Short.MAX_VALUE))
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pack();
@@ -215,36 +251,36 @@ public class FACTURA extends javax.swing.JFrame {
 
     private void btnGenerarComprobanteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarComprobanteActionPerformed
         // Verificar si se ha seleccionado una fila
-    int filaSeleccionada = TablaFactura.getSelectedRow();
-    
-    if (filaSeleccionada == -1) {
-        // Si no hay fila seleccionada, mostrar un mensaje de error
-        JOptionPane.showMessageDialog(this, "Por favor, seleccione una fila de la tabla para generar el comprobante.");
-    } else {
-        // Crear instancia de COMPROBANTE
-        COMPROBANTE mCOMPROBANTE = new COMPROBANTE();
-        // Mostrar el JFrame Comprobante
-        mCOMPROBANTE.setVisible(true);
-        mCOMPROBANTE.setLocationRelativeTo(null);
-                this.dispose(); // Cerrar la ventana actual si es necesario
-        // Recopilar datos de la fila seleccionada
-        StringBuilder sb = new StringBuilder();
-        
-        sb.append("Factura N°: ").append(TablaFactura.getValueAt(filaSeleccionada, 0)).append("\n");
-        sb.append("Nombre Cliente: ").append(TablaFactura.getValueAt(filaSeleccionada, 2)).append("\n");
-        sb.append("Fecha Reservada: ").append(TablaFactura.getValueAt(filaSeleccionada, 3)).append("\n");
-        sb.append("Precio Total: ").append(TablaFactura.getValueAt(filaSeleccionada, 4)).append("\n");
-        sb.append("------------------------------\n");
-    // Pasar los datos al TextArea del JFrame Comprobante
-    mCOMPROBANTE.getTextAreaComprobante().setText(sb.toString());
-            }
+        int filaSeleccionada = TablaFactura.getSelectedRow();
+
+        if (filaSeleccionada == -1) {
+            // Si no hay fila seleccionada, mostrar un mensaje de error
+            JOptionPane.showMessageDialog(this, "Por favor, seleccione una fila de la tabla para generar el comprobante.");
+        } else {
+            // Crear instancia de COMPROBANTE
+            COMPROBANTE mCOMPROBANTE = new COMPROBANTE();
+            // Mostrar el JFrame Comprobante
+            mCOMPROBANTE.setVisible(true);
+            mCOMPROBANTE.setLocationRelativeTo(null);
+            this.dispose(); // Cerrar la ventana actual si es necesario
+            // Recopilar datos de la fila seleccionada
+            StringBuilder sb = new StringBuilder();
+
+            sb.append("Factura N°: ").append(TablaFactura.getValueAt(filaSeleccionada, 0)).append("\n");
+            sb.append("Nombre Cliente: ").append(TablaFactura.getValueAt(filaSeleccionada, 2)).append("\n");
+            sb.append("Fecha Reservada: ").append(TablaFactura.getValueAt(filaSeleccionada, 3)).append("\n");
+            sb.append("Precio Total: ").append(TablaFactura.getValueAt(filaSeleccionada, 4)).append("\n");
+            sb.append("------------------------------\n");
+            // Pasar los datos al TextArea del JFrame Comprobante
+            mCOMPROBANTE.getTextAreaComprobante().setText(sb.toString());
+        }
     }//GEN-LAST:event_btnGenerarComprobanteActionPerformed
 
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
         MENU_PRICIPAL mMENU_PRICIPAL = new MENU_PRICIPAL();
         mMENU_PRICIPAL.setVisible(true);
         mMENU_PRICIPAL.setLocationRelativeTo(null);
-                this.dispose();
+        this.dispose();
     }//GEN-LAST:event_btnSalirActionPerformed
 
     private void btnMostrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMostrarActionPerformed
@@ -255,27 +291,41 @@ public class FACTURA extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Por favor, complete todos los campos.");
         } else {
             // Busca el nombre del cliente en el archivo CSV según el número de mesa
-        String[] clienteData = buscarClientePorIdCliente(idcliente);
-        if (clienteData != null) {
-            String nombreCliente = clienteData[0];
-            String fechaReservada = clienteData[1];
-            // Buscar el total del precio del cliente en la tabla Ingreso_Pedidos
-            double precioTotal = obtenerPrecioTotalPorCliente(idcliente);
-            
-            // Agrega los datos a la tabla, incluyendo el nombre, la fecha y el precio total
-            modelo2.addRow(new Object[]{idfactura, idcliente, nombreCliente, fechaReservada, precioTotal});
-            
-            // Guardar la tabla en el archivo CSV después de agregar los datos
-            guardarFacturaEnCSV();
-        } else {
-            JOptionPane.showMessageDialog(this, "No se encontró un cliente con ese ID.");
+            String[] clienteData = buscarClientePorIdCliente(idcliente);
+            if (clienteData != null) {
+                String nombreCliente = clienteData[0];
+                String fechaReservada = clienteData[1];
+                // Buscar el total del precio del cliente en la tabla Ingreso_Pedidos
+                double precioTotal = obtenerPrecioTotalPorCliente(idcliente);
+
+                // Agrega los datos a la tabla, incluyendo el nombre, la fecha y el precio total
+                modelo2.addRow(new Object[]{idfactura, idcliente, nombreCliente, fechaReservada, precioTotal});
+
+                // Guardar la tabla en el archivo CSV después de agregar los datos
+                guardarFacturaEnCSV();
+            } else {
+                JOptionPane.showMessageDialog(this, "No se encontró un cliente con ese ID.");
+            }
         }
-    }
     }//GEN-LAST:event_btnMostrarActionPerformed
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
-        JOptionPane.showMessageDialog(this, "Factura registrada con éxito.");
+
+        if (validarIDFactura(txtIDFactura.getText().trim()) && validarIDCliente(txtIdCliente.getText().trim())) {
+            JOptionPane.showMessageDialog(this, "Factura registrada con éxito.");
+        } else {
+            JOptionPane.showMessageDialog(this, "Debe insertar datos correctos");
+        }
     }//GEN-LAST:event_btnRegistrarActionPerformed
+
+    public static boolean validarIDFactura(String datos) {
+        return datos.matches("^[A-Z]{3}\\d{3,}$");
+    }
+
+    public static boolean validarIDCliente(String datos) {
+        return datos.matches("^[A-Z]{3}\\d{3,}$");
+    }
+
 
     private void btnNuevoComprobanteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoComprobanteActionPerformed
         limpiarCampos();
@@ -300,48 +350,122 @@ public class FACTURA extends javax.swing.JFrame {
         String[] clienteData = buscarClientePorIdCliente(Idcliente);
 
         if (clienteData != null) {
-        // Procesar la información del cliente
+            // Procesar la información del cliente
         } else {
-        JOptionPane.showMessageDialog(this, "No se encontró un cliente con ese ID.");
-    }
+            JOptionPane.showMessageDialog(this, "No se encontró un cliente con ese ID.");
+        }
     }//GEN-LAST:event_txtIdClienteActionPerformed
+
+    private void btnSalirMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSalirMouseEntered
+        btnSalir.setBackground(new Color(255, 153, 153));
+    }//GEN-LAST:event_btnSalirMouseEntered
+
+    private void btnSalirMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSalirMouseExited
+        btnSalir.setBackground(Color.gray);
+    }//GEN-LAST:event_btnSalirMouseExited
+
+    private void btnMostrarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnMostrarMouseEntered
+        btnMostrar.setBackground(new Color(255, 169, 40));
+    }//GEN-LAST:event_btnMostrarMouseEntered
+
+    private void btnRegistrarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnRegistrarMouseEntered
+        btnRegistrar.setBackground(new Color(255, 169, 40));
+    }//GEN-LAST:event_btnRegistrarMouseEntered
+
+    private void btnGenerarComprobanteMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnGenerarComprobanteMouseEntered
+        btnGenerarComprobante.setBackground(new Color(255, 169, 40));
+    }//GEN-LAST:event_btnGenerarComprobanteMouseEntered
+
+    private void btnNuevoComprobanteMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnNuevoComprobanteMouseEntered
+        btnNuevoComprobante.setBackground(new Color(255, 169, 40));
+    }//GEN-LAST:event_btnNuevoComprobanteMouseEntered
+
+    private void btnEliminarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEliminarMouseEntered
+        btnEliminar.setBackground(new Color(255, 169, 40));
+    }//GEN-LAST:event_btnEliminarMouseEntered
+
+    private void btnMostrarMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnMostrarMouseExited
+        btnMostrar.setBackground(new Color(255, 153, 0));
+    }//GEN-LAST:event_btnMostrarMouseExited
+
+    private void btnRegistrarMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnRegistrarMouseExited
+        btnRegistrar.setBackground(new Color(255, 153, 0));
+    }//GEN-LAST:event_btnRegistrarMouseExited
+
+    private void btnGenerarComprobanteMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnGenerarComprobanteMouseExited
+        btnGenerarComprobante.setBackground(new Color(255, 153, 0));
+    }//GEN-LAST:event_btnGenerarComprobanteMouseExited
+
+    private void btnNuevoComprobanteMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnNuevoComprobanteMouseExited
+        btnNuevoComprobante.setBackground(new Color(255, 153, 0));
+    }//GEN-LAST:event_btnNuevoComprobanteMouseExited
+
+    private void btnEliminarMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEliminarMouseExited
+        btnEliminar.setBackground(new Color(255, 153, 0));
+    }//GEN-LAST:event_btnEliminarMouseExited
+
+    private void txtIDFacturaMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtIDFacturaMousePressed
+        if (txtIDFactura.getText().equals("ID FACTURA")) {
+            txtIDFactura.setText("");
+            txtIDFactura.setForeground(Color.black);
+        }
+        if (String.valueOf(txtIdCliente.getText()).isEmpty()) {
+            txtIdCliente.setText("ID CLIENTE");
+            txtIdCliente.setForeground(Color.gray);
+        }
+    }//GEN-LAST:event_txtIDFacturaMousePressed
+
+    private void txtIDFacturaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIDFacturaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtIDFacturaActionPerformed
+
+    private void txtIdClienteMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtIdClienteMousePressed
+        if (txtIdCliente.getText().equals("ID CLIENTE")) {
+            txtIdCliente.setText("");
+            txtIdCliente.setForeground(Color.black);
+        }
+        if (String.valueOf(txtIDFactura.getText()).isEmpty()) {
+            txtIDFactura.setText("ID FACTURA");
+            txtIDFactura.setForeground(Color.gray);
+        }
+    }//GEN-LAST:event_txtIdClienteMousePressed
     private String[] buscarClientePorIdCliente(String Idcliente) {
-    String line;
-    try (BufferedReader br = new BufferedReader(new FileReader("clientes.csv"))) {
-        while ((line = br.readLine()) != null) {
-            String[] data = line.split(",");
-            // En el CSV, la posición 0 es el ID del Cliente, y el 1 es el nombre del cliente
-            if (data[0].equals(Idcliente)) {
-                return new String[]{data[1], data[5]}; // Retorna el nombre del cliente y la fecha
+        String line;
+        try (BufferedReader br = new BufferedReader(new FileReader("clientes.csv"))) {
+            while ((line = br.readLine()) != null) {
+                String[] data = line.split(",");
+                // En el CSV, la posición 0 es el ID del Cliente, y el 1 es el nombre del cliente
+                if (data[0].equals(Idcliente)) {
+                    return new String[]{data[1], data[5]}; // Retorna el nombre del cliente y la fecha
+                }
             }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-    } catch (IOException e) {
-        e.printStackTrace();
+        return null; // Si no se encuentra el cliente
     }
-    return null; // Si no se encuentra el cliente
-}
-    
+
     private double obtenerPrecioTotalPorCliente(String idcliente) {
-    double precioTotal = 0.0;
-    String line;
-    
-    try (BufferedReader br = new BufferedReader(new FileReader("Pedidos.csv"))) {
-        while ((line = br.readLine()) != null) {
-            String[] data = line.split(",");
-            
-            // El ID del cliente está en la posición 0 y el total del precio en la posición 6
-            if (data[0].equals(idcliente)) {
-                double totalPrecio = Double.parseDouble(data[6]);
-                precioTotal += totalPrecio; // Sumar el total del precio si hay más de un pedido
+        double precioTotal = 0.0;
+        String line;
+
+        try (BufferedReader br = new BufferedReader(new FileReader("Pedidos.csv"))) {
+            while ((line = br.readLine()) != null) {
+                String[] data = line.split(",");
+
+                // El ID del cliente está en la posición 0 y el total del precio en la posición 6
+                if (data[0].equals(idcliente)) {
+                    double totalPrecio = Double.parseDouble(data[6]);
+                    precioTotal += totalPrecio; // Sumar el total del precio si hay más de un pedido
+                }
             }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-    } catch (IOException e) {
-        e.printStackTrace();
-         }
-    
-    return precioTotal; // Devolver el total sumado
+
+        return precioTotal; // Devolver el total sumado
     }
-    
+
     private void guardarFacturaEnCSV() {
         try (PrintWriter pw = new PrintWriter(new File("facturas.csv"))) {
             StringBuilder sb = new StringBuilder();
@@ -357,9 +481,9 @@ public class FACTURA extends javax.swing.JFrame {
             e.printStackTrace();
         }
     }
-    
+
     private void cargarFacturasDesdeCSV() {
-    String line;
+        String line;
         try (BufferedReader br = new BufferedReader(new FileReader("facturas.csv"))) {
             while ((line = br.readLine()) != null) {
                 String[] data = line.split(",");
@@ -367,13 +491,14 @@ public class FACTURA extends javax.swing.JFrame {
             }
         } catch (IOException e) {
             e.printStackTrace();
+        }
     }
-}
-    
+
     private void limpiarCampos() {
         txtIDFactura.setText("");
         txtIdCliente.setText("");
     }
+
     /**
      * @param args the command line arguments
      */
@@ -417,9 +542,7 @@ public class FACTURA extends javax.swing.JFrame {
     private javax.swing.JButton btnNuevoComprobante;
     private javax.swing.JButton btnRegistrar;
     private javax.swing.JButton btnSalir;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextField txtIDFactura;
     private javax.swing.JTextField txtIdCliente;

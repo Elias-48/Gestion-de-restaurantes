@@ -4,17 +4,21 @@
  */
 package UI;
 
+import java.awt.Color;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import java.io.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+
 /**
  *
  * @author Usuario
  */
 public class INFORMACION_EMPLEADO extends javax.swing.JFrame {
-    DefaultTableModel modelo1=new DefaultTableModel();
+
+    DefaultTableModel modelo1 = new DefaultTableModel();
+
     /**
      * Creates new form INFORMACION_EMPLEADO
      */
@@ -54,41 +58,43 @@ public class INFORMACION_EMPLEADO extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        jComboBoxCargoDelEmpleado = new javax.swing.JComboBox<>();
         txtIDEmpleado = new javax.swing.JTextField();
+        jLabel5 = new javax.swing.JLabel();
+        jComboBoxCargoDelEmpleado = new javax.swing.JComboBox<>();
+        jLabel3 = new javax.swing.JLabel();
         txtNombreEmpleado = new javax.swing.JTextField();
-        txtDirecionEmpleado = new javax.swing.JTextField();
-        txtTelefonoEmpleado = new javax.swing.JTextField();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        TablaInformacionEmpleados = new javax.swing.JTable();
-        btnRegistrar = new javax.swing.JButton();
-        btnAgregar = new javax.swing.JButton();
-        btnEditar = new javax.swing.JButton();
-        btnEliminar = new javax.swing.JButton();
-        btnNuevoEmpleado = new javax.swing.JButton();
-        btnSalir = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
         txtCorreo = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
+        txtDirecionEmpleado = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
+        txtTelefonoEmpleado = new javax.swing.JTextField();
+        btnRegistrar = new javax.swing.JButton();
+        btnEditar = new javax.swing.JButton();
+        btnEliminar = new javax.swing.JButton();
+        btnAgregar = new javax.swing.JButton();
+        btnNuevoEmpleado = new javax.swing.JButton();
+        btnSalir = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        TablaInformacionEmpleados = new javax.swing.JTable();
+        jSeparator1 = new javax.swing.JSeparator();
+        jLabel8 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel1.setText("INFORMACION DE EMPLEADOS:");
+        jPanel1.setBackground(new java.awt.Color(204, 204, 204));
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        jLabel2.setForeground(new java.awt.Color(0, 0, 0));
         jLabel2.setText("ID EMPLEADO:");
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, -1, -1));
+        jPanel1.add(txtIDEmpleado, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 10, 170, 40));
 
-        jLabel3.setText("NOMBRE:");
-
-        jLabel4.setText("DIRECCIÓN:");
-
+        jLabel5.setForeground(new java.awt.Color(0, 0, 0));
         jLabel5.setText("CARGO:");
-
-        jLabel6.setText("TELÉFONO:");
+        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(39, 70, -1, -1));
 
         jComboBoxCargoDelEmpleado.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "SIN CARGO", "ADMINISTRADOR ", "MESERO", "CHEF" }));
         jComboBoxCargoDelEmpleado.addActionListener(new java.awt.event.ActionListener() {
@@ -96,6 +102,141 @@ public class INFORMACION_EMPLEADO extends javax.swing.JFrame {
                 jComboBoxCargoDelEmpleadoActionPerformed(evt);
             }
         });
+        jPanel1.add(jComboBoxCargoDelEmpleado, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 60, 172, 40));
+
+        jLabel3.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel3.setText("NOMBRE:");
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 120, 60, -1));
+        jPanel1.add(txtNombreEmpleado, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 110, 171, 40));
+
+        jLabel7.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel7.setText("CORREO ELECTRONICO:");
+        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 170, 140, -1));
+        jPanel1.add(txtCorreo, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 160, 171, 40));
+
+        jLabel4.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel4.setText("DIRECCIÓN:");
+        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(29, 220, -1, -1));
+        jPanel1.add(txtDirecionEmpleado, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 210, 171, 40));
+
+        jLabel6.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel6.setText("TELÉFONO:");
+        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 270, 70, -1));
+        jPanel1.add(txtTelefonoEmpleado, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 260, 171, 40));
+
+        btnRegistrar.setBackground(new java.awt.Color(255, 153, 0));
+        btnRegistrar.setForeground(new java.awt.Color(0, 0, 0));
+        btnRegistrar.setText("REGISTRAR");
+        btnRegistrar.setBorder(null);
+        btnRegistrar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnRegistrarMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnRegistrarMouseExited(evt);
+            }
+        });
+        btnRegistrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegistrarActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnRegistrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 70, 114, 50));
+
+        btnEditar.setBackground(new java.awt.Color(255, 153, 0));
+        btnEditar.setForeground(new java.awt.Color(0, 0, 0));
+        btnEditar.setText("EDITAR");
+        btnEditar.setBorder(null);
+        btnEditar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnEditarMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnEditarMouseExited(evt);
+            }
+        });
+        btnEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditarActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnEditar, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 150, 114, 50));
+
+        btnEliminar.setBackground(new java.awt.Color(255, 153, 0));
+        btnEliminar.setForeground(new java.awt.Color(0, 0, 0));
+        btnEliminar.setText("ELIMINAR");
+        btnEliminar.setBorder(null);
+        btnEliminar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnEliminarMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnEliminarMouseExited(evt);
+            }
+        });
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 230, 114, 50));
+
+        btnAgregar.setBackground(new java.awt.Color(255, 153, 0));
+        btnAgregar.setForeground(new java.awt.Color(0, 0, 0));
+        btnAgregar.setText("AGREGAR");
+        btnAgregar.setBorder(null);
+        btnAgregar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnAgregarMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnAgregarMouseExited(evt);
+            }
+        });
+        btnAgregar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgregarActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnAgregar, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 70, 114, 50));
+
+        btnNuevoEmpleado.setBackground(new java.awt.Color(255, 153, 0));
+        btnNuevoEmpleado.setForeground(new java.awt.Color(0, 0, 0));
+        btnNuevoEmpleado.setText("NUEVO EMPLEADO");
+        btnNuevoEmpleado.setBorder(null);
+        btnNuevoEmpleado.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnNuevoEmpleadoMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnNuevoEmpleadoMouseExited(evt);
+            }
+        });
+        btnNuevoEmpleado.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNuevoEmpleadoActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnNuevoEmpleado, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 150, 114, 50));
+
+        btnSalir.setBackground(java.awt.Color.gray);
+        btnSalir.setForeground(new java.awt.Color(0, 0, 0));
+        btnSalir.setText("SALIR");
+        btnSalir.setBorder(null);
+        btnSalir.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnSalirMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnSalirMouseExited(evt);
+            }
+        });
+        btnSalir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSalirActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnSalir, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 230, 114, 50));
 
         TablaInformacionEmpleados.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -110,160 +251,23 @@ public class INFORMACION_EMPLEADO extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(TablaInformacionEmpleados);
 
-        btnRegistrar.setText("REGISTRAR");
-        btnRegistrar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRegistrarActionPerformed(evt);
-            }
-        });
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 310, 670, 191));
+        jPanel1.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 50, 340, 10));
 
-        btnAgregar.setText("AGREGAR");
-        btnAgregar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAgregarActionPerformed(evt);
-            }
-        });
-
-        btnEditar.setText("EDITAR");
-        btnEditar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnEditarActionPerformed(evt);
-            }
-        });
-
-        btnEliminar.setText("ELIMINAR");
-        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnEliminarActionPerformed(evt);
-            }
-        });
-
-        btnNuevoEmpleado.setText("NUEVO EMPLEADO");
-        btnNuevoEmpleado.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnNuevoEmpleadoActionPerformed(evt);
-            }
-        });
-
-        btnSalir.setText("SALIR");
-        btnSalir.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSalirActionPerformed(evt);
-            }
-        });
-
-        jLabel7.setText("GMAIL:");
+        jLabel8.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        jLabel8.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel8.setText("INFORMACION DE EMPLEADOS");
+        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 20, 340, 30));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 688, Short.MAX_VALUE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                .addComponent(jLabel1)
-                                .addGap(0, 0, Short.MAX_VALUE)))
-                        .addContainerGap())
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addGap(35, 35, 35)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel5)
-                                .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jLabel4)))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(6, 6, 6)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jComboBoxCargoDelEmpleado, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtIDEmpleado, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtNombreEmpleado, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtCorreo, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtDirecionEmpleado, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtTelefonoEmpleado, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 225, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(btnRegistrar)
-                                    .addComponent(btnAgregar))
-                                .addGap(44, 44, 44))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(btnNuevoEmpleado)
-                                .addGap(20, 20, 20))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(btnEditar)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(btnEliminar)
-                                .addContainerGap())
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(btnSalir)
-                                .addGap(51, 51, 51))))))
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 691, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1)
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(btnRegistrar)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(btnAgregar)
-                                .addGap(45, 45, 45))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(btnEditar)
-                                    .addComponent(btnEliminar))
-                                .addGap(2, 2, 2)))
-                        .addGap(0, 4, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel2)
-                            .addComponent(txtIDEmpleado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jComboBoxCargoDelEmpleado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel5))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtNombreEmpleado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel3))
-                        .addGap(9, 9, 9)))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(txtCorreo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel7))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(12, 12, 12)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtDirecionEmpleado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel4))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtTelefonoEmpleado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel6)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(22, 22, 22)
-                        .addComponent(btnNuevoEmpleado)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnSalir)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 43, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 516, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
@@ -274,14 +278,40 @@ public class INFORMACION_EMPLEADO extends javax.swing.JFrame {
     }//GEN-LAST:event_jComboBoxCargoDelEmpleadoActionPerformed
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
-        JOptionPane.showMessageDialog(this, "Empleado registrado con éxito.");
+
+        if (validarIDEmpleado(txtIDEmpleado.getText().trim()) && validarNombreDelEmpleado(txtNombreEmpleado.getText().trim()) && validarCorreo(txtCorreo.getText().trim()) && validarDireccion(txtDirecionEmpleado.getText().trim()) && validarTelefono(txtTelefonoEmpleado.getText().trim())) {
+            JOptionPane.showMessageDialog(this, "Empleado registrado con éxito.");
+        } else {
+            JOptionPane.showMessageDialog(this, "Debe insertar datos correctos");
+        }
     }//GEN-LAST:event_btnRegistrarActionPerformed
 
+    
+    public static boolean validarIDEmpleado(String datos) {
+        return datos.matches("^\\d{1,5}$");
+    }
+
+    public static boolean validarNombreDelEmpleado(String datos) {
+        return datos.matches("^[a-zA-ZÀ-ÿ\\s]{3,50}$");
+    }
+
+    public static boolean validarCorreo(String datos) {
+        return datos.matches("^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,6}$");
+    }
+
+    public static boolean validarDireccion(String datos) {
+        return datos.matches("^[a-zA-Z0-9À-ÿ\\s,.-]{5,100}$");
+    }
+
+    public static boolean validarTelefono(String datos) {
+        return datos.matches("^\\d{9}$");
+    }
+    
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
         MENU_PRICIPAL mMENU_PRICIPAL = new MENU_PRICIPAL();
         mMENU_PRICIPAL.setVisible(true);
         mMENU_PRICIPAL.setLocationRelativeTo(null);
-                this.dispose();
+        this.dispose();
     }//GEN-LAST:event_btnSalirActionPerformed
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
@@ -329,7 +359,55 @@ public class INFORMACION_EMPLEADO extends javax.swing.JFrame {
     private void btnNuevoEmpleadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoEmpleadoActionPerformed
         limpiarCampos();
     }//GEN-LAST:event_btnNuevoEmpleadoActionPerformed
-    
+
+    private void btnSalirMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSalirMouseEntered
+        btnSalir.setBackground(new Color(255, 153, 153));
+    }//GEN-LAST:event_btnSalirMouseEntered
+
+    private void btnSalirMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSalirMouseExited
+        btnSalir.setBackground(Color.gray);
+    }//GEN-LAST:event_btnSalirMouseExited
+
+    private void btnNuevoEmpleadoMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnNuevoEmpleadoMouseEntered
+        btnNuevoEmpleado.setBackground(new Color(255, 169, 40));
+    }//GEN-LAST:event_btnNuevoEmpleadoMouseEntered
+
+    private void btnRegistrarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnRegistrarMouseEntered
+        btnRegistrar.setBackground(new Color(255, 169, 40));
+    }//GEN-LAST:event_btnRegistrarMouseEntered
+
+    private void btnAgregarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAgregarMouseEntered
+        btnAgregar.setBackground(new Color(255, 169, 40));
+    }//GEN-LAST:event_btnAgregarMouseEntered
+
+    private void btnEliminarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEliminarMouseEntered
+        btnEliminar.setBackground(new Color(255, 169, 40));
+    }//GEN-LAST:event_btnEliminarMouseEntered
+
+    private void btnEditarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEditarMouseEntered
+        btnEditar.setBackground(new Color(255, 169, 40));
+    }//GEN-LAST:event_btnEditarMouseEntered
+
+    private void btnNuevoEmpleadoMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnNuevoEmpleadoMouseExited
+        btnNuevoEmpleado.setBackground(new Color(255, 153, 0));
+    }//GEN-LAST:event_btnNuevoEmpleadoMouseExited
+
+    private void btnRegistrarMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnRegistrarMouseExited
+        btnRegistrar.setBackground(new Color(255, 153, 0));
+    }//GEN-LAST:event_btnRegistrarMouseExited
+
+    private void btnAgregarMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAgregarMouseExited
+        btnAgregar.setBackground(new Color(255, 153, 0));
+    }//GEN-LAST:event_btnAgregarMouseExited
+
+    private void btnEliminarMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEliminarMouseExited
+        btnEliminar.setBackground(new Color(255, 153, 0));
+    }//GEN-LAST:event_btnEliminarMouseExited
+
+    private void btnEditarMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEditarMouseExited
+        btnEditar.setBackground(new Color(255, 153, 0));
+    }//GEN-LAST:event_btnEditarMouseExited
+
     // Método para guardar los datos en un archivo CSV
     private void guardarInformacionEnCSV() {
         try (PrintWriter pw = new PrintWriter(new File("Empleado.csv"))) {
@@ -359,7 +437,7 @@ public class INFORMACION_EMPLEADO extends javax.swing.JFrame {
             e.printStackTrace();
         }
     }
-    
+
     private void limpiarCampos() {
         txtIDEmpleado.setText("");
         txtNombreEmpleado.setText("");
@@ -368,6 +446,7 @@ public class INFORMACION_EMPLEADO extends javax.swing.JFrame {
         txtTelefonoEmpleado.setText("");
         jComboBoxCargoDelEmpleado.setSelectedIndex(0);  // Vuelve a "SIN CARGO"
     }
+
     /**
      * @param args the command line arguments
      */
@@ -412,14 +491,16 @@ public class INFORMACION_EMPLEADO extends javax.swing.JFrame {
     private javax.swing.JButton btnRegistrar;
     private javax.swing.JButton btnSalir;
     private javax.swing.JComboBox<String> jComboBoxCargoDelEmpleado;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTextField txtCorreo;
     private javax.swing.JTextField txtDirecionEmpleado;
     private javax.swing.JTextField txtIDEmpleado;

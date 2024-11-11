@@ -4,6 +4,7 @@
  */
 package UI;
 
+import java.awt.Color;
 import javax.swing.JOptionPane;
 import java.io.*;
 import javax.swing.table.DefaultTableModel;
@@ -18,7 +19,9 @@ import java.util.Date;
  * @author Usuario
  */
 public class REGISTRO_CLIENTES extends javax.swing.JFrame {
-    DefaultTableModel model=new DefaultTableModel();
+
+    DefaultTableModel model = new DefaultTableModel();
+
     /**
      * Creates new form REGISTRO_CLIENTES
      */
@@ -47,14 +50,14 @@ public class REGISTRO_CLIENTES extends javax.swing.JFrame {
                     String fechaEnTabla = model.getValueAt(filaSeleccionada, 5).toString();
 
                     try {
-                    // Definir el formato en que está la fecha en la tabla
-                    SimpleDateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd");  // Ajusta el formato según tu necesidad
-                    Date fecha = formatoFecha.parse(fechaEnTabla);  // Convertir la cadena a un objeto Date
+                        // Definir el formato en que está la fecha en la tabla
+                        SimpleDateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd");  // Ajusta el formato según tu necesidad
+                        Date fecha = formatoFecha.parse(fechaEnTabla);  // Convertir la cadena a un objeto Date
 
-                    // Establecer la fecha en el JDateChooser
-                    jDateFecha.setDate(fecha);
+                        // Establecer la fecha en el JDateChooser
+                        jDateFecha.setDate(fecha);
                     } catch (ParseException ex) {
-                    JOptionPane.showMessageDialog(null, "Error al convertir la fecha: " + ex.getMessage());
+                        JOptionPane.showMessageDialog(null, "Error al convertir la fecha: " + ex.getMessage());
                     }
                 }
             }
@@ -72,27 +75,29 @@ public class REGISTRO_CLIENTES extends javax.swing.JFrame {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
+        jPanel1 = new javax.swing.JPanel();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         TablaDeRegistro = new javax.swing.JTable();
-        jLabel1 = new javax.swing.JLabel();
-        btnNuevoCliente = new javax.swing.JButton();
-        jLabel2 = new javax.swing.JLabel();
+        txtIdCLiente = new javax.swing.JTextField();
         txtNombreCliente = new javax.swing.JTextField();
-        jLabel3 = new javax.swing.JLabel();
+        txtCorreo = new javax.swing.JTextField();
         txtDireccion = new javax.swing.JTextField();
-        jLabel4 = new javax.swing.JLabel();
         txtTelefono = new javax.swing.JTextField();
-        btnAgregar = new javax.swing.JButton();
-        jLabel7 = new javax.swing.JLabel();
+        jDateFecha = new com.toedter.calendar.JDateChooser();
         btnRegistrar = new javax.swing.JButton();
+        btnAgregar = new javax.swing.JButton();
         btnEditar = new javax.swing.JButton();
         btnEliminar = new javax.swing.JButton();
+        btnNuevoCliente = new javax.swing.JButton();
         btnSalir = new javax.swing.JButton();
-        jLabel8 = new javax.swing.JLabel();
-        txtCorreo = new javax.swing.JTextField();
-        jLabel9 = new javax.swing.JLabel();
-        txtIdCLiente = new javax.swing.JTextField();
-        jDateFecha = new com.toedter.calendar.JDateChooser();
+        jSeparator1 = new javax.swing.JSeparator();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -109,6 +114,38 @@ public class REGISTRO_CLIENTES extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        jPanel1.setBackground(new java.awt.Color(204, 204, 204));
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel9.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel9.setText("ID DEL CLIENTE:");
+        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 10, 100, 40));
+
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel1.setText("REGISTRO DE CLIENTES");
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 20, -1, 30));
+
+        jLabel2.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel2.setText("NOMBRE DEL CLIENTE:");
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 66, -1, 30));
+
+        jLabel8.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel8.setText("CORREO ELECTRONICO:");
+        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 110, 150, 40));
+
+        jLabel3.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel3.setText("DIRECCIÓN:");
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 160, -1, 40));
+
+        jLabel4.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel4.setText("TELÉFONO:");
+        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 210, -1, 40));
+
+        jLabel7.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel7.setText("FECHA DE RESERVA:");
+        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 260, -1, 40));
+
         TablaDeRegistro.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null},
@@ -122,165 +159,159 @@ public class REGISTRO_CLIENTES extends javax.swing.JFrame {
         ));
         jScrollPane2.setViewportView(TablaDeRegistro);
 
-        jLabel1.setText("REGISTRO DE CLIENTES");
+        jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 310, 690, 200));
 
-        btnNuevoCliente.setText("NUEVO CLIENTE");
-        btnNuevoCliente.addActionListener(new java.awt.event.ActionListener() {
+        txtIdCLiente.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        jPanel1.add(txtIdCLiente, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 10, 174, 40));
+        jPanel1.add(txtNombreCliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 60, 174, 40));
+
+        txtCorreo.setToolTipText("");
+        txtCorreo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnNuevoClienteActionPerformed(evt);
+                txtCorreoActionPerformed(evt);
             }
         });
-
-        jLabel2.setText("NOMBRE DEL CLIENTE:");
-
-        jLabel3.setText("DIRECCIÓN:");
+        jPanel1.add(txtCorreo, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 110, 174, 40));
 
         txtDireccion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtDireccionActionPerformed(evt);
             }
         });
+        jPanel1.add(txtDireccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 160, 174, 40));
+        jPanel1.add(txtTelefono, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 210, 174, 40));
+        jPanel1.add(jDateFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 260, 174, 40));
 
-        jLabel4.setText("TELÉFONO:");
-
-        btnAgregar.setText("AGREGAR");
-        btnAgregar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAgregarActionPerformed(evt);
+        btnRegistrar.setBackground(new java.awt.Color(255, 153, 0));
+        btnRegistrar.setForeground(new java.awt.Color(0, 0, 0));
+        btnRegistrar.setText("REGISTRAR");
+        btnRegistrar.setBorder(null);
+        btnRegistrar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnRegistrar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnRegistrarMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnRegistrarMouseExited(evt);
             }
         });
-
-        jLabel7.setText("FECHA DE RESERVA:");
-
-        btnRegistrar.setText("REGISTRAR");
         btnRegistrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnRegistrarActionPerformed(evt);
             }
         });
+        jPanel1.add(btnRegistrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 80, 110, 50));
 
+        btnAgregar.setBackground(new java.awt.Color(255, 153, 0));
+        btnAgregar.setForeground(new java.awt.Color(0, 0, 0));
+        btnAgregar.setText("AGREGAR");
+        btnAgregar.setBorder(null);
+        btnAgregar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnAgregar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnAgregarMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnAgregarMouseExited(evt);
+            }
+        });
+        btnAgregar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgregarActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnAgregar, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 80, 110, 50));
+
+        btnEditar.setBackground(new java.awt.Color(255, 153, 0));
+        btnEditar.setForeground(new java.awt.Color(0, 0, 0));
         btnEditar.setText("EDITAR");
+        btnEditar.setBorder(null);
+        btnEditar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnEditar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnEditarMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnEditarMouseExited(evt);
+            }
+        });
         btnEditar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnEditarActionPerformed(evt);
             }
         });
+        jPanel1.add(btnEditar, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 160, 110, 50));
 
+        btnEliminar.setBackground(new java.awt.Color(255, 153, 0));
+        btnEliminar.setForeground(new java.awt.Color(0, 0, 0));
         btnEliminar.setText("ELIMINAR");
+        btnEliminar.setBorder(null);
+        btnEliminar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnEliminar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnEliminarMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnEliminarMouseExited(evt);
+            }
+        });
         btnEliminar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnEliminarActionPerformed(evt);
             }
         });
+        jPanel1.add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 240, 110, 50));
 
+        btnNuevoCliente.setBackground(new java.awt.Color(255, 153, 0));
+        btnNuevoCliente.setForeground(new java.awt.Color(0, 0, 0));
+        btnNuevoCliente.setText("NUEVO CLIENTE");
+        btnNuevoCliente.setBorder(null);
+        btnNuevoCliente.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnNuevoCliente.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnNuevoClienteMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnNuevoClienteMouseExited(evt);
+            }
+        });
+        btnNuevoCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNuevoClienteActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnNuevoCliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 160, 110, 50));
+
+        btnSalir.setBackground(java.awt.Color.gray);
+        btnSalir.setForeground(new java.awt.Color(0, 0, 0));
         btnSalir.setText("SALIR");
+        btnSalir.setBorder(null);
+        btnSalir.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnSalir.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnSalirMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnSalirMouseExited(evt);
+            }
+        });
         btnSalir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSalirActionPerformed(evt);
             }
         });
-
-        jLabel8.setText("CORREO ELECTRONICO:");
-
-        jLabel9.setText("ID DEL CLIENTE:");
+        jPanel1.add(btnSalir, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 240, 110, 50));
+        jPanel1.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 50, 250, 10));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 703, Short.MAX_VALUE)
-                .addContainerGap())
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(22, 22, 22)
-                        .addComponent(jLabel1))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(37, 37, 37)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel4)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel2)
-                                    .addComponent(jLabel9))
-                                .addComponent(jLabel7)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtCorreo, javax.swing.GroupLayout.DEFAULT_SIZE, 174, Short.MAX_VALUE)
-                            .addComponent(txtNombreCliente)
-                            .addComponent(txtDireccion)
-                            .addComponent(txtTelefono)
-                            .addComponent(txtIdCLiente)
-                            .addComponent(jDateFecha, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 184, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnRegistrar)
-                            .addComponent(btnAgregar))
-                        .addGap(51, 51, 51))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(btnSalir)
-                        .addGap(54, 54, 54))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(btnEditar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnEliminar)
-                        .addGap(19, 19, 19))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(btnNuevoCliente)
-                        .addGap(32, 32, 32))))
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 712, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(16, 16, 16)
-                .addComponent(jLabel1)
-                .addGap(16, 16, 16)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnRegistrar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnAgregar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnEditar)
-                            .addComponent(btnEliminar))
-                        .addGap(74, 74, 74)
-                        .addComponent(btnNuevoCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnSalir))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel9)
-                            .addComponent(txtIdCLiente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel2)
-                            .addComponent(txtNombreCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel8)
-                            .addComponent(txtCorreo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel3)
-                            .addComponent(txtDireccion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel4)
-                            .addComponent(txtTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel7)
-                            .addComponent(jDateFecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 25, Short.MAX_VALUE)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 516, Short.MAX_VALUE)
         );
 
         pack();
@@ -304,20 +335,20 @@ public class REGISTRO_CLIENTES extends javax.swing.JFrame {
             // Obtener la fecha del JDateChooser
             Date fecha = jDateFecha.getDate();
             if (fecha != null) {
-            // Definir el formato de fecha que usarás en la tabla
-            SimpleDateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd");
-            String fechaFormateada = formatoFecha.format(fecha);
-            model.setValueAt(fechaFormateada, filaSeleccionada, 5);
+                // Definir el formato de fecha que usarás en la tabla
+                SimpleDateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd");
+                String fechaFormateada = formatoFecha.format(fecha);
+                model.setValueAt(fechaFormateada, filaSeleccionada, 5);
             } else {
-            // Si no se seleccionó ninguna fecha, dejar el valor anterior o manejarlo como quieras
-            JOptionPane.showMessageDialog(this, "Por favor, seleccione una fecha válida.");
+                // Si no se seleccionó ninguna fecha, dejar el valor anterior o manejarlo como quieras
+                JOptionPane.showMessageDialog(this, "Por favor, seleccione una fecha válida.");
             }
 
             JOptionPane.showMessageDialog(this, "Registro editado correctamente.");
             guardarDatosEnCSV();  // Guardar los cambios después de editar
-            } else {
+        } else {
             JOptionPane.showMessageDialog(this, "Por favor, seleccione una fila para editar.");
-            }
+        }
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
@@ -325,7 +356,7 @@ public class REGISTRO_CLIENTES extends javax.swing.JFrame {
         MENU_PRICIPAL mMENU_PRICIPAL = new MENU_PRICIPAL();
         mMENU_PRICIPAL.setVisible(true);
         mMENU_PRICIPAL.setLocationRelativeTo(null);
-                this.dispose();
+        this.dispose();
     }//GEN-LAST:event_btnSalirActionPerformed
 
     private void btnNuevoClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoClienteActionPerformed
@@ -334,39 +365,65 @@ public class REGISTRO_CLIENTES extends javax.swing.JFrame {
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
         // Obtener la fecha del componente jDateFecha
-    Date mFecha = jDateFecha.getDate();
-    
-    // Verificar si la fecha es nula
-    if (mFecha == null) {
-        JOptionPane.showMessageDialog(this, "Por favor, seleccione una fecha.");
-        return;  // Salir del método si la fecha no está seleccionada
-    }
-    
-    long fecha = mFecha.getTime();
-    java.sql.Date fecha_sql = new java.sql.Date(fecha);
-    JOptionPane.showMessageDialog(null, fecha_sql);
+        Date mFecha = jDateFecha.getDate();
 
-    // Declarar variables para los campos de texto
-    String id = txtIdCLiente.getText();
-    String nombre = txtNombreCliente.getText();
-    String gmail = txtCorreo.getText();
-    String direccion = txtDireccion.getText();
-    String telefono = txtTelefono.getText();
+        // Verificar si la fecha es nula
+        if (mFecha == null) {
+            JOptionPane.showMessageDialog(this, "Por favor, seleccione una fecha.");
+            return;  // Salir del método si la fecha no está seleccionada
+        }
 
-    // Validar que los campos no estén vacíos
-    if (id.isEmpty() || nombre.isEmpty() || gmail.isEmpty() || direccion.isEmpty() || telefono.isEmpty()) {
-        JOptionPane.showMessageDialog(this, "Por favor, complete todos los campos.");
-    } else {
-        // Agregar una nueva fila a la tabla si todo está correcto
-        model.addRow(new Object[]{id, nombre, gmail, direccion, telefono, fecha_sql});
-        guardarDatosEnCSV();  // Guardar los datos en el archivo CSV después de agregar un nuevo registro
-    }
+        long fecha = mFecha.getTime();
+        java.sql.Date fecha_sql = new java.sql.Date(fecha);
+        JOptionPane.showMessageDialog(null, fecha_sql);
+
+        // Declarar variables para los campos de texto
+        String id = txtIdCLiente.getText();
+        String nombre = txtNombreCliente.getText();
+        String gmail = txtCorreo.getText();
+        String direccion = txtDireccion.getText();
+        String telefono = txtTelefono.getText();
+
+        // Validar que los campos no estén vacíos
+        if (id.isEmpty() || nombre.isEmpty() || gmail.isEmpty() || direccion.isEmpty() || telefono.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Por favor, complete todos los campos.");
+        } else {
+            // Agregar una nueva fila a la tabla si todo está correcto
+            model.addRow(new Object[]{id, nombre, gmail, direccion, telefono, fecha_sql});
+            guardarDatosEnCSV();  // Guardar los datos en el archivo CSV después de agregar un nuevo registro
+        }
     }//GEN-LAST:event_btnAgregarActionPerformed
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
-        //No se necesita mucho codigo porque con la palabra this hace referencia al contexto actual
-        JOptionPane.showMessageDialog(this, "Cliente registrado con éxito.");
+
+        if (validarIDCliente(txtIdCLiente.getText().trim()) && validarNombreDelCliente(txtNombreCliente.getText().trim()) && validarCorreo(txtCorreo.getText().trim()) && validarDireccion(txtDireccion.getText().trim()) && validarTelefono(txtTelefono.getText().trim())) {
+            //No se necesita mucho codigo porque con la palabra this hace referencia al contexto actual
+            JOptionPane.showMessageDialog(this, "Cliente registrado con éxito.");
+        } else {
+            JOptionPane.showMessageDialog(this, "Debe insertar datos correctos");
+        }
     }//GEN-LAST:event_btnRegistrarActionPerformed
+
+    public static boolean validarIDCliente(String datos) {
+        return datos.matches("^\\d{1,5}$");
+    }
+
+    public static boolean validarNombreDelCliente(String datos) {
+        return datos.matches("^[a-zA-ZÀ-ÿ\\s]{3,50}$");
+    }
+
+    public static boolean validarCorreo(String datos) {
+        return datos.matches("^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,6}$");
+    }
+
+    public static boolean validarDireccion(String datos) {
+        return datos.matches("^[a-zA-Z0-9À-ÿ\\s,.-]{5,100}$");
+    }
+
+    public static boolean validarTelefono(String datos) {
+        return datos.matches("^\\d{9}$");
+    }
+
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
         //Seleccionamos la fila que se quiera eliminar
@@ -381,6 +438,58 @@ public class REGISTRO_CLIENTES extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Por favor, seleccione una fila para eliminar.");
         }
     }//GEN-LAST:event_btnEliminarActionPerformed
+
+    private void btnSalirMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSalirMouseEntered
+        btnSalir.setBackground(new Color(255, 153, 153));
+    }//GEN-LAST:event_btnSalirMouseEntered
+
+    private void btnSalirMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSalirMouseExited
+        btnSalir.setBackground(Color.gray);
+    }//GEN-LAST:event_btnSalirMouseExited
+
+    private void btnNuevoClienteMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnNuevoClienteMouseEntered
+        btnNuevoCliente.setBackground(new Color(255, 169, 40));
+    }//GEN-LAST:event_btnNuevoClienteMouseEntered
+
+    private void btnRegistrarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnRegistrarMouseEntered
+        btnRegistrar.setBackground(new Color(255, 169, 40));
+    }//GEN-LAST:event_btnRegistrarMouseEntered
+
+    private void btnAgregarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAgregarMouseEntered
+        btnAgregar.setBackground(new Color(255, 169, 40));
+    }//GEN-LAST:event_btnAgregarMouseEntered
+
+    private void btnEditarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEditarMouseEntered
+        btnEditar.setBackground(new Color(255, 169, 40));
+    }//GEN-LAST:event_btnEditarMouseEntered
+
+    private void btnEliminarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEliminarMouseEntered
+        btnEliminar.setBackground(new Color(255, 169, 40));
+    }//GEN-LAST:event_btnEliminarMouseEntered
+
+    private void btnNuevoClienteMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnNuevoClienteMouseExited
+        btnNuevoCliente.setBackground(new Color(255, 153, 0));
+    }//GEN-LAST:event_btnNuevoClienteMouseExited
+
+    private void btnRegistrarMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnRegistrarMouseExited
+        btnRegistrar.setBackground(new Color(255, 153, 0));
+    }//GEN-LAST:event_btnRegistrarMouseExited
+
+    private void btnAgregarMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAgregarMouseExited
+        btnAgregar.setBackground(new Color(255, 153, 0));
+    }//GEN-LAST:event_btnAgregarMouseExited
+
+    private void btnEditarMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEditarMouseExited
+        btnEditar.setBackground(new Color(255, 153, 0));
+    }//GEN-LAST:event_btnEditarMouseExited
+
+    private void btnEliminarMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEliminarMouseExited
+        btnEliminar.setBackground(new Color(255, 153, 0));
+    }//GEN-LAST:event_btnEliminarMouseExited
+
+    private void txtCorreoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCorreoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCorreoActionPerformed
 
     // Método para guardar los datos en un archivo CSV
     private void guardarDatosEnCSV() {
@@ -411,7 +520,7 @@ public class REGISTRO_CLIENTES extends javax.swing.JFrame {
             e.printStackTrace();
         }
     }
-    
+
     private void limpiarCampos() {
         //Limpiar textos
         txtIdCLiente.setText("");
@@ -422,6 +531,7 @@ public class REGISTRO_CLIENTES extends javax.swing.JFrame {
         // Limpiar la fecha en el JDateChooser
         jDateFecha.setDate(null);
     }
+
     /**
      * @param args the command line arguments
      */
@@ -473,8 +583,10 @@ public class REGISTRO_CLIENTES extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTable jTable1;
     private javax.swing.JTextField txtCorreo;
     private javax.swing.JTextField txtDireccion;

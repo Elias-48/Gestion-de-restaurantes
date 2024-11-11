@@ -4,11 +4,14 @@
  */
 package UI;
 
+import java.awt.Color;
+
 /**
  *
  * @author Usuario
  */
 public class MENU_PRICIPAL extends javax.swing.JFrame {
+
     /**
      * Creates new form MENU_PRICIPAL
      */
@@ -26,6 +29,7 @@ public class MENU_PRICIPAL extends javax.swing.JFrame {
     private void initComponents() {
 
         jButton5 = new javax.swing.JButton();
+        jPanel1 = new javax.swing.JPanel();
         btnCliente = new javax.swing.JButton();
         btnMenu = new javax.swing.JButton();
         btnPedidos = new javax.swing.JButton();
@@ -37,86 +41,143 @@ public class MENU_PRICIPAL extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        jPanel1.setBackground(new java.awt.Color(204, 204, 204));
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        btnCliente.setBackground(new java.awt.Color(255, 153, 0));
+        btnCliente.setForeground(new java.awt.Color(0, 0, 0));
+        btnCliente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/users_group_customers_clients_icon-icons.com_72448.png"))); // NOI18N
         btnCliente.setText("CLIENTES");
+        btnCliente.setBorder(null);
+        btnCliente.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnCliente.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnClienteMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnClienteMouseExited(evt);
+            }
+        });
         btnCliente.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnClienteActionPerformed(evt);
             }
         });
+        jPanel1.add(btnCliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 100, 440, 80));
 
-        btnMenu.setText("MENU PLATOS");
+        btnMenu.setBackground(new java.awt.Color(255, 153, 0));
+        btnMenu.setForeground(new java.awt.Color(0, 0, 0));
+        btnMenu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/food_5115.png"))); // NOI18N
+        btnMenu.setText("   MENU");
+        btnMenu.setBorder(null);
+        btnMenu.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnMenu.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnMenuMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnMenuMouseExited(evt);
+            }
+        });
         btnMenu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnMenuActionPerformed(evt);
             }
         });
+        jPanel1.add(btnMenu, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 440, 80));
 
-        btnPedidos.setText("INGRESO PEDIDOS");
+        btnPedidos.setBackground(new java.awt.Color(255, 153, 0));
+        btnPedidos.setForeground(new java.awt.Color(0, 0, 0));
+        btnPedidos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/waiter_food_5411.png"))); // NOI18N
+        btnPedidos.setText("  PEDIDOS");
+        btnPedidos.setBorder(null);
+        btnPedidos.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnPedidos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnPedidosMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnPedidosMouseExited(evt);
+            }
+        });
         btnPedidos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnPedidosActionPerformed(evt);
             }
         });
+        jPanel1.add(btnPedidos, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 190, 440, 80));
 
-        btnEmpleados.setText("INFORMACION EMPLEADOS");
+        btnEmpleados.setBackground(new java.awt.Color(255, 153, 0));
+        btnEmpleados.setForeground(new java.awt.Color(0, 0, 0));
+        btnEmpleados.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/people_team_business_employees_prospective_selection_resource_human_management_icon_259235 (1).png"))); // NOI18N
+        btnEmpleados.setText("  EMPLEADOS");
+        btnEmpleados.setBorder(null);
+        btnEmpleados.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnEmpleados.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnEmpleadosMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnEmpleadosMouseExited(evt);
+            }
+        });
         btnEmpleados.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnEmpleadosActionPerformed(evt);
             }
         });
+        jPanel1.add(btnEmpleados, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 370, 440, 80));
 
-        btnFactura.setText("FACTURA");
+        btnFactura.setBackground(new java.awt.Color(255, 153, 0));
+        btnFactura.setForeground(new java.awt.Color(0, 0, 0));
+        btnFactura.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/invoice_bill_payment_request_billing_statement_financial_document_icon_262954.png"))); // NOI18N
+        btnFactura.setText("        FACTURA");
+        btnFactura.setBorder(null);
+        btnFactura.setBorderPainted(false);
+        btnFactura.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnFactura.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnFacturaMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnFacturaMouseExited(evt);
+            }
+        });
         btnFactura.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnFacturaActionPerformed(evt);
             }
         });
+        jPanel1.add(btnFactura, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 280, 440, 80));
 
+        btnSalir.setBackground(java.awt.Color.gray);
+        btnSalir.setForeground(new java.awt.Color(0, 0, 0));
         btnSalir.setText("SALIR");
+        btnSalir.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnSalir.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnSalirMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnSalirMouseExited(evt);
+            }
+        });
         btnSalir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSalirActionPerformed(evt);
             }
         });
+        jPanel1.add(btnSalir, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 460, 440, 40));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(31, 31, 31)
-                        .addComponent(btnSalir))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(29, 29, 29)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(btnEmpleados)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(btnCliente)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnMenu)))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnPedidos)
-                            .addComponent(btnFactura))))
-                .addContainerGap(16, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 460, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap(118, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnPedidos)
-                    .addComponent(btnMenu)
-                    .addComponent(btnCliente))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnEmpleados)
-                    .addComponent(btnFactura))
-                .addGap(51, 51, 51)
-                .addComponent(btnSalir)
-                .addGap(44, 44, 44))
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 510, Short.MAX_VALUE)
         );
 
         pack();
@@ -126,43 +187,91 @@ public class MENU_PRICIPAL extends javax.swing.JFrame {
         REGISTRO_CLIENTES mREGISTRO_CLIENTES = new REGISTRO_CLIENTES();
         mREGISTRO_CLIENTES.setVisible(true);
         mREGISTRO_CLIENTES.setLocationRelativeTo(null);
-                this.dispose();
+        this.dispose();
     }//GEN-LAST:event_btnClienteActionPerformed
 
     private void btnMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuActionPerformed
         MENÚ_PLATOS mMENÚ_PLATOS = new MENÚ_PLATOS();
         mMENÚ_PLATOS.setVisible(true);
         mMENÚ_PLATOS.setLocationRelativeTo(null);
-                this.dispose();
+        this.dispose();
     }//GEN-LAST:event_btnMenuActionPerformed
 
     private void btnPedidosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPedidosActionPerformed
         INGRESO_PEDIDOS mINGRESO_PEDIDOS = new INGRESO_PEDIDOS();
         mINGRESO_PEDIDOS.setVisible(true);
         mINGRESO_PEDIDOS.setLocationRelativeTo(null);
-                this.dispose();
+        this.dispose();
     }//GEN-LAST:event_btnPedidosActionPerformed
 
     private void btnEmpleadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEmpleadosActionPerformed
         INFORMACION_EMPLEADO mINFORMACIO_EMPLEADO = new INFORMACION_EMPLEADO();
         mINFORMACIO_EMPLEADO.setVisible(true);
         mINFORMACIO_EMPLEADO.setLocationRelativeTo(null);
-                this.dispose();
+        this.dispose();
     }//GEN-LAST:event_btnEmpleadosActionPerformed
 
     private void btnFacturaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFacturaActionPerformed
         FACTURA mFACTURA = new FACTURA(); // Pasar la misma instancia
         mFACTURA.setVisible(true);
         mFACTURA.setLocationRelativeTo(null);
-                this.dispose();
+        this.dispose();
     }//GEN-LAST:event_btnFacturaActionPerformed
 
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
         LOGIN mLOGIN = new LOGIN();
         mLOGIN.setVisible(true);
         mLOGIN.setLocationRelativeTo(null);
-                this.dispose();
+        this.dispose();
     }//GEN-LAST:event_btnSalirActionPerformed
+
+    private void btnSalirMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSalirMouseEntered
+        btnSalir.setBackground(new Color(255, 153, 153));
+    }//GEN-LAST:event_btnSalirMouseEntered
+
+    private void btnSalirMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSalirMouseExited
+        btnSalir.setBackground(Color.gray);
+    }//GEN-LAST:event_btnSalirMouseExited
+
+    private void btnFacturaMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnFacturaMouseEntered
+        btnFactura.setBackground(new Color(255, 169, 40));
+    }//GEN-LAST:event_btnFacturaMouseEntered
+
+    private void btnEmpleadosMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEmpleadosMouseEntered
+        btnEmpleados.setBackground(new Color(255, 169, 40));
+    }//GEN-LAST:event_btnEmpleadosMouseEntered
+
+    private void btnPedidosMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnPedidosMouseEntered
+        btnPedidos.setBackground(new Color(255, 169, 40));
+    }//GEN-LAST:event_btnPedidosMouseEntered
+
+    private void btnMenuMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnMenuMouseEntered
+        btnMenu.setBackground(new Color(255, 169, 40));
+    }//GEN-LAST:event_btnMenuMouseEntered
+
+    private void btnClienteMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnClienteMouseEntered
+        btnCliente.setBackground(new Color(255, 169, 40));
+    }//GEN-LAST:event_btnClienteMouseEntered
+
+    private void btnFacturaMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnFacturaMouseExited
+        btnFactura.setBackground(new Color(255, 153, 0));
+    }//GEN-LAST:event_btnFacturaMouseExited
+
+    private void btnEmpleadosMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEmpleadosMouseExited
+        btnEmpleados.setBackground(new Color(255, 153, 0));
+    }//GEN-LAST:event_btnEmpleadosMouseExited
+
+    private void btnPedidosMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnPedidosMouseExited
+        btnPedidos.setBackground(new Color(255, 153, 0));
+    }//GEN-LAST:event_btnPedidosMouseExited
+
+    private void btnMenuMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnMenuMouseExited
+        btnMenu.setBackground(new Color(255, 153, 0));
+    }//GEN-LAST:event_btnMenuMouseExited
+
+    private void btnClienteMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnClienteMouseExited
+        btnCliente.setBackground(new Color(255, 153, 0));
+    }//GEN-LAST:event_btnClienteMouseExited
 
     /**
      * @param args the command line arguments
@@ -207,5 +316,6 @@ public class MENU_PRICIPAL extends javax.swing.JFrame {
     private javax.swing.JButton btnPedidos;
     private javax.swing.JButton btnSalir;
     private javax.swing.JButton jButton5;
+    private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
 }

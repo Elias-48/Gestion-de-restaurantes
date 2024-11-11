@@ -3,6 +3,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package UI;
+
+import java.awt.Color;
+
 /**
  *
  * @author Usuario
@@ -25,6 +28,8 @@ public class COMPROBANTE extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanel1 = new javax.swing.JPanel();
+        btnSalir = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -33,106 +38,86 @@ public class COMPROBANTE extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
-        btnSalir = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         TextAreaComprobante = new javax.swing.JTextArea();
+        jLabel9 = new javax.swing.JLabel();
+        jSeparator1 = new javax.swing.JSeparator();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        jLabel1.setText("SAZÓN ANDINA");
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel2.setText("########################################################");
-
-        jLabel3.setText("RUC: 20512002090");
-
-        jLabel4.setText("CENTRAL: AV. Cualquiera");
-
-        jLabel5.setText("BOLETA DE VENTA ELECTRONICA");
-
-        jLabel6.setText("------------------------------------------------------------------------------------------");
-
-        jLabel7.setText("A.T.R. 01-0000000020");
-
-        jLabel8.setText("DETALLE");
-
+        btnSalir.setBackground(java.awt.Color.gray);
+        btnSalir.setForeground(new java.awt.Color(0, 0, 0));
         btnSalir.setText("SALIR");
+        btnSalir.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnSalirMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnSalirMouseExited(evt);
+            }
+        });
         btnSalir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSalirActionPerformed(evt);
             }
         });
+        jPanel1.add(btnSalir, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 470, 114, 50));
+
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel1.setText("SAZÓN ANDINA");
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 50, -1, -1));
+
+        jLabel2.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel2.setText("...................................................................................................................................................................................");
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 120, 430, -1));
+
+        jLabel3.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel3.setText("RUC: 20512002090");
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 150, -1, -1));
+
+        jLabel4.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel4.setText("CENTRAL: Larcomar, Mal. de la Reserva 610, Miraflores 15074");
+        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 170, -1, -1));
+
+        jLabel5.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel5.setText("BOLETA DE VENTA ELECTRONICA");
+        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 200, -1, -1));
+
+        jLabel6.setText("-------------------------------------------------------------------------------------------");
+        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 250, 440, -1));
+
+        jLabel7.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel7.setText("A.T.R. 01-0000000020");
+        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 230, -1, -1));
+
+        jLabel8.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel8.setText("DETALLES:");
+        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 280, 80, -1));
 
         TextAreaComprobante.setColumns(20);
         TextAreaComprobante.setRows(5);
         TextAreaComprobante.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
         jScrollPane1.setViewportView(TextAreaComprobante);
 
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 300, -1, 161));
+
+        jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/Imagen de WhatsApp 2024-11-09 a las 13.02.39_c4d383a3_1.jpg"))); // NOI18N
+        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 10, 110, 90));
+        jPanel1.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 80, 180, 10));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel8)
-                        .addGap(191, 191, 191)))
-                .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(131, 131, 131))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jLabel5)
-                        .addGap(128, 128, 128))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jLabel4)
-                        .addGap(150, 150, 150))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addGap(169, 169, 169))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(btnSalir)
-                        .addGap(176, 176, 176))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jLabel7)
-                        .addGap(161, 161, 161))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addGap(15, 15, 15))))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(103, 103, 103))
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(btnSalir)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 53, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel2)
-                .addGap(12, 12, 12)
-                .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel5)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel6)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel7)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel8)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(63, 63, 63))
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -142,12 +127,21 @@ public class COMPROBANTE extends javax.swing.JFrame {
         FACTURA mFACTURA = new FACTURA();
         mFACTURA.setVisible(true);
         mFACTURA.setLocationRelativeTo(null);
-                this.dispose();
+        this.dispose();
     }//GEN-LAST:event_btnSalirActionPerformed
 
+    private void btnSalirMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSalirMouseEntered
+        btnSalir.setBackground(new Color(255, 153, 153));
+    }//GEN-LAST:event_btnSalirMouseEntered
+
+    private void btnSalirMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSalirMouseExited
+        btnSalir.setBackground(Color.gray);
+    }//GEN-LAST:event_btnSalirMouseExited
+
     public javax.swing.JTextArea getTextAreaComprobante() {
-    return TextAreaComprobante;
+        return TextAreaComprobante;
     }
+
     /**
      * @param args the command line arguments
      */
@@ -194,6 +188,9 @@ public class COMPROBANTE extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JSeparator jSeparator1;
     // End of variables declaration//GEN-END:variables
 }
