@@ -10,6 +10,12 @@ import javax.swing.table.DefaultTableModel;
 import java.io.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import javax.swing.RowSorter;
+import javax.swing.SortOrder;
+import javax.swing.table.TableRowSorter;
 
 /**
  *
@@ -17,32 +23,41 @@ import java.awt.event.MouseEvent;
  */
 public class MENÚ_PLATOS extends javax.swing.JFrame {
 
-    DefaultTableModel modelo = new DefaultTableModel();
-
+    private DefaultTableModel modelo;
+    private HashSet<String> idsPlatos;
+    private HashSet<String> nombresPlatos;
     /**
      * Creates new form MENÚ_PLATOS
      */
     public MENÚ_PLATOS() {
-        initComponents();
-        modelo.addColumn("ID");
-        modelo.addColumn("MENÚ");
-        modelo.addColumn("INGREDIENTES");
-        modelo.addColumn("COSTO");
-        TablaMenuPlato.setModel(modelo);
-        cargarMenuDesdeCSV();  // Carga los datos desde el archivo CSV al iniciar la ventana
-        // Agregar evento para seleccionar una fila y llenar los campos
-        TablaMenuPlato.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
-                int filaSeleccionada = TablaMenuPlato.getSelectedRow();
-                if (filaSeleccionada >= 0) {
-                    // Llenar los campos de texto con los valores de la fila seleccionada
-                    txtIdDelPlato.setText(modelo.getValueAt(filaSeleccionada, 0).toString());
-                    txtNombreDelPlato.setText(modelo.getValueAt(filaSeleccionada, 1).toString());
-                    jTextAreaIngredientes.setText(modelo.getValueAt(filaSeleccionada, 2).toString());
-                    txtPrecioDelPlato.setText(modelo.getValueAt(filaSeleccionada, 3).toString());
-                }
+    modelo = new DefaultTableModel(); // Inicializar el modelo de tabla
+    initComponents();
+    idsPlatos = new HashSet<>();
+    nombresPlatos = new HashSet<>();
+    modelo.addColumn("ID");
+    modelo.addColumn("MENÚ");
+    modelo.addColumn("INGREDIENTES");
+    modelo.addColumn("COSTO");
+    TablaMenuPlato.setModel(modelo);
+    cargarMenuDesdeCSV();  // Carga los datos desde el archivo CSV al iniciar la ventana
+    ordenarTablaPorID();   // Solo ordena la visualización de la tabla, no el modelo
+
+    // Evento para seleccionar una fila y llenar los campos
+    TablaMenuPlato.addMouseListener(new MouseAdapter() {
+        public void mouseClicked(MouseEvent e) {
+            int filaVisual = TablaMenuPlato.getSelectedRow(); // Índice visual de la fila seleccionada
+            if (filaVisual >= 0) {
+                // Convertir el índice visual al índice del modelo para acceder correctamente a los datos
+                int filaModelo = TablaMenuPlato.convertRowIndexToModel(filaVisual);
+                
+                // Llenar los campos de texto con los valores de la fila seleccionada
+                txtIdDelPlato.setText(modelo.getValueAt(filaModelo, 0).toString());
+                txtNombreDelPlato.setText(modelo.getValueAt(filaModelo, 1).toString());
+                jTextAreaIngredientes.setText(modelo.getValueAt(filaModelo, 2).toString());
+                txtPrecioDelPlato.setText(modelo.getValueAt(filaModelo, 3).toString());
             }
-        });
+        }
+    });
     }
 
     /**
@@ -285,18 +300,30 @@ public class MENÚ_PLATOS extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSalirActionPerformed
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
-        String idplato = txtIdDelPlato.getText();
-        String nombre = txtNombreDelPlato.getText();
-        String ingredientes = jTextAreaIngredientes.getText().replace("\n", " | ");
-        String precio = txtPrecioDelPlato.getText();
+        String idplato = txtIdDelPlato.getText().trim();
+    String nombre = txtNombreDelPlato.getText().trim();
+    String ingredientes = jTextAreaIngredientes.getText().replace("\n", " | ").trim();
+    String precio = txtPrecioDelPlato.getText().trim();
 
-        if (idplato.isEmpty() || nombre.isEmpty() || ingredientes.isEmpty() || precio.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Todos los campos deben estar completos");
-        } else {
-            modelo.addRow(new Object[]{idplato, nombre, ingredientes, precio});
-            JOptionPane.showMessageDialog(this, "Plato registrado con éxito");
-            guardarMenuEnCSV();
-        }
+    if (idplato.isEmpty() || nombre.isEmpty() || ingredientes.isEmpty() || precio.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Todos los campos deben estar completos");
+    } else if (idsPlatos.contains(idplato)) {
+        JOptionPane.showMessageDialog(this, "El ID del plato ya existe. Ingrese un ID diferente.");
+    } else if (nombresPlatos.contains(nombre)) {
+        JOptionPane.showMessageDialog(this, "El nombre del plato ya existe. Ingrese un nombre diferente.");
+    } else {
+        // Agregar el ID y el nombre a los HashSets para evitar duplicados
+        idsPlatos.add(idplato);
+        nombresPlatos.add(nombre);
+
+        // Agregar la nueva fila a la tabla
+        modelo.addRow(new Object[]{idplato, nombre, ingredientes, precio});
+        JOptionPane.showMessageDialog(this, "Plato registrado con éxito");
+        
+        guardarMenuEnCSV();  // Guardar los datos en el archivo CSV
+        ordenarTablaPorID(); // Ordenar la tabla después de agregar un nuevo plato
+        limpiarCampos(); // Limpiar los campos de texto
+    }
     }//GEN-LAST:event_btnAgregarActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
@@ -318,6 +345,14 @@ public class MENÚ_PLATOS extends javax.swing.JFrame {
         int filaSeleccionada = TablaMenuPlato.getSelectedRow();
 
         if (filaSeleccionada >= 0) {
+            String idPlato = (String) modelo.getValueAt(filaSeleccionada, 0);
+            String nombrePlato = (String) modelo.getValueAt(filaSeleccionada, 1);
+
+            
+            idsPlatos.remove(idPlato);
+            nombresPlatos.remove(nombrePlato);
+
+            // Eliminar la fila seleccionada en la tabla y actualizar el archivo CSV
             modelo.removeRow(filaSeleccionada);
             guardarMenuEnCSV();
             JOptionPane.showMessageDialog(this, "Plato eliminado con éxito");
@@ -327,11 +362,17 @@ public class MENÚ_PLATOS extends javax.swing.JFrame {
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
-        if (validarIDPlato(txtIdDelPlato.getText().trim()) && validarNombre(txtNombreDelPlato.getText().trim()) && validarIngredientes(jTextAreaIngredientes.getText().trim()) && validarPrecio(txtPrecioDelPlato.getText().trim())) {
-            JOptionPane.showMessageDialog(this, "Plato registrado con éxito.");
-        } else {
-            JOptionPane.showMessageDialog(this, "Debe insertar datos correctos");
-        }
+        String idPlato = txtIdDelPlato.getText().trim();
+    String nombrePlato = txtNombreDelPlato.getText().trim();
+
+    if (validarIDPlato(idPlato) && validarNombre(nombrePlato) &&
+        validarIngredientes(jTextAreaIngredientes.getText().trim()) &&
+        validarPrecio(txtPrecioDelPlato.getText().trim())) {
+
+        JOptionPane.showMessageDialog(this, "Datos válidos. Puede agregar el plato.");
+    } else {
+        JOptionPane.showMessageDialog(this, "Debe insertar datos correctos");
+    }
     }//GEN-LAST:event_btnRegistrarActionPerformed
 
     public static boolean validarIDPlato(String datos) {
@@ -343,7 +384,7 @@ public class MENÚ_PLATOS extends javax.swing.JFrame {
     }
 
     public static boolean validarIngredientes(String datos) {
-        return datos.matches("^[a-zA-ZÀ-ÿ\\s]{3,500000000}$");
+        return datos.matches("^[a-zA-ZÀ-ÿ\\s]{3,500000}$");
     }
 
     public static boolean validarPrecio(String datos) {
@@ -416,7 +457,9 @@ public class MENÚ_PLATOS extends javax.swing.JFrame {
                         value = value.replace("\n", " | ");  // Reemplazar saltos de línea por |
                     }
                     sb.append(value);
-                    sb.append(",");
+                    if (j < modelo.getColumnCount() - 1) {
+                        sb.append(",");
+                    }
                 }
                 sb.append("\n");
             }
@@ -433,10 +476,22 @@ public class MENÚ_PLATOS extends javax.swing.JFrame {
             while ((line = br.readLine()) != null) {
                 String[] data = line.split(",");
                 modelo.addRow(data);
+                idsPlatos.add(data[0]); // Agregar ID a HashSet
+                nombresPlatos.add(data[1]); // Agregar nombre a HashSet
             }
+            ordenarTablaPorID();
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+    private void ordenarTablaPorID() {
+    TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(modelo);
+    TablaMenuPlato.setRowSorter(sorter);
+
+    // Ordenar por la columna de ID (columna 0), en orden ascendente
+    List<RowSorter.SortKey> sortKeys = new ArrayList<>();
+    sortKeys.add(new RowSorter.SortKey(0, SortOrder.ASCENDING));
+    sorter.setSortKeys(sortKeys);
     }
 
     private void limpiarCampos() {

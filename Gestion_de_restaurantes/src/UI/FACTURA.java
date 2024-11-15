@@ -10,6 +10,12 @@ import javax.swing.table.DefaultTableModel;
 import java.io.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.List;
+
 
 /**
  *
@@ -17,13 +23,17 @@ import java.awt.event.MouseEvent;
  */
 public class FACTURA extends javax.swing.JFrame {
 
-    DefaultTableModel modelo2 = new DefaultTableModel();
-
+    private DefaultTableModel modelo2;  
+    private HashSet<String> idFacturas;  
+    private HashSet<String> idClientes;
     /**
      * Creates new form FACTURA
      */
     public FACTURA() {
         initComponents();
+        modelo2 = new DefaultTableModel();
+        idFacturas = new HashSet<>();  
+        idClientes = new HashSet<>();
         modelo2.addColumn("ID FACTURA");
         modelo2.addColumn("ID CLIENTE");
         modelo2.addColumn("NOMBRE CLIENTE");
@@ -31,6 +41,7 @@ public class FACTURA extends javax.swing.JFrame {
         modelo2.addColumn("PRECIO TOTAL");
         TablaFactura.setModel(modelo2);
         cargarFacturasDesdeCSV();
+        ordenarTablaPorIDFactura();
         // Agregar el evento para detectar clics en las filas
         TablaFactura.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
@@ -43,7 +54,32 @@ public class FACTURA extends javax.swing.JFrame {
             }
         });
     }
+    private void ordenarTablaPorIDFactura() {   
+    int rowCount = modelo2.getRowCount();  
+    List<Object[]> tableData = new ArrayList<>();  
 
+    for (int i = 0; i < rowCount; i++) {  
+        Object[] row = new Object[modelo2.getColumnCount()];  
+        for (int j = 0; j < modelo2.getColumnCount(); j++) {  
+            row[j] = modelo2.getValueAt(i, j);  
+        }  
+        tableData.add(row);  
+    }  
+
+    // Ordenar la lista por el primer elemento (IDFactura)  
+    Collections.sort(tableData, new Comparator<Object[]>() {  
+        @Override  
+        public int compare(Object[] row1, Object[] row2) {  
+            return row1[0].toString().compareTo(row2[0].toString());  
+        }  
+    });  
+
+    // Limpiar y volver a llenar el modelo de la tabla  
+    modelo2.setRowCount(0); // Limpiar el modelo  
+    for (Object[] rowData : tableData) {  
+        modelo2.addRow(rowData);  
+    }    
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -287,6 +323,18 @@ public class FACTURA extends javax.swing.JFrame {
         String idfactura = txtIDFactura.getText();
         String idcliente = txtIdCliente.getText();
 
+        // Verifica ID de factura  
+        if (idFacturas.contains(idfactura)) {  
+            JOptionPane.showMessageDialog(this, "Este ID de factura ya existe.");  
+            return;  
+        }  
+
+        // Verifica ID de cliente  
+        if (idClientes.contains(idcliente)) {  
+            JOptionPane.showMessageDialog(this, "Este ID de cliente ya existe.");  
+            return;  
+            
+        }
         if (idfactura.isEmpty() || idcliente.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Por favor, complete todos los campos.");
         } else {
@@ -300,9 +348,12 @@ public class FACTURA extends javax.swing.JFrame {
 
                 // Agrega los datos a la tabla, incluyendo el nombre, la fecha y el precio total
                 modelo2.addRow(new Object[]{idfactura, idcliente, nombreCliente, fechaReservada, precioTotal});
-
+                // Aquí se guardaría la nueva factura  
+                idFacturas.add(idfactura);  
+                idClientes.add(idcliente);
                 // Guardar la tabla en el archivo CSV después de agregar los datos
                 guardarFacturaEnCSV();
+                ordenarTablaPorIDFactura();
             } else {
                 JOptionPane.showMessageDialog(this, "No se encontró un cliente con ese ID.");
             }
@@ -319,11 +370,11 @@ public class FACTURA extends javax.swing.JFrame {
     }//GEN-LAST:event_btnRegistrarActionPerformed
 
     public static boolean validarIDFactura(String datos) {
-        return datos.matches("^[A-Z]{3}\\d{3,}$");
+        return datos.matches("^\\d{1,6}$");
     }
 
     public static boolean validarIDCliente(String datos) {
-        return datos.matches("^[A-Z]{3}\\d{3,}$");
+        return datos.matches("^\\d{1,6}$");
     }
 
 
@@ -489,6 +540,7 @@ public class FACTURA extends javax.swing.JFrame {
                 String[] data = line.split(",");
                 modelo2.addRow(data);
             }
+            ordenarTablaPorIDFactura();
         } catch (IOException e) {
             e.printStackTrace();
         }

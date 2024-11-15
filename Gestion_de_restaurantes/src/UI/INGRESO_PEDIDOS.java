@@ -10,12 +10,18 @@ import javax.swing.table.DefaultTableModel;
 import java.io.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.RowSorter;
+import javax.swing.SortOrder;
+import javax.swing.table.TableRowSorter;
 
 /**
  *
  * @author Usuario
  */
 public class INGRESO_PEDIDOS extends javax.swing.JFrame {
+    private TableRowSorter<DefaultTableModel> sorter;
 
     DefaultTableModel modelo3 = new DefaultTableModel();
 
@@ -24,6 +30,8 @@ public class INGRESO_PEDIDOS extends javax.swing.JFrame {
      */
     public INGRESO_PEDIDOS() {
         initComponents();
+        sorter = new TableRowSorter<>(modelo3);
+        TablaIngresoDePedidos.setRowSorter(sorter);
         modelo3.addColumn("ID CLIENTE");
         modelo3.addColumn("MESA");
         modelo3.addColumn("N° ASIENTOS");
@@ -34,6 +42,7 @@ public class INGRESO_PEDIDOS extends javax.swing.JFrame {
         modelo3.addColumn("DETALLE");
         TablaIngresoDePedidos.setModel(modelo3);
         cargarPedidosDesdeCSV();
+        ordenarTablaPorID();
         // Agregar el evento para detectar clics en las filas
         TablaIngresoDePedidos.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
@@ -50,6 +59,15 @@ public class INGRESO_PEDIDOS extends javax.swing.JFrame {
             }
         });
     }
+    private void ordenarTablaPorID() {
+    // Configura la columna del ID del cliente en orden ascendente (suponiendo que está en la columna 0)
+    List<RowSorter.SortKey> sortKeys = new ArrayList<>();
+    sortKeys.add(new RowSorter.SortKey(0, SortOrder.ASCENDING));
+    
+    // Aplica el orden al sorter de la tabla
+    sorter.setSortKeys(sortKeys);
+    sorter.sort();
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -305,7 +323,7 @@ public class INGRESO_PEDIDOS extends javax.swing.JFrame {
     }//GEN-LAST:event_btnRegistrarActionPerformed
 
     public static boolean validarIDCliente(String datos) {
-        return datos.matches("^[A-Z]{3}\\d{3,}$");
+        return datos.matches("^\\d{1,6}$");
     }
 
     public static boolean validarNombreDelPlato(String datos) {

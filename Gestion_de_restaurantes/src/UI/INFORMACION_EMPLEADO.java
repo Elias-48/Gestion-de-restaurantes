@@ -10,6 +10,10 @@ import javax.swing.table.DefaultTableModel;
 import java.io.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.List;
 
 /**
  *
@@ -17,13 +21,20 @@ import java.awt.event.MouseEvent;
  */
 public class INFORMACION_EMPLEADO extends javax.swing.JFrame {
 
-    DefaultTableModel modelo1 = new DefaultTableModel();
+    private DefaultTableModel modelo1;
+    private HashSet<String> idsUnicos;
+    private HashSet<String> correosUnicos;
+    private HashSet<String> telefonosUnicos;
 
     /**
      * Creates new form INFORMACION_EMPLEADO
      */
     public INFORMACION_EMPLEADO() {
         initComponents();
+        modelo1 = new DefaultTableModel();
+        idsUnicos = new HashSet<>();
+        correosUnicos = new HashSet<>();
+        telefonosUnicos = new HashSet<>();
         modelo1.addColumn("ID");
         modelo1.addColumn("CARGO");
         modelo1.addColumn("NOMBRE");
@@ -32,6 +43,7 @@ public class INFORMACION_EMPLEADO extends javax.swing.JFrame {
         modelo1.addColumn("TELEFONO");
         TablaInformacionEmpleados.setModel(modelo1);
         cargarInformacionDesdeCSV();
+        ordenarTablaPorID();
         // Agregar el evento para detectar clics en las filas
         TablaInformacionEmpleados.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
@@ -278,7 +290,7 @@ public class INFORMACION_EMPLEADO extends javax.swing.JFrame {
     }//GEN-LAST:event_jComboBoxCargoDelEmpleadoActionPerformed
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
-
+ 
         if (validarIDEmpleado(txtIDEmpleado.getText().trim()) && validarNombreDelEmpleado(txtNombreEmpleado.getText().trim()) && validarCorreo(txtCorreo.getText().trim()) && validarDireccion(txtDirecionEmpleado.getText().trim()) && validarTelefono(txtTelefonoEmpleado.getText().trim())) {
             JOptionPane.showMessageDialog(this, "Empleado registrado con éxito.");
         } else {
@@ -324,12 +336,47 @@ public class INFORMACION_EMPLEADO extends javax.swing.JFrame {
 
         if (id.isEmpty() || cargo.equals("SIN CARGO") || nombre.isEmpty() || gmail.isEmpty() || direccion.isEmpty() || telefono.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Por favor, complete todos los campos.");
-        } else {
-            modelo1.addRow(new Object[]{id, cargo, nombre, gmail, direccion, telefono});
-            guardarInformacionEnCSV();
+        return;
         }
-    }//GEN-LAST:event_btnAgregarActionPerformed
 
+        // Validación de duplicados usando HashSet
+        if (idsUnicos.contains(id)) {
+            JOptionPane.showMessageDialog(this, "El ID ya está registrado. Ingrese un ID único.");
+            return;
+        }
+        if (correosUnicos.contains(gmail)) {
+            JOptionPane.showMessageDialog(this, "El correo ya está registrado. Ingrese un correo único.");
+            return;
+        }
+        if (telefonosUnicos.contains(telefono)) {
+            JOptionPane.showMessageDialog(this, "El teléfono ya está registrado. Ingrese un teléfono único.");
+            return;
+        }
+            modelo1.addRow(new Object[]{id, cargo, nombre, gmail, direccion, telefono});
+            idsUnicos.add(id);
+            correosUnicos.add(gmail);
+            telefonosUnicos.add(telefono);
+            guardarInformacionEnCSV();
+            ordenarTablaPorID();
+        
+    }//GEN-LAST:event_btnAgregarActionPerformed
+private void ordenarTablaPorID() {
+        List<Object[]> filas = new ArrayList<>();
+        for (int i = 0; i < modelo1.getRowCount(); i++) {
+            filas.add(new Object[]{
+                modelo1.getValueAt(i, 0), modelo1.getValueAt(i, 1),
+                modelo1.getValueAt(i, 2), modelo1.getValueAt(i, 3),
+                modelo1.getValueAt(i, 4), modelo1.getValueAt(i, 5)
+            });
+        }
+        
+        filas.sort(Comparator.comparingInt(o -> Integer.parseInt(o[0].toString())));
+
+        modelo1.setRowCount(0);  // Limpiar tabla antes de reordenar
+        for (Object[] fila : filas) {
+            modelo1.addRow(fila);
+        }
+    }
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
         int filaSeleccionada = TablaInformacionEmpleados.getSelectedRow();
         if (filaSeleccionada != -1) {
@@ -348,9 +395,20 @@ public class INFORMACION_EMPLEADO extends javax.swing.JFrame {
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
         int filaSeleccionada = TablaInformacionEmpleados.getSelectedRow();
         if (filaSeleccionada != -1) {
-            modelo1.removeRow(filaSeleccionada);
-            JOptionPane.showMessageDialog(this, "Empleado eliminado.");
-            guardarInformacionEnCSV();
+            int confirmacion = JOptionPane.showConfirmDialog(this, "¿Estás seguro de que deseas eliminar este empleado?", "Confirmación", JOptionPane.YES_NO_OPTION);
+            if (confirmacion == JOptionPane.YES_OPTION) {
+                String id = modelo1.getValueAt(filaSeleccionada, 0).toString();
+                String correo = modelo1.getValueAt(filaSeleccionada, 3).toString();
+                String telefono = modelo1.getValueAt(filaSeleccionada, 5).toString();
+
+                idsUnicos.remove(id);
+                correosUnicos.remove(correo);
+                telefonosUnicos.remove(telefono);
+
+                modelo1.removeRow(filaSeleccionada);
+                JOptionPane.showMessageDialog(this, "Empleado eliminado.");
+                guardarInformacionEnCSV();
+            }
         } else {
             JOptionPane.showMessageDialog(this, "Por favor, seleccione una fila para eliminar.");
         }
@@ -421,6 +479,7 @@ public class INFORMACION_EMPLEADO extends javax.swing.JFrame {
             }
             pw.write(sb.toString());
         } catch (FileNotFoundException e) {
+            JOptionPane.showMessageDialog(this, "Error al guardar en CSV: Archivo no encontrado.");
             e.printStackTrace();
         }
     }
@@ -432,8 +491,12 @@ public class INFORMACION_EMPLEADO extends javax.swing.JFrame {
             while ((line = br.readLine()) != null) {
                 String[] data = line.split(",");
                 modelo1.addRow(data);
+                idsUnicos.add(data[0]);
+                correosUnicos.add(data[3]);
+                telefonosUnicos.add(data[5]);
             }
         } catch (IOException e) {
+            JOptionPane.showMessageDialog(this, "Error al cargar datos desde CSV.");
             e.printStackTrace();
         }
     }

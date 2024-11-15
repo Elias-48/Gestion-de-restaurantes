@@ -12,7 +12,11 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.List;
+import java.util.HashSet;
 
 /**
  *
@@ -20,21 +24,33 @@ import java.util.Date;
  */
 public class REGISTRO_CLIENTES extends javax.swing.JFrame {
 
-    DefaultTableModel model = new DefaultTableModel();
+    // Declaración de HashSet
+private DefaultTableModel model;
+private HashSet<String> idsClientes = new HashSet<>();
+private HashSet<String> correosClientes = new HashSet<>();
+private HashSet<String> telefonoSet = new HashSet<>();
+
+    
 
     /**
      * Creates new form REGISTRO_CLIENTES
      */
     public REGISTRO_CLIENTES() {
-        initComponents();
-        model.addColumn("ID");
-        model.addColumn("NOMBRE");
-        model.addColumn("GMAIL");
-        model.addColumn("DIRECCIÓN");
-        model.addColumn("TELÉFONO");
-        model.addColumn("FECHA RESERVADA");
-        TablaDeRegistro.setModel(model);
-        cargarDatosDesdeCSV();  // Cargar datos cuando se abre el JFrame
+    initComponents();
+    
+    // Inicializar el modelo de tabla con las columnas desde el inicio
+    model = new DefaultTableModel(new String[]{"ID", "Nombre", "Correo", "Dirección", "Teléfono", "Fecha"}, 0);
+    
+    // Asignar el modelo a la tabla directamente
+    TablaDeRegistro.setModel(model);
+
+    // Inicializar conjuntos de validación
+    idsClientes = new HashSet<>();
+    correosClientes = new HashSet<>();
+    telefonoSet = new HashSet<>();
+
+    // Cargar datos desde el CSV (solo filas) 
+    cargarDatosDesdeCSV();// Cargar datos cuando se abre el JFrame
         // Agregar el evento para detectar clics en las filas
         TablaDeRegistro.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
@@ -345,6 +361,7 @@ public class REGISTRO_CLIENTES extends javax.swing.JFrame {
             }
 
             JOptionPane.showMessageDialog(this, "Registro editado correctamente.");
+            ordenarTablaPorID();  // Ordenar después de editar
             guardarDatosEnCSV();  // Guardar los cambios después de editar
         } else {
             JOptionPane.showMessageDialog(this, "Por favor, seleccione una fila para editar.");
@@ -383,17 +400,63 @@ public class REGISTRO_CLIENTES extends javax.swing.JFrame {
         String gmail = txtCorreo.getText();
         String direccion = txtDireccion.getText();
         String telefono = txtTelefono.getText();
+        
+ // Verificar duplicados
+    if (idsClientes.contains(id)) {
+        JOptionPane.showMessageDialog(this, "El ID ya está registrado.Por favor, ingrese uno diferente.");
+        return;
+    }
 
+    if (correosClientes.contains(gmail)) {
+        JOptionPane.showMessageDialog(this, "El correo electrónico ya está registrado.Por favor, ingrese uno diferente.");
+        return;
+    }
+    if (telefonoSet.contains(telefono)) {
+        JOptionPane.showMessageDialog(this, "El teléfono ya está registrado. Por favor, ingrese uno diferente.");
+        return;
+    }
         // Validar que los campos no estén vacíos
         if (id.isEmpty() || nombre.isEmpty() || gmail.isEmpty() || direccion.isEmpty() || telefono.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Por favor, complete todos los campos.");
         } else {
             // Agregar una nueva fila a la tabla si todo está correcto
             model.addRow(new Object[]{id, nombre, gmail, direccion, telefono, fecha_sql});
+            // Agregar con treeset
+        idsClientes.add(id);
+        correosClientes.add(gmail);
+        telefonoSet.add(telefono);
+        // Llamada al método para ordenar la tabla tras agregar el nuevo registro
+            ordenarTablaPorID();
             guardarDatosEnCSV();  // Guardar los datos en el archivo CSV después de agregar un nuevo registro
+        
         }
     }//GEN-LAST:event_btnAgregarActionPerformed
+// Método para ordenar la tabla por ID en orden ascendente
+    private void ordenarTablaPorID() {
+        List<Object[]> filas = new ArrayList<>();
+// Recorrer el modelo de la tabla y añadir filas con ID no nulo o no vacío a la lista
+    for (int i = 0; i < model.getRowCount(); i++) {
+        Object idValue = model.getValueAt(i, 0);
+        
+        // Validar que el ID no sea nulo ni vacío antes de agregar la fila
+        if (idValue != null && !idValue.toString().trim().isEmpty()) {
+            Object[] fila = new Object[model.getColumnCount()];
+            for (int j = 0; j < model.getColumnCount(); j++) {
+                fila[j] = model.getValueAt(i, j);
+            }
+            filas.add(fila);
+        }
+    }
 
+        // Ordenar la lista de filas por la columna del ID (primera columna)
+        filas.sort(Comparator.comparingInt(f -> Integer.parseInt(f[0].toString())));
+
+        // Limpiar el modelo y añadir las filas ordenadas
+        model.setRowCount(0);
+        for (Object[] fila : filas) {
+            model.addRow(fila);
+        }
+    }
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
 
         if (validarIDCliente(txtIdCLiente.getText().trim()) && validarNombreDelCliente(txtNombreCliente.getText().trim()) && validarCorreo(txtCorreo.getText().trim()) && validarDireccion(txtDireccion.getText().trim()) && validarTelefono(txtTelefono.getText().trim())) {
@@ -430,8 +493,17 @@ public class REGISTRO_CLIENTES extends javax.swing.JFrame {
         int filaSeleccionada = TablaDeRegistro.getSelectedRow();
 
         if (filaSeleccionada >= 0) {
+            // Obtener el ID y el correo de la fila seleccionada antes de eliminarla
+        String id = model.getValueAt(filaSeleccionada, 0).toString();
+        String correo = model.getValueAt(filaSeleccionada, 2).toString();
+        String telefono = model.getValueAt(filaSeleccionada, 4).toString();
             // Eliminar la fila de la tabla
             model.removeRow(filaSeleccionada);
+        // Remover el ID y el correo de los TreeSet
+        idsClientes.remove(id);
+        correosClientes.remove(correo);
+        telefonoSet.remove(telefono);
+            
             JOptionPane.showMessageDialog(this, "Registro eliminado correctamente.");
             guardarDatosEnCSV();  // Guardar los cambios después de editar
         } else {
@@ -513,9 +585,14 @@ public class REGISTRO_CLIENTES extends javax.swing.JFrame {
         String line;
         try (BufferedReader br = new BufferedReader(new FileReader("clientes.csv"))) {
             while ((line = br.readLine()) != null) {
-                String[] data = line.split(",");
-                model.addRow(data);
+            String[] data = line.split(",");
+            model.addRow(data); // Agregar datos al modelo    
+            // Agregar datos no repetidos
+            idsClientes.add(data[0]);
+            correosClientes.add(data[2]);
+            telefonoSet.add(data[4]);
             }
+            ordenarTablaPorID();  // Ordenar después de cargar los datos
         } catch (IOException e) {
             e.printStackTrace();
         }
