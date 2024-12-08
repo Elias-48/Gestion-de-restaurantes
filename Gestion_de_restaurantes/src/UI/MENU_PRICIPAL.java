@@ -165,7 +165,18 @@ public class MENU_PRICIPAL extends javax.swing.JFrame {
         });
         jPanel1.add(btnSalir, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 550, 440, 40));
 
-        btnReservaciones.setText("RESERVACIONES");
+        btnReservaciones.setBackground(new java.awt.Color(255, 153, 0));
+        btnReservaciones.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/table_chair_icon_137131.png"))); // NOI18N
+        btnReservaciones.setText("   RESERVACIONES");
+        btnReservaciones.setBorder(null);
+        btnReservaciones.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnReservacionesMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnReservacionesMouseExited(evt);
+            }
+        });
         btnReservaciones.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnReservacionesActionPerformed(evt);
@@ -283,6 +294,14 @@ public class MENU_PRICIPAL extends javax.swing.JFrame {
         mRESERVACION.setLocationRelativeTo(null);
         this.dispose();
     }//GEN-LAST:event_btnReservacionesActionPerformed
+
+    private void btnReservacionesMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnReservacionesMouseEntered
+        btnReservaciones.setBackground(new Color(255, 169, 40));
+    }//GEN-LAST:event_btnReservacionesMouseEntered
+
+    private void btnReservacionesMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnReservacionesMouseExited
+        btnPedidos.setBackground(new Color(255, 153, 0));
+    }//GEN-LAST:event_btnReservacionesMouseExited
 
     /**
      * @param args the command line arguments

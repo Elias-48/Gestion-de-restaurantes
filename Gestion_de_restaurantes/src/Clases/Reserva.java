@@ -6,20 +6,44 @@ package Clases;
  */
 import java.util.Date;
 public class Reserva {
-    private int idReserva;
+    private int idCliente;         
+    private int capacidad;         
+    private int numeroAsientos;    
     private Date fechaReserva;
+    private String horaInicio;
+    private String horaFin;
 
-    public Reserva(int idReserva, Date fechaReserva) {
-        this.idReserva = idReserva;
+    public Reserva(int idCliente, int capacidad, int numeroAsientos, Date fechaReserva, String horaInicio, String horaFin) {
+        this.idCliente = idCliente;
+        this.capacidad = capacidad;
+        this.numeroAsientos = numeroAsientos;
         this.fechaReserva = fechaReserva;
+        this.horaInicio = horaInicio;
+        this.horaFin = horaFin;
     }
 
-    public int getIdReserva() {
-        return idReserva;
+    public int getIdCliente() {
+        return idCliente;
     }
 
-    public void setIdReserva(int idReserva) {
-        this.idReserva = idReserva;
+    public void setIdCliente(int idCliente) {
+        this.idCliente = idCliente;
+    }
+
+    public int getCapacidad() {
+        return capacidad;
+    }
+
+    public void setCapacidad(int capacidad) {
+        this.capacidad = capacidad;
+    }
+
+    public int getNumeroAsientos() {
+        return numeroAsientos;
+    }
+
+    public void setNumeroAsientos(int numeroAsientos) {
+        this.numeroAsientos = numeroAsientos;
     }
 
     public Date getFechaReserva() {
@@ -29,5 +53,20 @@ public class Reserva {
     public void setFechaReserva(Date fechaReserva) {
         this.fechaReserva = fechaReserva;
     }
-}
 
+    public String getHoraInicio() {
+        return horaInicio;
+    }
+
+    public void setHoraInicio(String horaInicio) {
+        this.horaInicio = horaInicio;
+    }
+
+    public String getHoraFin() {
+        return horaFin;
+    }
+
+    public void setHoraFin(String horaFin) {
+        this.horaFin = horaFin;
+    }
+}

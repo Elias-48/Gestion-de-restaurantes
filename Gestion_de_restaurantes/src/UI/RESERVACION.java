@@ -5,6 +5,7 @@
 package UI;
 
 import Clases.Conexion;
+import java.awt.Color;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -18,6 +19,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Date;
+
 /**
  *
  * @author Henry
@@ -29,6 +31,7 @@ public class RESERVACION extends javax.swing.JFrame {
     Connection conet;
     Statement st;
     ResultSet rs;
+
     /**
      * Creates new form Reservaciones
      */
@@ -42,17 +45,17 @@ public class RESERVACION extends javax.swing.JFrame {
         modelo4.addColumn("HORA FIN");
         TablaReservacion.setModel(modelo4);
         ConsultarReservacion();
-        
+
         // Agregar el evento para detectar clics en las filas
         TablaReservacion.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 int filaSeleccionada = TablaReservacion.getSelectedRow();
-         if (filaSeleccionada >= 0) {
-             // Obtener los valores de la fila seleccionada y colocarlos en los campos de texto
-             txtIDCliente.setText(modelo4.getValueAt(filaSeleccionada, 0).toString());
-             jComboBoxNumDeMesa.setSelectedItem(modelo4.getValueAt(filaSeleccionada, 1).toString());
-             jComboBoxNumDeSillas.setSelectedItem(modelo4.getValueAt(filaSeleccionada, 2).toString());
-             // Convertir la fecha de String a Date y establecerla en jDateFecha
+                if (filaSeleccionada >= 0) {
+                    // Obtener los valores de la fila seleccionada y colocarlos en los campos de texto
+                    txtIDCliente.setText(modelo4.getValueAt(filaSeleccionada, 0).toString());
+                    jComboBoxNumDeMesa.setSelectedItem(modelo4.getValueAt(filaSeleccionada, 1).toString());
+                    jComboBoxNumDeSillas.setSelectedItem(modelo4.getValueAt(filaSeleccionada, 2).toString());
+                    // Convertir la fecha de String a Date y establecerla en jDateFecha
                     try {
                         Date fecha = sdf.parse(modelo4.getValueAt(filaSeleccionada, 3).toString());
                         jDateFecha.setDate(fecha);
@@ -63,8 +66,8 @@ public class RESERVACION extends javax.swing.JFrame {
                     txtHoraReservaIniciada.setText(modelo4.getValueAt(filaSeleccionada, 4).toString());
                     txtHoraReservaFinalizada.setText(modelo4.getValueAt(filaSeleccionada, 5).toString());
                 }
-     }
-});
+            }
+        });
     }
 
     /**
@@ -77,7 +80,6 @@ public class RESERVACION extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jComboBoxNumDeMesa = new javax.swing.JComboBox<>();
         jLabel6 = new javax.swing.JLabel();
@@ -98,13 +100,17 @@ public class RESERVACION extends javax.swing.JFrame {
         btnEditar = new javax.swing.JButton();
         btnEliminar = new javax.swing.JButton();
         btnSalir = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        jSeparator1 = new javax.swing.JSeparator();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        jLabel1.setText("RESERVACION");
+        jPanel1.setBackground(new java.awt.Color(204, 204, 204));
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel2.setText("N° DE MESA:");
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 70, 100, 40));
 
         jComboBoxNumDeMesa.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "SIN MESA", "MESA 1", "MESA 2", "MESA 3", "MESA 4", "MESA 5", "MESA 6" }));
         jComboBoxNumDeMesa.addActionListener(new java.awt.event.ActionListener() {
@@ -112,20 +118,27 @@ public class RESERVACION extends javax.swing.JFrame {
                 jComboBoxNumDeMesaActionPerformed(evt);
             }
         });
+        jPanel1.add(jComboBoxNumDeMesa, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 70, 174, 40));
 
         jLabel6.setText("ID DEL CLIENTE:");
+        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 10, 100, 40));
 
         txtIDCliente.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtIDClienteActionPerformed(evt);
             }
         });
+        jPanel1.add(txtIDCliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 10, 174, 40));
 
         jLabel7.setText("FECHA DE RESERVA:");
+        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 190, 120, 40));
+        jPanel1.add(jDateFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 190, 174, 40));
 
-        jLabel8.setText("HORA DE RESERVA:");
+        jLabel8.setText("HORA DE INICIO:");
+        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 250, 120, 40));
 
         jLabel9.setText("N° ASIENTOS:");
+        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 130, 100, 40));
 
         jComboBoxNumDeSillas.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "SIN ASIENTOS", "1", "2", "3", "4", "5", "6", "7", "8" }));
         jComboBoxNumDeSillas.addActionListener(new java.awt.event.ActionListener() {
@@ -133,6 +146,7 @@ public class RESERVACION extends javax.swing.JFrame {
                 jComboBoxNumDeSillasActionPerformed(evt);
             }
         });
+        jPanel1.add(jComboBoxNumDeSillas, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 130, 174, 40));
 
         TablaReservacion.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -147,160 +161,146 @@ public class RESERVACION extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(TablaReservacion);
 
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 380, 690, 170));
+
         jLabel10.setText("HORA FINALIZADA:");
+        jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 310, 120, 40));
 
         txtHoraReservaIniciada.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtHoraReservaIniciadaActionPerformed(evt);
             }
         });
+        jPanel1.add(txtHoraReservaIniciada, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 250, 174, 40));
 
         txtHoraReservaFinalizada.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtHoraReservaFinalizadaActionPerformed(evt);
             }
         });
+        jPanel1.add(txtHoraReservaFinalizada, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 310, 174, 40));
 
+        btnRegistrar.setBackground(new java.awt.Color(255, 153, 0));
         btnRegistrar.setText("REGISTRAR");
+        btnRegistrar.setBorder(null);
+        btnRegistrar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnRegistrar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnRegistrarMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnRegistrarMouseExited(evt);
+            }
+        });
         btnRegistrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnRegistrarActionPerformed(evt);
             }
         });
+        jPanel1.add(btnRegistrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 60, 110, 50));
 
+        btnAgregar.setBackground(new java.awt.Color(255, 153, 0));
         btnAgregar.setText("AGREGAR");
+        btnAgregar.setBorder(null);
+        btnAgregar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnAgregar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnAgregarMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnAgregarMouseExited(evt);
+            }
+        });
         btnAgregar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAgregarActionPerformed(evt);
             }
         });
+        jPanel1.add(btnAgregar, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 60, 110, 50));
 
+        btnNuevaReserva.setBackground(new java.awt.Color(255, 153, 0));
         btnNuevaReserva.setText("NUEVA RESERVA");
+        btnNuevaReserva.setBorder(null);
+        btnNuevaReserva.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnNuevaReserva.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnNuevaReservaMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnNuevaReservaMouseExited(evt);
+            }
+        });
         btnNuevaReserva.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnNuevaReservaActionPerformed(evt);
             }
         });
+        jPanel1.add(btnNuevaReserva, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 120, 110, 50));
 
+        btnEditar.setBackground(new java.awt.Color(255, 153, 0));
         btnEditar.setText("EDITAR");
+        btnEditar.setBorder(null);
+        btnEditar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnEditar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnEditarMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnEditarMouseExited(evt);
+            }
+        });
         btnEditar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnEditarActionPerformed(evt);
             }
         });
+        jPanel1.add(btnEditar, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 60, 110, 50));
 
+        btnEliminar.setBackground(new java.awt.Color(255, 153, 0));
         btnEliminar.setText("ELIMINAR");
+        btnEliminar.setBorder(null);
+        btnEliminar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnEliminar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnEliminarMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnEliminarMouseExited(evt);
+            }
+        });
         btnEliminar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnEliminarActionPerformed(evt);
             }
         });
+        jPanel1.add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 120, 110, 50));
 
+        btnSalir.setBackground(java.awt.Color.gray);
         btnSalir.setText("SALIR");
+        btnSalir.setBorder(null);
+        btnSalir.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnSalir.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnSalirMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnSalirMouseExited(evt);
+            }
+        });
         btnSalir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSalirActionPerformed(evt);
             }
         });
+        jPanel1.add(btnSalir, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 120, 110, 50));
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(22, 22, 22)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(jLabel8)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(txtHoraReservaIniciada, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
-                                        .addComponent(btnRegistrar))
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                            .addComponent(jLabel6)
-                                                            .addComponent(jLabel2)
-                                                            .addComponent(jLabel9))
-                                                        .addGap(35, 35, 35))
-                                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                                        .addComponent(jLabel7)
-                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
-                                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                    .addComponent(jComboBoxNumDeMesa, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                    .addComponent(txtIDCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                    .addComponent(jDateFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                    .addComponent(jComboBoxNumDeSillas, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                                .addComponent(jLabel10)
-                                                .addGap(18, 18, 18)
-                                                .addComponent(txtHoraReservaFinalizada, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addGap(18, 18, 18)
-                                                .addComponent(btnEditar)))
-                                        .addGap(0, 0, Short.MAX_VALUE)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(btnEliminar)
-                                    .addComponent(btnAgregar)))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(221, 221, 221)
-                                .addComponent(jLabel1)))
-                        .addGap(12, 12, 12)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnNuevaReserva)
-                            .addComponent(btnSalir)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jScrollPane1)))
-                .addContainerGap())
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(27, 27, 27)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtIDCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel6))
-                .addGap(14, 14, 14)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jComboBoxNumDeMesa, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2))
-                .addGap(16, 16, 16)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jComboBoxNumDeSillas, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel9))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jDateFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtHoraReservaIniciada, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnRegistrar)
-                            .addComponent(btnAgregar)
-                            .addComponent(btnNuevaReserva)))
-                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtHoraReservaFinalizada, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnEditar)
-                    .addComponent(btnEliminar)
-                    .addComponent(btnSalir))
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        jLabel3.setText("RESERVACIÓN");
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 20, -1, 30));
+        jPanel1.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 50, 150, 10));
+
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/mesas.png"))); // NOI18N
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 180, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -310,9 +310,7 @@ public class RESERVACION extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 559, Short.MAX_VALUE)
         );
 
         pack();
@@ -340,86 +338,86 @@ public class RESERVACION extends javax.swing.JFrame {
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
         // Obtener los datos de los campos
-    String idCliente = txtIDCliente.getText().trim();
-    String mesa = jComboBoxNumDeMesa.getSelectedItem().toString();
-    String sillas = jComboBoxNumDeSillas.getSelectedItem().toString();
-    Date fecha = jDateFecha.getDate();
-    String horaInicio = txtHoraReservaIniciada.getText().trim();
-    String horaFin = txtHoraReservaFinalizada.getText().trim();
+        String idCliente = txtIDCliente.getText().trim();
+        String mesa = jComboBoxNumDeMesa.getSelectedItem().toString();
+        String sillas = jComboBoxNumDeSillas.getSelectedItem().toString();
+        Date fecha = jDateFecha.getDate();
+        String horaInicio = txtHoraReservaIniciada.getText().trim();
+        String horaFin = txtHoraReservaFinalizada.getText().trim();
 
-    // Validar los campos antes de registrar
-    if (validarIDCliente(idCliente) && validarMesa(mesa) && validarSillas(sillas) && validarHora(horaInicio, horaFin) && fecha != null) {
-        // Validar si hay conflicto de horarios en la misma mesa
-        if (validarConflictoDeHorario(fecha, horaInicio, horaFin, mesa)) {
-            JOptionPane.showMessageDialog(this, "El horario seleccionado para esta mesa ya está ocupado.");
+        // Validar los campos antes de registrar
+        if (validarIDCliente(idCliente) && validarMesa(mesa) && validarSillas(sillas) && validarHora(horaInicio, horaFin) && fecha != null) {
+            // Validar si hay conflicto de horarios en la misma mesa
+            if (validarConflictoDeHorario(fecha, horaInicio, horaFin, mesa)) {
+                JOptionPane.showMessageDialog(this, "El horario seleccionado para esta mesa ya está ocupado.");
+            } else {
+                JOptionPane.showMessageDialog(this, "Reserva registrada con éxito.");
+            }
         } else {
-            JOptionPane.showMessageDialog(this, "Reserva registrada con éxito.");
+            JOptionPane.showMessageDialog(this, "Debe insertar datos correctos.");
         }
-    } else {
-        JOptionPane.showMessageDialog(this, "Debe insertar datos correctos.");
-    }
     }//GEN-LAST:event_btnRegistrarActionPerformed
 
     public static boolean validarIDCliente(String datos) {
-    return datos.matches("^\\d{1,6}$"); // Validación de ID de cliente (máximo 6 dígitos)
-}
-
-public static boolean validarMesa(String datos) {
-    return !datos.equals("SIN MESA"); // Validación para asegurarse de que se haya seleccionado una mesa
-}
-
-public static boolean validarSillas(String datos) {
-    return !datos.equals("SIN MESA"); // Validación para asegurarse de que se haya seleccionado un número de sillas
-}
-
-public static boolean validarHora(String horaInicio, String horaFin) {
-    SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-    try {
-        // Validar que las horas estén en formato correcto
-        sdf.parse(horaInicio);
-        sdf.parse(horaFin);
-        
-        // Validar que la hora de inicio sea antes de la hora de fin
-        return sdf.parse(horaInicio).before(sdf.parse(horaFin));
-    } catch (ParseException e) {
-        return false; // Si no es un formato correcto, retorna false
+        return datos.matches("^\\d{1,6}$"); // Validación de ID de cliente (máximo 6 dígitos)
     }
-}
 
-private boolean validarConflictoDeHorario(Date fecha, String horaInicio, String horaFin, String mesa) {
-    SimpleDateFormat sdfHora = new SimpleDateFormat("HH:mm");
-    SimpleDateFormat sdfFecha = new SimpleDateFormat("yy-MM-dd"); // Ajusta el formato de la fecha si es necesario
+    public static boolean validarMesa(String datos) {
+        return !datos.equals("SIN MESA"); // Validación para asegurarse de que se haya seleccionado una mesa
+    }
 
-    try {
-        Date inicio = sdfHora.parse(horaInicio);
-        Date fin = sdfHora.parse(horaFin);
+    public static boolean validarSillas(String datos) {
+        return !datos.equals("SIN MESA"); // Validación para asegurarse de que se haya seleccionado un número de sillas
+    }
 
-        for (int i = 0; i < modelo4.getRowCount(); i++) {
-            String fechaReservadaStr = modelo4.getValueAt(i, 3).toString(); // Fecha como String
-            Date fechaReservada = sdfFecha.parse(fechaReservadaStr); // Convertir a Date
+    public static boolean validarHora(String horaInicio, String horaFin) {
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+        try {
+            // Validar que las horas estén en formato correcto
+            sdf.parse(horaInicio);
+            sdf.parse(horaFin);
 
-            String mesaReservada = modelo4.getValueAt(i, 1).toString();
-            String horaInicioReservada = modelo4.getValueAt(i, 4).toString();
-            String horaFinReservada = modelo4.getValueAt(i, 5).toString();
+            // Validar que la hora de inicio sea antes de la hora de fin
+            return sdf.parse(horaInicio).before(sdf.parse(horaFin));
+        } catch (ParseException e) {
+            return false; // Si no es un formato correcto, retorna false
+        }
+    }
 
-            if (fecha.equals(fechaReservada) && mesa.equals(mesaReservada)) {
-                Date inicioReservado = sdfHora.parse(horaInicioReservada);
-                Date finReservado = sdfHora.parse(horaFinReservada);
+    private boolean validarConflictoDeHorario(Date fecha, String horaInicio, String horaFin, String mesa) {
+        SimpleDateFormat sdfHora = new SimpleDateFormat("HH:mm");
+        SimpleDateFormat sdfFecha = new SimpleDateFormat("yy-MM-dd"); // Ajusta el formato de la fecha si es necesario
 
-                // Verificar si hay conflicto de horarios
-                if ((inicio.before(finReservado) && inicio.after(inicioReservado)) ||
-                    (fin.after(inicioReservado) && fin.before(finReservado)) ||
-                    inicio.equals(inicioReservado) || fin.equals(finReservado) ||
-                    (inicio.before(inicioReservado) && fin.after(finReservado))) {
-                    return true; // Hay un conflicto
+        try {
+            Date inicio = sdfHora.parse(horaInicio);
+            Date fin = sdfHora.parse(horaFin);
+
+            for (int i = 0; i < modelo4.getRowCount(); i++) {
+                String fechaReservadaStr = modelo4.getValueAt(i, 3).toString(); // Fecha como String
+                Date fechaReservada = sdfFecha.parse(fechaReservadaStr); // Convertir a Date
+
+                String mesaReservada = modelo4.getValueAt(i, 1).toString();
+                String horaInicioReservada = modelo4.getValueAt(i, 4).toString();
+                String horaFinReservada = modelo4.getValueAt(i, 5).toString();
+
+                if (fecha.equals(fechaReservada) && mesa.equals(mesaReservada)) {
+                    Date inicioReservado = sdfHora.parse(horaInicioReservada);
+                    Date finReservado = sdfHora.parse(horaFinReservada);
+
+                    // Verificar si hay conflicto de horarios
+                    if ((inicio.before(finReservado) && inicio.after(inicioReservado))
+                            || (fin.after(inicioReservado) && fin.before(finReservado))
+                            || inicio.equals(inicioReservado) || fin.equals(finReservado)
+                            || (inicio.before(inicioReservado) && fin.after(finReservado))) {
+                        return true; // Hay un conflicto
+                    }
                 }
             }
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
-    } catch (ParseException e) {
-        e.printStackTrace();
+        return false;
     }
-    return false;
-}
 
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
         MENU_PRICIPAL mMENU_PRICIPAL = new MENU_PRICIPAL();
@@ -430,63 +428,6 @@ private boolean validarConflictoDeHorario(Date fecha, String horaInicio, String 
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
         // Obtener los valores ingresados
-    String idCliente = txtIDCliente.getText().trim();
-    String mesa = jComboBoxNumDeMesa.getSelectedItem().toString();
-    String sillas = jComboBoxNumDeSillas.getSelectedItem().toString();
-    Date fecha = jDateFecha.getDate();
-    String horaInicio = txtHoraReservaIniciada.getText().trim();
-    String horaFin = txtHoraReservaFinalizada.getText().trim();
-
-    if (idCliente.isEmpty() || mesa.equals("SIN MESA") || sillas.equals("SIN MESA") || 
-        horaInicio.isEmpty() || horaFin.isEmpty() || fecha == null) {
-        JOptionPane.showMessageDialog(this, "Todos los campos deben estar completos.");
-        return;
-    }
-
-    // Convertir la fecha al formato "yyyy-MM-dd" para la base de datos
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-    String fechaFormateada = sdf.format(fecha);
-
-    // Validar conflictos de horario
-    if (validarConflictoDeHorario(fechaFormateada, horaInicio, horaFin, mesa)) {
-        JOptionPane.showMessageDialog(this, "El horario seleccionado para esta mesa ya está ocupado.");
-        return;
-    }
-
-    try {
-        // Insertar los datos en la base de datos
-        Connection con = Conexion.getInstance().getConnection();
-        String sql = "INSERT INTO reservaciones (id_cliente, mesa, asientos, fecha, hora_inicio, hora_fin) VALUES (?, ?, ?, ?, ?, ?)";
-        PreparedStatement pst = con.prepareStatement(sql);
-        pst.setString(1, idCliente); // ID Cliente
-        pst.setString(2, mesa); // Número de Mesa
-        pst.setString(3, sillas); // Número de Sillas
-        pst.setString(4, fechaFormateada); // Fecha de la reserva
-        pst.setString(5, horaInicio); // Hora de inicio
-        pst.setString(6, horaFin); // Hora de fin
-
-        // Ejecutar la consulta
-        int filasAfectadas = pst.executeUpdate();
-        if (filasAfectadas > 0) {
-            // Agregar a la tabla en el JFrame
-            modelo4.addRow(new Object[]{idCliente, mesa, sillas, fechaFormateada, horaInicio, horaFin});
-            JOptionPane.showMessageDialog(this, "Reserva agregada con éxito.");
-        } else {
-            JOptionPane.showMessageDialog(this, "Error al guardar la reserva en la base de datos.");
-        }
-
-        // Cerrar el PreparedStatement
-        pst.close();
-    } catch (SQLException ex) {
-        JOptionPane.showMessageDialog(this, "Error de conexión o consulta SQL: " + ex.getMessage());
-        ex.printStackTrace();
-    }                          
-    }//GEN-LAST:event_btnAgregarActionPerformed
-
-    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
-        int filaSeleccionada = TablaReservacion.getSelectedRow();
-    if (filaSeleccionada >= 0) {
-        // Obtener los datos del formulario
         String idCliente = txtIDCliente.getText().trim();
         String mesa = jComboBoxNumDeMesa.getSelectedItem().toString();
         String sillas = jComboBoxNumDeSillas.getSelectedItem().toString();
@@ -494,8 +435,8 @@ private boolean validarConflictoDeHorario(Date fecha, String horaInicio, String 
         String horaInicio = txtHoraReservaIniciada.getText().trim();
         String horaFin = txtHoraReservaFinalizada.getText().trim();
 
-        if (idCliente.isEmpty() || mesa.equals("SIN MESA") || sillas.equals("SIN MESA") ||
-            horaInicio.isEmpty() || horaFin.isEmpty() || fecha == null) {
+        if (idCliente.isEmpty() || mesa.equals("SIN MESA") || sillas.equals("SIN MESA")
+                || horaInicio.isEmpty() || horaFin.isEmpty() || fecha == null) {
             JOptionPane.showMessageDialog(this, "Todos los campos deben estar completos.");
             return;
         }
@@ -505,36 +446,31 @@ private boolean validarConflictoDeHorario(Date fecha, String horaInicio, String 
         String fechaFormateada = sdf.format(fecha);
 
         // Validar conflictos de horario
-        if (validarConflictoDeHorario(fechaFormateada, horaInicio, horaFin, mesa, filaSeleccionada)) {
-            JOptionPane.showMessageDialog(this, "El horario seleccionado ya está ocupado.");
+        if (validarConflictoDeHorario(fechaFormateada, horaInicio, horaFin, mesa)) {
+            JOptionPane.showMessageDialog(this, "El horario seleccionado para esta mesa ya está ocupado.");
             return;
         }
 
         try {
-            // Actualizar en la base de datos
+            // Insertar los datos en la base de datos
             Connection con = Conexion.getInstance().getConnection();
-            String sql = "UPDATE reservaciones SET mesa = ?, asientos = ?, fecha = ?, hora_inicio = ?, hora_fin = ? WHERE id_cliente = ?";
+            String sql = "INSERT INTO reservaciones (id_cliente, mesa, asientos, fecha, hora_inicio, hora_fin) VALUES (?, ?, ?, ?, ?, ?)";
             PreparedStatement pst = con.prepareStatement(sql);
-            pst.setString(1, mesa); // Número de Mesa
-            pst.setString(2, sillas); // Número de Sillas
-            pst.setString(3, fechaFormateada); // Fecha
-            pst.setString(4, horaInicio); // Hora de inicio
-            pst.setString(5, horaFin); // Hora de fin
-            pst.setString(6, idCliente); // ID de la reserva
+            pst.setString(1, idCliente); // ID Cliente
+            pst.setString(2, mesa); // Número de Mesa
+            pst.setString(3, sillas); // Número de Sillas
+            pst.setString(4, fechaFormateada); // Fecha de la reserva
+            pst.setString(5, horaInicio); // Hora de inicio
+            pst.setString(6, horaFin); // Hora de fin
 
+            // Ejecutar la consulta
             int filasAfectadas = pst.executeUpdate();
             if (filasAfectadas > 0) {
-                // Actualizar en el JTable
-                modelo4.setValueAt(idCliente, filaSeleccionada, 0);
-                modelo4.setValueAt(mesa, filaSeleccionada, 1);
-                modelo4.setValueAt(sillas, filaSeleccionada, 2);
-                modelo4.setValueAt(fechaFormateada, filaSeleccionada, 3);
-                modelo4.setValueAt(horaInicio, filaSeleccionada, 4);
-                modelo4.setValueAt(horaFin, filaSeleccionada, 5);
-
-                JOptionPane.showMessageDialog(this, "Reserva actualizada con éxito.");
+                // Agregar a la tabla en el JFrame
+                modelo4.addRow(new Object[]{idCliente, mesa, sillas, fechaFormateada, horaInicio, horaFin});
+                JOptionPane.showMessageDialog(this, "Reserva agregada con éxito.");
             } else {
-                JOptionPane.showMessageDialog(this, "Error al actualizar la reserva en la base de datos.");
+                JOptionPane.showMessageDialog(this, "Error al guardar la reserva en la base de datos.");
             }
 
             // Cerrar el PreparedStatement
@@ -543,9 +479,71 @@ private boolean validarConflictoDeHorario(Date fecha, String horaInicio, String 
             JOptionPane.showMessageDialog(this, "Error de conexión o consulta SQL: " + ex.getMessage());
             ex.printStackTrace();
         }
-    } else {
-        JOptionPane.showMessageDialog(this, "Selecciona una fila para editar.");
-    }
+    }//GEN-LAST:event_btnAgregarActionPerformed
+
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+        int filaSeleccionada = TablaReservacion.getSelectedRow();
+        if (filaSeleccionada >= 0) {
+            // Obtener los datos del formulario
+            String idCliente = txtIDCliente.getText().trim();
+            String mesa = jComboBoxNumDeMesa.getSelectedItem().toString();
+            String sillas = jComboBoxNumDeSillas.getSelectedItem().toString();
+            Date fecha = jDateFecha.getDate();
+            String horaInicio = txtHoraReservaIniciada.getText().trim();
+            String horaFin = txtHoraReservaFinalizada.getText().trim();
+
+            if (idCliente.isEmpty() || mesa.equals("SIN MESA") || sillas.equals("SIN MESA")
+                    || horaInicio.isEmpty() || horaFin.isEmpty() || fecha == null) {
+                JOptionPane.showMessageDialog(this, "Todos los campos deben estar completos.");
+                return;
+            }
+
+            // Convertir la fecha al formato "yyyy-MM-dd" para la base de datos
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            String fechaFormateada = sdf.format(fecha);
+
+            // Validar conflictos de horario
+            if (validarConflictoDeHorario(fechaFormateada, horaInicio, horaFin, mesa, filaSeleccionada)) {
+                JOptionPane.showMessageDialog(this, "El horario seleccionado ya está ocupado.");
+                return;
+            }
+
+            try {
+                // Actualizar en la base de datos
+                Connection con = Conexion.getInstance().getConnection();
+                String sql = "UPDATE reservaciones SET mesa = ?, asientos = ?, fecha = ?, hora_inicio = ?, hora_fin = ? WHERE id_cliente = ?";
+                PreparedStatement pst = con.prepareStatement(sql);
+                pst.setString(1, mesa); // Número de Mesa
+                pst.setString(2, sillas); // Número de Sillas
+                pst.setString(3, fechaFormateada); // Fecha
+                pst.setString(4, horaInicio); // Hora de inicio
+                pst.setString(5, horaFin); // Hora de fin
+                pst.setString(6, idCliente); // ID de la reserva
+
+                int filasAfectadas = pst.executeUpdate();
+                if (filasAfectadas > 0) {
+                    // Actualizar en el JTable
+                    modelo4.setValueAt(idCliente, filaSeleccionada, 0);
+                    modelo4.setValueAt(mesa, filaSeleccionada, 1);
+                    modelo4.setValueAt(sillas, filaSeleccionada, 2);
+                    modelo4.setValueAt(fechaFormateada, filaSeleccionada, 3);
+                    modelo4.setValueAt(horaInicio, filaSeleccionada, 4);
+                    modelo4.setValueAt(horaFin, filaSeleccionada, 5);
+
+                    JOptionPane.showMessageDialog(this, "Reserva actualizada con éxito.");
+                } else {
+                    JOptionPane.showMessageDialog(this, "Error al actualizar la reserva en la base de datos.");
+                }
+
+                // Cerrar el PreparedStatement
+                pst.close();
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(this, "Error de conexión o consulta SQL: " + ex.getMessage());
+                ex.printStackTrace();
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Selecciona una fila para editar.");
+        }
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private boolean validarConflictoDeHorario(String fecha, String horaInicio, String horaFin, String mesa) {
@@ -559,8 +557,9 @@ private boolean validarConflictoDeHorario(Date fecha, String horaInicio, String 
             Date fin = sdfHora.parse(horaFin);
 
             for (int i = 0; i < modelo4.getRowCount(); i++) {
-                if (i == filaExcluir) continue; // Excluir la fila actual
-
+                if (i == filaExcluir) {
+                    continue; // Excluir la fila actual
+                }
                 String fechaReservada = modelo4.getValueAt(i, 3).toString();
                 String mesaReservada = modelo4.getValueAt(i, 1).toString();
                 String horaInicioReservada = modelo4.getValueAt(i, 4).toString();
@@ -570,10 +569,10 @@ private boolean validarConflictoDeHorario(Date fecha, String horaInicio, String 
                     Date inicioReservado = sdfHora.parse(horaInicioReservada);
                     Date finReservado = sdfHora.parse(horaFinReservada);
 
-                    if ((inicio.before(finReservado) && inicio.after(inicioReservado)) ||
-                        (fin.after(inicioReservado) && fin.before(finReservado)) ||
-                        inicio.equals(inicioReservado) || fin.equals(finReservado) ||
-                        (inicio.before(inicioReservado) && fin.after(finReservado))) {
+                    if ((inicio.before(finReservado) && inicio.after(inicioReservado))
+                            || (fin.after(inicioReservado) && fin.before(finReservado))
+                            || inicio.equals(inicioReservado) || fin.equals(finReservado)
+                            || (inicio.before(inicioReservado) && fin.after(finReservado))) {
                         return true; // Hay un conflicto
                     }
                 }
@@ -583,95 +582,143 @@ private boolean validarConflictoDeHorario(Date fecha, String horaInicio, String 
         }
         return false;
     }
-    
+
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
         int filaSeleccionada = TablaReservacion.getSelectedRow();
-    if (filaSeleccionada >= 0) {
-        // Obtener el ID de la reserva desde la tabla (suponiendo que está en la última columna)
-        String idCliente = modelo4.getValueAt(filaSeleccionada, 0).toString(); // Cambia "6" al índice correcto si es necesario
-        
-        int confirmacion = JOptionPane.showConfirmDialog(this, 
-            "¿Estás seguro de que deseas eliminar esta reserva?", 
-            "Confirmación", 
-            JOptionPane.YES_NO_OPTION);
-        
-        if (confirmacion == JOptionPane.YES_OPTION) {
-            try {
-                // Conexión a la base de datos
-                Connection con = Conexion.getInstance().getConnection();
-                String sql = "DELETE FROM reservaciones WHERE id_cliente = ?";
-                PreparedStatement pst = con.prepareStatement(sql);
-                pst.setString(1, idCliente); // Asigna el ID de la reserva
-                
-                int filasAfectadas = pst.executeUpdate();
-                if (filasAfectadas > 0) {
-                    // Eliminar del JTable
-                    modelo4.removeRow(filaSeleccionada);
-                    JOptionPane.showMessageDialog(this, "Reserva eliminada con éxito.");
-                } else {
-                    JOptionPane.showMessageDialog(this, "No se pudo eliminar la reserva de la base de datos.");
-                }
+        if (filaSeleccionada >= 0) {
+            // Obtener el ID de la reserva desde la tabla (suponiendo que está en la última columna)
+            String idCliente = modelo4.getValueAt(filaSeleccionada, 0).toString(); // Cambia "6" al índice correcto si es necesario
 
-                // Cerrar el PreparedStatement
-                pst.close();
-            } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(this, "Error al eliminar de la base de datos: " + ex.getMessage());
-                ex.printStackTrace();
+            int confirmacion = JOptionPane.showConfirmDialog(this,
+                    "¿Estás seguro de que deseas eliminar esta reserva?",
+                    "Confirmación",
+                    JOptionPane.YES_NO_OPTION);
+
+            if (confirmacion == JOptionPane.YES_OPTION) {
+                try {
+                    // Conexión a la base de datos
+                    Connection con = Conexion.getInstance().getConnection();
+                    String sql = "DELETE FROM reservaciones WHERE id_cliente = ?";
+                    PreparedStatement pst = con.prepareStatement(sql);
+                    pst.setString(1, idCliente); // Asigna el ID de la reserva
+
+                    int filasAfectadas = pst.executeUpdate();
+                    if (filasAfectadas > 0) {
+                        // Eliminar del JTable
+                        modelo4.removeRow(filaSeleccionada);
+                        JOptionPane.showMessageDialog(this, "Reserva eliminada con éxito.");
+                    } else {
+                        JOptionPane.showMessageDialog(this, "No se pudo eliminar la reserva de la base de datos.");
+                    }
+
+                    // Cerrar el PreparedStatement
+                    pst.close();
+                } catch (SQLException ex) {
+                    JOptionPane.showMessageDialog(this, "Error al eliminar de la base de datos: " + ex.getMessage());
+                    ex.printStackTrace();
+                }
             }
+        } else {
+            JOptionPane.showMessageDialog(this, "Selecciona una fila para eliminar.");
         }
-    } else {
-        JOptionPane.showMessageDialog(this, "Selecciona una fila para eliminar.");
-    }
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void btnNuevaReservaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevaReservaActionPerformed
         limpiarCampos();
     }//GEN-LAST:event_btnNuevaReservaActionPerformed
 
+    private void btnRegistrarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnRegistrarMouseEntered
+        btnRegistrar.setBackground(new Color(255, 169, 40));
+    }//GEN-LAST:event_btnRegistrarMouseEntered
+
+    private void btnAgregarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAgregarMouseEntered
+        btnAgregar.setBackground(new Color(255, 169, 40));
+    }//GEN-LAST:event_btnAgregarMouseEntered
+
+    private void btnEditarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEditarMouseEntered
+        btnEditar.setBackground(new Color(255, 169, 40));
+    }//GEN-LAST:event_btnEditarMouseEntered
+
+    private void btnNuevaReservaMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnNuevaReservaMouseEntered
+        btnNuevaReserva.setBackground(new Color(255, 169, 40));
+    }//GEN-LAST:event_btnNuevaReservaMouseEntered
+
+    private void btnEliminarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEliminarMouseEntered
+        btnEliminar.setBackground(new Color(255, 169, 40));
+    }//GEN-LAST:event_btnEliminarMouseEntered
+
+    private void btnRegistrarMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnRegistrarMouseExited
+        btnRegistrar.setBackground(new Color(255, 153, 0));
+    }//GEN-LAST:event_btnRegistrarMouseExited
+
+    private void btnAgregarMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAgregarMouseExited
+        btnAgregar.setBackground(new Color(255, 153, 0));
+    }//GEN-LAST:event_btnAgregarMouseExited
+
+    private void btnEditarMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEditarMouseExited
+        btnEditar.setBackground(new Color(255, 153, 0));
+    }//GEN-LAST:event_btnEditarMouseExited
+
+    private void btnNuevaReservaMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnNuevaReservaMouseExited
+        btnNuevaReserva.setBackground(new Color(255, 153, 0));
+    }//GEN-LAST:event_btnNuevaReservaMouseExited
+
+    private void btnEliminarMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEliminarMouseExited
+        btnEliminar.setBackground(new Color(255, 153, 0));
+    }//GEN-LAST:event_btnEliminarMouseExited
+
+    private void btnSalirMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSalirMouseEntered
+        btnSalir.setBackground(new Color(255, 153, 153));
+    }//GEN-LAST:event_btnSalirMouseEntered
+
+    private void btnSalirMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSalirMouseExited
+        btnSalir.setBackground(Color.gray);
+    }//GEN-LAST:event_btnSalirMouseExited
+
     void ConsultarReservacion() {
         String sql = "select * from reservaciones";
-        
-       try {
-           // Obtener la conexión utilizando el Singleton
-        conet = Conexion.getInstance().getConnection();
-        
-        // Crear el Statement y ejecutar la consulta
-        st = conet.createStatement();
-        rs = st.executeQuery(sql);
-        
-        // Crear un arreglo para almacenar los datos de cada empleado
-        Object[] reservaciones = new Object[6];
-        
-        // Iterar sobre los resultados y agregar los datos a la tabla
-        while (rs.next()) {
-            reservaciones[0] = rs.getInt("ID_CLIENTE");
-            reservaciones[1] = rs.getString("MESA");
-            reservaciones[2] = rs.getString("ASIENTOS");
-            reservaciones[3] = rs.getString("FECHA");
-            reservaciones[4] = rs.getString("HORA_INICIO");
-            reservaciones[5] = rs.getString("HORA_FIN");
-            
-            modelo4.addRow(reservaciones);
+
+        try {
+            // Obtener la conexión utilizando el Singleton
+            conet = Conexion.getInstance().getConnection();
+
+            // Crear el Statement y ejecutar la consulta
+            st = conet.createStatement();
+            rs = st.executeQuery(sql);
+
+            // Crear un arreglo para almacenar los datos de cada empleado
+            Object[] reservaciones = new Object[6];
+
+            // Iterar sobre los resultados y agregar los datos a la tabla
+            while (rs.next()) {
+                reservaciones[0] = rs.getInt("ID_CLIENTE");
+                reservaciones[1] = rs.getString("MESA");
+                reservaciones[2] = rs.getString("ASIENTOS");
+                reservaciones[3] = rs.getString("FECHA");
+                reservaciones[4] = rs.getString("HORA_INICIO");
+                reservaciones[5] = rs.getString("HORA_FIN");
+
+                modelo4.addRow(reservaciones);
+            }
+
+            // Asignar el modelo a la tabla
+            TablaReservacion.setModel(modelo4);
+
+        } catch (Exception e) {
+            // Mostrar el mensaje de error si algo falla
+            JOptionPane.showMessageDialog(this, "Error al consultar datos: " + e.getMessage());
         }
-        
-        // Asignar el modelo a la tabla
-        TablaReservacion.setModel(modelo4);
-        
-    } catch (Exception e) {
-        // Mostrar el mensaje de error si algo falla
-        JOptionPane.showMessageDialog(this, "Error al consultar datos: " + e.getMessage());
     }
-    }
-    
+
     private void limpiarCampos() {
-    txtIDCliente.setText(""); // Limpiar el campo de ID del cliente
-    jComboBoxNumDeMesa.setSelectedIndex(0); // Resetear el ComboBox de mesas a la primera opción (puedes poner la opción por defecto aquí)
-    jComboBoxNumDeSillas.setSelectedIndex(0); // Resetear el ComboBox de sillas a la primera opción
-    jDateFecha.setDate(null); // Limpiar la fecha
-    txtHoraReservaIniciada.setText(""); // Limpiar la hora de inicio
-    txtHoraReservaFinalizada.setText(""); // Limpiar la hora de finalización
-}
-    
+        txtIDCliente.setText(""); // Limpiar el campo de ID del cliente
+        jComboBoxNumDeMesa.setSelectedIndex(0); // Resetear el ComboBox de mesas a la primera opción (puedes poner la opción por defecto aquí)
+        jComboBoxNumDeSillas.setSelectedIndex(0); // Resetear el ComboBox de sillas a la primera opción
+        jDateFecha.setDate(null); // Limpiar la fecha
+        txtHoraReservaIniciada.setText(""); // Limpiar la hora de inicio
+        txtHoraReservaFinalizada.setText(""); // Limpiar la hora de finalización
+    }
+
     /**
      * @param args the command line arguments
      */
@@ -722,12 +769,14 @@ private boolean validarConflictoDeHorario(Date fecha, String horaInicio, String 
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTextField txtHoraReservaFinalizada;
     private javax.swing.JTextField txtHoraReservaIniciada;
     private javax.swing.JTextField txtIDCliente;
