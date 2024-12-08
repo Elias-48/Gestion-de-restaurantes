@@ -4,10 +4,16 @@
  */
 package UI;
 
+import Clases.Conexion;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
 import java.awt.Color;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import java.io.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -24,7 +30,9 @@ public class INGRESO_PEDIDOS extends javax.swing.JFrame {
     private TableRowSorter<DefaultTableModel> sorter;
 
     DefaultTableModel modelo3 = new DefaultTableModel();
-
+    Connection conet;
+    Statement st;
+    ResultSet rs;
     /**
      * Creates new form INGRESO_PEDIDOS
      */
@@ -32,16 +40,15 @@ public class INGRESO_PEDIDOS extends javax.swing.JFrame {
         initComponents();
         sorter = new TableRowSorter<>(modelo3);
         TablaIngresoDePedidos.setRowSorter(sorter);
+        modelo3.addColumn("ID PEDIDO");
         modelo3.addColumn("ID CLIENTE");
-        modelo3.addColumn("MESA");
-        modelo3.addColumn("N° ASIENTOS");
         modelo3.addColumn("MENÚ");
         modelo3.addColumn("PRECIO UNI.");
         modelo3.addColumn("CANTIDAD");
         modelo3.addColumn("TOTAL");
         modelo3.addColumn("DETALLE");
         TablaIngresoDePedidos.setModel(modelo3);
-        cargarPedidosDesdeCSV();
+        ConsultarPedidos();
         ordenarTablaPorID();
         // Agregar el evento para detectar clics en las filas
         TablaIngresoDePedidos.addMouseListener(new MouseAdapter() {
@@ -49,12 +56,11 @@ public class INGRESO_PEDIDOS extends javax.swing.JFrame {
                 int filaSeleccionada = TablaIngresoDePedidos.getSelectedRow();
                 if (filaSeleccionada >= 0) {
                     // Obtener los valores de la fila seleccionada y colocarlos en los campos de texto
-                    txtCliente.setText(modelo3.getValueAt(filaSeleccionada, 0).toString());
-                    jComboBoxNumDeMesa.setSelectedItem(modelo3.getValueAt(filaSeleccionada, 1).toString());
-                    jComboBoxNumDeSillas.setSelectedItem(modelo3.getValueAt(filaSeleccionada, 2).toString());
-                    txtNombreDelPlato.setText(modelo3.getValueAt(filaSeleccionada, 3).toString());
-                    txtNumDePlato.setText(modelo3.getValueAt(filaSeleccionada, 5).toString());
-                    TextAreaDetalleDelPlato.setText(modelo3.getValueAt(filaSeleccionada, 7).toString());
+                    txtPedido.setText(modelo3.getValueAt(filaSeleccionada, 0).toString());
+                    txtCliente.setText(modelo3.getValueAt(filaSeleccionada, 1).toString());
+                    txtNombreDelPlato.setText(modelo3.getValueAt(filaSeleccionada, 2).toString());
+                    txtNumDePlato.setText(modelo3.getValueAt(filaSeleccionada, 4).toString());
+                    TextAreaDetalleDelPlato.setText(modelo3.getValueAt(filaSeleccionada, 6).toString());
                 }
             }
         });
@@ -81,10 +87,6 @@ public class INGRESO_PEDIDOS extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
         txtCliente = new javax.swing.JTextField();
-        jLabel2 = new javax.swing.JLabel();
-        jComboBoxNumDeMesa = new javax.swing.JComboBox<>();
-        jLabel7 = new javax.swing.JLabel();
-        jComboBoxNumDeSillas = new javax.swing.JComboBox<>();
         jLabel3 = new javax.swing.JLabel();
         txtNombreDelPlato = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
@@ -102,54 +104,33 @@ public class INGRESO_PEDIDOS extends javax.swing.JFrame {
         TablaIngresoDePedidos = new javax.swing.JTable();
         jLabel8 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
+        txtPedido = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(204, 204, 204));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel6.setForeground(new java.awt.Color(0, 0, 0));
         jLabel6.setText("ID DEL CLIENTE:");
-        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 20, -1, -1));
+        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 120, -1, -1));
 
         txtCliente.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtClienteActionPerformed(evt);
             }
         });
-        jPanel1.add(txtCliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 10, 170, 40));
+        jPanel1.add(txtCliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 110, 170, 40));
 
-        jLabel2.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel2.setText("N° MESA:");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 70, -1, -1));
-
-        jComboBoxNumDeMesa.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "SIN MESA", "MESA 1", "MESA 2", "MESA 3", "MESA 4", "MESA 5", "MESA 6" }));
-        jComboBoxNumDeMesa.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBoxNumDeMesaActionPerformed(evt);
-            }
-        });
-        jPanel1.add(jComboBoxNumDeMesa, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 60, 170, 40));
-
-        jLabel7.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel7.setText("N° ASIENTOS:");
-        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 120, -1, -1));
-
-        jComboBoxNumDeSillas.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "SIN ASIENTOS", "1", "2", "3", "4", "5", "6", "7", "8" }));
-        jPanel1.add(jComboBoxNumDeSillas, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 110, 170, 40));
-
-        jLabel3.setForeground(new java.awt.Color(0, 0, 0));
         jLabel3.setText("NOMBRE DEL PLATO:");
         jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 170, -1, -1));
         jPanel1.add(txtNombreDelPlato, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 160, 170, 40));
 
-        jLabel4.setForeground(new java.awt.Color(0, 0, 0));
         jLabel4.setText("N° PLATOS:");
         jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 220, -1, -1));
         jPanel1.add(txtNumDePlato, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 210, 170, 40));
 
         btnRegistrar.setBackground(new java.awt.Color(255, 153, 0));
-        btnRegistrar.setForeground(new java.awt.Color(0, 0, 0));
         btnRegistrar.setText("REGISTRAR");
         btnRegistrar.setBorder(null);
         btnRegistrar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -166,10 +147,9 @@ public class INGRESO_PEDIDOS extends javax.swing.JFrame {
                 btnRegistrarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnRegistrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 90, 110, 50));
+        jPanel1.add(btnRegistrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 90, 110, 50));
 
         btnAgregar.setBackground(new java.awt.Color(255, 153, 0));
-        btnAgregar.setForeground(new java.awt.Color(0, 0, 0));
         btnAgregar.setText("AGREGAR");
         btnAgregar.setBorder(null);
         btnAgregar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -186,10 +166,9 @@ public class INGRESO_PEDIDOS extends javax.swing.JFrame {
                 btnAgregarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnAgregar, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 90, 110, 50));
+        jPanel1.add(btnAgregar, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 90, 110, 50));
 
         btnEditar.setBackground(new java.awt.Color(255, 153, 0));
-        btnEditar.setForeground(new java.awt.Color(0, 0, 0));
         btnEditar.setText("EDITAR");
         btnEditar.setBorder(null);
         btnEditar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -206,10 +185,9 @@ public class INGRESO_PEDIDOS extends javax.swing.JFrame {
                 btnEditarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnEditar, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 180, 110, 50));
+        jPanel1.add(btnEditar, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 180, 110, 50));
 
         btnEliminar.setBackground(new java.awt.Color(255, 153, 0));
-        btnEliminar.setForeground(new java.awt.Color(0, 0, 0));
         btnEliminar.setText("ELIMINAR");
         btnEliminar.setBorder(null);
         btnEliminar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -226,10 +204,9 @@ public class INGRESO_PEDIDOS extends javax.swing.JFrame {
                 btnEliminarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 270, 110, 50));
+        jPanel1.add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 270, 110, 50));
 
         btnNuevoPedido.setBackground(new java.awt.Color(255, 153, 0));
-        btnNuevoPedido.setForeground(new java.awt.Color(0, 0, 0));
         btnNuevoPedido.setText("NUEVO PEDIDO");
         btnNuevoPedido.setBorder(null);
         btnNuevoPedido.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -246,10 +223,9 @@ public class INGRESO_PEDIDOS extends javax.swing.JFrame {
                 btnNuevoPedidoActionPerformed(evt);
             }
         });
-        jPanel1.add(btnNuevoPedido, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 180, 110, 50));
+        jPanel1.add(btnNuevoPedido, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 180, 110, 50));
 
         btnSalir.setBackground(java.awt.Color.gray);
-        btnSalir.setForeground(new java.awt.Color(0, 0, 0));
         btnSalir.setText("SALIR");
         btnSalir.setBorder(null);
         btnSalir.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -266,9 +242,8 @@ public class INGRESO_PEDIDOS extends javax.swing.JFrame {
                 btnSalirActionPerformed(evt);
             }
         });
-        jPanel1.add(btnSalir, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 270, 110, 50));
+        jPanel1.add(btnSalir, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 270, 110, 50));
 
-        jLabel5.setForeground(new java.awt.Color(0, 0, 0));
         jLabel5.setText("DETALLES DEL PEDIDO (OPCIONAL):");
         jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 260, -1, -1));
 
@@ -276,34 +251,37 @@ public class INGRESO_PEDIDOS extends javax.swing.JFrame {
         TextAreaDetalleDelPlato.setRows(5);
         jScrollPane2.setViewportView(TextAreaDetalleDelPlato);
 
-        jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 276, 290, 70));
+        jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 280, 290, 70));
 
         TablaIngresoDePedidos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null}
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null}
             },
             new String [] {
-                "ID CLIENTE", "MESA", "N° ASIENTOS", "MENÚ", "PRECIO UNI.", "CANTIDAD", "TOTAL", "DETALLE"
+                "IDPEDIDO", "IDCLIENTE", "MENU", "PRECIO UNI.", "CANTIDAD", "TOTAL", "DETALLE"
             }
         ));
         jScrollPane1.setViewportView(TablaIngresoDePedidos);
 
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 360, 680, 160));
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 360, 620, 160));
 
         jLabel8.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        jLabel8.setForeground(new java.awt.Color(0, 0, 0));
         jLabel8.setText("INGRESO DE PEDIDOS");
-        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 20, 240, 30));
+        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 20, 240, 30));
         jPanel1.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 50, 240, 10));
+        jPanel1.add(txtPedido, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 60, 170, 40));
+
+        jLabel1.setText("ID DEL PEDIDO:");
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 70, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 700, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -315,13 +293,17 @@ public class INGRESO_PEDIDOS extends javax.swing.JFrame {
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
 
-        if (validarIDCliente(txtCliente.getText().trim()) && validarNombreDelPlato(txtNombreDelPlato.getText().trim()) && validarNumeroDePlatos(txtNumDePlato.getText().trim()) && validarDetallesDelPedido(TextAreaDetalleDelPlato.getText().trim())) {
+        if (validarIDPedido(txtPedido.getText().trim()) && validarIDCliente(txtCliente.getText().trim()) && validarNombreDelPlato(txtNombreDelPlato.getText().trim()) && validarNumeroDePlatos(txtNumDePlato.getText().trim()) && validarDetallesDelPedido(TextAreaDetalleDelPlato.getText().trim())) {
             JOptionPane.showMessageDialog(this, "Pedido registrado con éxito.");
         } else {
             JOptionPane.showMessageDialog(this, "Debe insertar datos correctos");
         }
     }//GEN-LAST:event_btnRegistrarActionPerformed
-
+    
+    public static boolean validarIDPedido(String datos) {
+    return datos.matches("^\\d+$");
+    }
+    
     public static boolean validarIDCliente(String datos) {
         return datos.matches("^\\d{1,6}$");
     }
@@ -347,43 +329,95 @@ public class INGRESO_PEDIDOS extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSalirActionPerformed
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
-        String idcliente = txtCliente.getText();
-        String mesa = jComboBoxNumDeMesa.getSelectedItem().toString();
-        String silla = jComboBoxNumDeSillas.getSelectedItem().toString();
-        String nombrePlato = txtNombreDelPlato.getText();
-        String cantidadplato = txtNumDePlato.getText();
-        String detalle = TextAreaDetalleDelPlato.getText();
+        String idpedido = txtPedido.getText().trim();
+        String idcliente = txtCliente.getText().trim();
+        String nombrePlato = txtNombreDelPlato.getText().trim();
+        String cantidadplato = txtNumDePlato.getText().trim();
+        String detalle = TextAreaDetalleDelPlato.getText().trim();
 
-        if (idcliente.isEmpty() || mesa.equals("SIN MESA") || silla.equals("SIN MESA") || nombrePlato.isEmpty() || cantidadplato.isEmpty() || detalle.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Todos los campos deben estar completos");
-        } else {
-            // Buscar el precio del plato
-            String precioUni = buscarPrecioPorNombrePlato(nombrePlato);
+    if (idpedido.isEmpty() || idcliente.isEmpty() || nombrePlato.isEmpty() || cantidadplato.isEmpty() || detalle.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Todos los campos deben estar completos");
+    } else {
+        // Buscar el precio del plato
+        String precioUni = buscarPrecioPorNombrePlato(nombrePlato);
 
-            if (precioUni != null) {
+        if (precioUni != null) {
+            try {
                 // Calcular el total (cantidad * precio unitario)
                 int cantidad = Integer.parseInt(cantidadplato);
                 double precio = Double.parseDouble(precioUni);
                 double total = cantidad * precio;
 
-                // Agregar la fila a la tabla (con el precio unitario y total)
-                modelo3.addRow(new Object[]{idcliente, mesa, silla, nombrePlato, precioUni, cantidadplato, total, detalle});
-                guardarPedidosEnCSV(); // Guardar la tabla actualizada en CSV
-            } else {
-                JOptionPane.showMessageDialog(this, "Plato no encontrado.");
+                // Guardar en la base de datos
+                Connection con = Conexion.getInstance().getConnection(); // Obtener la conexión
+                String sql = "INSERT INTO ingreso_pedidos (idpedido, idcliente, menu, precio_uni, cantidad, total, detalle) VALUES (?, ?, ?, ?, ?, ?, ?)";
+                PreparedStatement pst = con.prepareStatement(sql);
+                pst.setString(1, idpedido);
+                pst.setString(2, idcliente);
+                pst.setString(3, nombrePlato);
+                pst.setDouble(4, precio);
+                pst.setInt(5, cantidad);
+                pst.setDouble(6, total);
+                pst.setString(7, detalle);
+
+                int filasAfectadas = pst.executeUpdate();
+                if (filasAfectadas > 0) {
+                    // Guardar en la tabla si la inserción fue exitosa
+                    modelo3.addRow(new Object[]{idpedido, idcliente, nombrePlato, precioUni, cantidadplato, total, detalle});
+                    JOptionPane.showMessageDialog(this, "Pedido registrado con éxito en la base de datos y en la tabla.");
+                } else {
+                    JOptionPane.showMessageDialog(this, "Error al registrar el pedido en la base de datos.");
+                }
+                pst.close(); // Cerrar el PreparedStatement
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(this, "Error al guardar en la base de datos: " + ex.getMessage());
+                ex.printStackTrace();
             }
+        } else {
+            JOptionPane.showMessageDialog(this, "Plato no encontrado.");
         }
+    }
     }//GEN-LAST:event_btnAgregarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
         int filaSeleccionada = TablaIngresoDePedidos.getSelectedRow();
-        if (filaSeleccionada != -1) {
-            modelo3.removeRow(filaSeleccionada);
-            guardarPedidosEnCSV();
-        } else {
-            // Mostrar mensaje de error o advertencia
-            javax.swing.JOptionPane.showMessageDialog(this, "Selecciona una fila para eliminar.");
+    if (filaSeleccionada != -1) {
+        // Confirmar eliminación
+        int confirmacion = JOptionPane.showConfirmDialog(this, 
+                "¿Estás seguro de que deseas eliminar este registro?", 
+                "Confirmación de eliminación", 
+                JOptionPane.YES_NO_OPTION);
+
+        if (confirmacion == JOptionPane.YES_OPTION) {
+            try {
+                // Obtener el identificador único del pedido (suponiendo que es la primera columna)
+                String idpedido = modelo3.getValueAt(filaSeleccionada, 0).toString();
+
+                // Eliminar el registro de la base de datos
+                Connection con = Conexion.getInstance().getConnection();
+                String sql = "DELETE FROM ingreso_pedidos WHERE idpedido = ?";
+                PreparedStatement pst = con.prepareStatement(sql);
+                pst.setString(1, idpedido);
+
+                int filasAfectadas = pst.executeUpdate();
+                if (filasAfectadas > 0) {
+                    // Eliminar la fila de la tabla visual
+                    modelo3.removeRow(filaSeleccionada);
+                    JOptionPane.showMessageDialog(this, "Registro eliminado correctamente.");
+                } else {
+                    JOptionPane.showMessageDialog(this, "No se pudo eliminar el registro en la base de datos.");
+                }
+
+                pst.close(); // Cerrar el PreparedStatement
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(this, "Error al eliminar de la base de datos: " + ex.getMessage());
+                ex.printStackTrace();
+            }
         }
+    } else {
+        // Mostrar mensaje de error o advertencia
+        JOptionPane.showMessageDialog(this, "Selecciona una fila para eliminar.");
+    }
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void btnNuevoPedidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoPedidoActionPerformed
@@ -392,41 +426,67 @@ public class INGRESO_PEDIDOS extends javax.swing.JFrame {
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
         int filaSeleccionada = TablaIngresoDePedidos.getSelectedRow();
-        if (filaSeleccionada != -1) {
-            // Obtener el nombre del plato para buscar el precio
-            String nombrePlato = txtNombreDelPlato.getText();
-            String precioPlato = buscarPrecioPorNombrePlato(nombrePlato);
+    if (filaSeleccionada != -1) {
+        // Obtener los datos del formulario
+        String idpedido = txtPedido.getText();
+        String idCliente = txtCliente.getText();
+        String nombrePlato = txtNombreDelPlato.getText();
+        String precioPlato = buscarPrecioPorNombrePlato(nombrePlato);
 
-            if (precioPlato != null) {
-                // Obtener la cantidad del plato
+        if (precioPlato != null) {
+            try {
+                // Calcular el total
                 int cantidad = Integer.parseInt(txtNumDePlato.getText());
                 double precio = Double.parseDouble(precioPlato);
                 double total = cantidad * precio;
 
-                // Actualizar los datos en la fila seleccionada
-                modelo3.setValueAt(txtCliente.getText(), filaSeleccionada, 0); // Cliente
-                modelo3.setValueAt(jComboBoxNumDeMesa.getSelectedItem().toString(), filaSeleccionada, 1); // Mesa
-                modelo3.setValueAt(jComboBoxNumDeSillas.getSelectedItem().toString(), filaSeleccionada, 2); // Silla
-                modelo3.setValueAt(nombrePlato, filaSeleccionada, 3); // Nombre del plato
-                modelo3.setValueAt(precioPlato, filaSeleccionada, 4); // Precio unitario
-                modelo3.setValueAt(txtNumDePlato.getText(), filaSeleccionada, 5); // Cantidad de platos
-                modelo3.setValueAt(total, filaSeleccionada, 6); // Total
-                modelo3.setValueAt(TextAreaDetalleDelPlato.getText(), filaSeleccionada, 7); // Detalle
+                // Detalle del plato
+                String detalle = TextAreaDetalleDelPlato.getText();
 
-                // Guardar los pedidos en el archivo CSV después de editar
-                guardarPedidosEnCSV();
-            } else {
-                JOptionPane.showMessageDialog(this, "Plato no encontrado.");
+                // Actualizar en la tabla (JTable)
+                modelo3.setValueAt(idpedido, filaSeleccionada, 0); // Pedido
+                modelo3.setValueAt(idCliente, filaSeleccionada, 1); // Cliente
+                modelo3.setValueAt(nombrePlato, filaSeleccionada, 2); // Nombre del plato
+                modelo3.setValueAt(precioPlato, filaSeleccionada, 3); // Precio unitario
+                modelo3.setValueAt(txtNumDePlato.getText(), filaSeleccionada, 4); // Cantidad de platos
+                modelo3.setValueAt(total, filaSeleccionada, 5); // Total
+                modelo3.setValueAt(detalle, filaSeleccionada, 6); // Detalle
+
+                // Actualizar en la base de datos
+                Connection con = Conexion.getInstance().getConnection();
+                String sql = "UPDATE ingreso_pedidos SET idcliente = ?, menu = ?, precio_uni = ?, cantidad = ?, total = ?, detalle = ? WHERE idpedido = ?";
+                PreparedStatement pst = con.prepareStatement(sql);
+                pst.setString(1, idCliente); // ID del cliente
+                pst.setString(2, nombrePlato); // Nombre del plato
+                pst.setDouble(3, precio); // Precio unitario
+                pst.setInt(4, cantidad); // Cantidad
+                pst.setDouble(5, total); // Total
+                pst.setString(6, detalle); // Detalle
+                pst.setString(7, idpedido); // ID del pedido
+
+                int filasAfectadas = pst.executeUpdate();
+                if (filasAfectadas > 0) {
+                    JOptionPane.showMessageDialog(this, "Pedido actualizado correctamente en la base de datos.");
+                } else {
+                    JOptionPane.showMessageDialog(this, "No se pudo actualizar el pedido en la base de datos.");
+                }
+
+                pst.close(); // Cerrar el PreparedStatement
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(this, "Error al actualizar en la base de datos: " + ex.getMessage());
+                ex.printStackTrace();
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(this, "Error en el formato de los datos: " + ex.getMessage());
+                ex.printStackTrace();
             }
         } else {
-            // Mostrar mensaje de error o advertencia
-            javax.swing.JOptionPane.showMessageDialog(this, "Selecciona una fila para editar.");
+            JOptionPane.showMessageDialog(this, "Plato no encontrado.");
         }
+    } else {
+        // Mostrar mensaje de error o advertencia
+        JOptionPane.showMessageDialog(this, "Selecciona una fila para editar.");
+    }
     }//GEN-LAST:event_btnEditarActionPerformed
-
-    private void jComboBoxNumDeMesaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxNumDeMesaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBoxNumDeMesaActionPerformed
 
     private void txtClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtClienteActionPerformed
         // TODO add your handling code here:
@@ -480,55 +540,62 @@ public class INGRESO_PEDIDOS extends javax.swing.JFrame {
         btnEliminar.setBackground(new Color(255, 153, 0));
     }//GEN-LAST:event_btnEliminarMouseExited
 
+    
     private String buscarPrecioPorNombrePlato(String nombrePlato) {
-        String line;
-        try (BufferedReader br = new BufferedReader(new FileReader("Menu.csv"))) {
-            while ((line = br.readLine()) != null) {
-                String[] data = line.split(",");
-                // En el CSV, la posición 1 es el nombre del plato, y el 3 es el precio del plato
-                if (data[1].equalsIgnoreCase(nombrePlato)) {
-                    return data[3]; // Retorna el precio del plato
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+    String precio = null;
+    try {
+        // Obtener la conexión a la base de datos
+        Connection con = Conexion.getInstance().getConnection();
+        // Consulta SQL para buscar el precio del plato por su nombre
+        String sql = "SELECT costo FROM menu_platos WHERE menu = ?";
+        PreparedStatement pst = con.prepareStatement(sql);
+        pst.setString(1, nombrePlato); // Asignar el parámetro del nombre del plato
+
+        // Ejecutar la consulta
+        ResultSet rs = pst.executeQuery();
+        if (rs.next()) {
+            // Recuperar el precio si se encuentra el plato
+            precio = rs.getString("costo");
         }
-        return null; // Retorna null si no se encontró el plato
+        rs.close(); // Cerrar el ResultSet
+        pst.close(); // Cerrar el PreparedStatement
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(null, "Error al buscar el costo del plato: " + e.getMessage());
+        e.printStackTrace();
+    }
+    return precio; // Retorna el precio o null si no se encontró
     }
 
-    private void guardarPedidosEnCSV() {
-        try (PrintWriter pw = new PrintWriter(new File("Pedidos.csv"))) {
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < modelo3.getRowCount(); i++) {
-                for (int j = 0; j < modelo3.getColumnCount(); j++) {
-                    sb.append(modelo3.getValueAt(i, j).toString());
-                    sb.append(",");
-                }
-                sb.append("\n");
-            }
-            pw.write(sb.toString());
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
+    void ConsultarPedidos() {
+        String sql = "SELECT * FROM ingreso_pedidos";
+    try {
+        conet = Conexion.getInstance().getConnection();
+        st = conet.createStatement();
+        rs = st.executeQuery(sql);
 
-    // Método para cargar los datos desde un archivo CSV
-    private void cargarPedidosDesdeCSV() {
-        String line;
-        try (BufferedReader br = new BufferedReader(new FileReader("Pedidos.csv"))) {
-            while ((line = br.readLine()) != null) {
-                String[] data = line.split(",");
-                modelo3.addRow(data);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+        // Crear un arreglo para almacenar los datos
+        Object[] ingreso_pedidos = new Object[7]; // Ahora hay 7 columnas
+
+        while (rs.next()) {
+            ingreso_pedidos[0] = rs.getInt("IDPEDIDO");
+            ingreso_pedidos[1] = rs.getInt("IDCLIENTE");
+            ingreso_pedidos[2] = rs.getString("MENU");
+            ingreso_pedidos[3] = rs.getDouble("PRECIO_UNI");
+            ingreso_pedidos[4] = rs.getInt("CANTIDAD");
+            ingreso_pedidos[5] = rs.getDouble("TOTAL");
+            ingreso_pedidos[6] = rs.getString("DETALLE");
+            modelo3.addRow(ingreso_pedidos);
         }
+
+        TablaIngresoDePedidos.setModel(modelo3);
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Error al consultar datos: " + e.getMessage());
+    }
     }
 
     private void limpiarCampos() {
+        txtPedido.setText("");
         txtCliente.setText("");
-        jComboBoxNumDeMesa.setSelectedIndex(0);
-        jComboBoxNumDeSillas.setSelectedIndex(0);
         txtNombreDelPlato.setText("");
         txtNumDePlato.setText("");
         TextAreaDetalleDelPlato.setText("");
@@ -578,14 +645,11 @@ public class INGRESO_PEDIDOS extends javax.swing.JFrame {
     private javax.swing.JButton btnNuevoPedido;
     private javax.swing.JButton btnRegistrar;
     private javax.swing.JButton btnSalir;
-    private javax.swing.JComboBox<String> jComboBoxNumDeMesa;
-    private javax.swing.JComboBox<String> jComboBoxNumDeSillas;
-    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
@@ -594,5 +658,6 @@ public class INGRESO_PEDIDOS extends javax.swing.JFrame {
     private javax.swing.JTextField txtCliente;
     private javax.swing.JTextField txtNombreDelPlato;
     private javax.swing.JTextField txtNumDePlato;
+    private javax.swing.JTextField txtPedido;
     // End of variables declaration//GEN-END:variables
 }

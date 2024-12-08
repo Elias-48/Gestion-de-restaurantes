@@ -4,10 +4,16 @@
  */
 package UI;
 
+import Clases.Conexion;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
 import java.awt.Color;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import java.io.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -26,6 +32,9 @@ public class MENÚ_PLATOS extends javax.swing.JFrame {
     private DefaultTableModel modelo;
     private HashSet<String> idsPlatos;
     private HashSet<String> nombresPlatos;
+    Connection conet;
+    Statement st;
+    ResultSet rs;
     /**
      * Creates new form MENÚ_PLATOS
      */
@@ -39,7 +48,7 @@ public class MENÚ_PLATOS extends javax.swing.JFrame {
     modelo.addColumn("INGREDIENTES");
     modelo.addColumn("COSTO");
     TablaMenuPlato.setModel(modelo);
-    cargarMenuDesdeCSV();  // Carga los datos desde el archivo CSV al iniciar la ventana
+    ConsultarPlatos();
     ordenarTablaPorID();   // Solo ordena la visualización de la tabla, no el modelo
 
     // Evento para seleccionar una fila y llenar los campos
@@ -300,29 +309,45 @@ public class MENÚ_PLATOS extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSalirActionPerformed
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
-        String idplato = txtIdDelPlato.getText().trim();
-    String nombre = txtNombreDelPlato.getText().trim();
+    String idplato = txtIdDelPlato.getText().trim();
+    String menu = txtNombreDelPlato.getText().trim();
     String ingredientes = jTextAreaIngredientes.getText().replace("\n", " | ").trim();
-    String precio = txtPrecioDelPlato.getText().trim();
+    String costo = txtPrecioDelPlato.getText().trim();
 
-    if (idplato.isEmpty() || nombre.isEmpty() || ingredientes.isEmpty() || precio.isEmpty()) {
+    if (idplato.isEmpty() || menu.isEmpty() || ingredientes.isEmpty() || costo.isEmpty()) {
         JOptionPane.showMessageDialog(this, "Todos los campos deben estar completos");
     } else if (idsPlatos.contains(idplato)) {
         JOptionPane.showMessageDialog(this, "El ID del plato ya existe. Ingrese un ID diferente.");
-    } else if (nombresPlatos.contains(nombre)) {
+    } else if (nombresPlatos.contains(menu)) {
         JOptionPane.showMessageDialog(this, "El nombre del plato ya existe. Ingrese un nombre diferente.");
     } else {
-        // Agregar el ID y el nombre a los HashSets para evitar duplicados
-        idsPlatos.add(idplato);
-        nombresPlatos.add(nombre);
-
-        // Agregar la nueva fila a la tabla
-        modelo.addRow(new Object[]{idplato, nombre, ingredientes, precio});
-        JOptionPane.showMessageDialog(this, "Plato registrado con éxito");
-        
-        guardarMenuEnCSV();  // Guardar los datos en el archivo CSV
-        ordenarTablaPorID(); // Ordenar la tabla después de agregar un nuevo plato
-        limpiarCampos(); // Limpiar los campos de texto
+        try {
+            // Guardar en la base de datos
+            Connection con = Conexion.getInstance().getConnection(); // Obtener la conexión
+            String sql = "INSERT INTO menu_platos (ID, MENU, INGREDIENTES, COSTO) VALUES (?, ?, ?, ?)";
+            PreparedStatement pst = con.prepareStatement(sql);
+            pst.setString(1, idplato);
+            pst.setString(2, menu);
+            pst.setString(3, ingredientes);
+            pst.setString(4, costo);
+            
+            int filasAfectadas = pst.executeUpdate();
+            if (filasAfectadas > 0) {
+                // Guardar en la tabla si la inserción fue exitosa
+                idsPlatos.add(idplato);
+                nombresPlatos.add(menu);
+                modelo.addRow(new Object[]{idplato, menu, ingredientes, costo});
+                JOptionPane.showMessageDialog(this, "Plato registrado con éxito en la base de datos y en la tabla.");
+                
+                ordenarTablaPorID(); // Ordenar la tabla después de agregar un nuevo plato
+                limpiarCampos(); // Limpiar los campos de texto
+            } else {
+                JOptionPane.showMessageDialog(this, "Error al registrar el plato en la base de datos.");
+            }
+            pst.close(); // Cerrar el PreparedStatement
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, "Error al guardar en la base de datos: " + ex.getMessage());
+        }
     }
     }//GEN-LAST:event_btnAgregarActionPerformed
 
@@ -330,35 +355,99 @@ public class MENÚ_PLATOS extends javax.swing.JFrame {
         int filaSeleccionada = TablaMenuPlato.getSelectedRow();
 
         if (filaSeleccionada >= 0) {
-            modelo.setValueAt(txtIdDelPlato.getText(), filaSeleccionada, 0);
-            modelo.setValueAt(txtNombreDelPlato.getText(), filaSeleccionada, 1);
-            modelo.setValueAt(jTextAreaIngredientes.getText(), filaSeleccionada, 2);
-            modelo.setValueAt(txtPrecioDelPlato.getText(), filaSeleccionada, 3);
-            guardarMenuEnCSV();
-            JOptionPane.showMessageDialog(this, "Plato editado con éxito");
-        } else {
-            JOptionPane.showMessageDialog(this, "Debe seleccionar un plato para editar");
+            // Obtener los valores del formulario
+        String idPlato = txtIdDelPlato.getText().trim();
+        String menu = txtNombreDelPlato.getText().trim();
+        String ingredientes = jTextAreaIngredientes.getText().replace("\n", " | ").trim();
+        String costo = txtPrecioDelPlato.getText().trim();
+
+        if (idPlato.isEmpty() || menu.isEmpty() || ingredientes.isEmpty() || costo.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Todos los campos deben estar completos.");
+            return;
         }
+
+        try {
+            // Obtener la conexión a la base de datos
+            Connection con = Conexion.getInstance().getConnection();
+            
+            // Preparar la consulta SQL para actualizar
+            String sql = "UPDATE menu_platos SET MENU = ?, INGREDIENTES = ?, COSTO = ? WHERE ID = ?";
+            PreparedStatement pst = con.prepareStatement(sql);
+            pst.setString(1, menu);
+            pst.setString(2, ingredientes);
+            pst.setString(3, costo);
+            pst.setString(4, idPlato);
+
+            // Ejecutar la consulta
+            int filasAfectadas = pst.executeUpdate();
+
+            if (filasAfectadas > 0) {
+                // Actualizar los datos en la tabla de la interfaz
+                modelo.setValueAt(idPlato, filaSeleccionada, 0);
+                modelo.setValueAt(menu, filaSeleccionada, 1);
+                modelo.setValueAt(ingredientes, filaSeleccionada, 2);
+                modelo.setValueAt(costo, filaSeleccionada, 3);
+
+                JOptionPane.showMessageDialog(this, "Plato editado con éxito en la base de datos.");
+            } else {
+                JOptionPane.showMessageDialog(this, "No se encontró un plato con el ID especificado.");
+            }
+
+            // Cerrar el PreparedStatement
+            pst.close();
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, "Error al editar el plato en la base de datos: " + ex.getMessage());
+        }
+    } else {
+        JOptionPane.showMessageDialog(this, "Debe seleccionar un plato para editar.");
+    }
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
         int filaSeleccionada = TablaMenuPlato.getSelectedRow();
 
         if (filaSeleccionada >= 0) {
-            String idPlato = (String) modelo.getValueAt(filaSeleccionada, 0);
-            String nombrePlato = (String) modelo.getValueAt(filaSeleccionada, 1);
+            // Obtener el ID del plato seleccionado
+        String idPlato = modelo.getValueAt(filaSeleccionada, 0).toString();
 
-            
-            idsPlatos.remove(idPlato);
-            nombresPlatos.remove(nombrePlato);
+        // Confirmar eliminación
+        int confirmacion = JOptionPane.showConfirmDialog(this, 
+            "¿Está seguro de que desea eliminar este plato?", 
+            "Confirmación", 
+            JOptionPane.YES_NO_OPTION);
 
-            // Eliminar la fila seleccionada en la tabla y actualizar el archivo CSV
-            modelo.removeRow(filaSeleccionada);
-            guardarMenuEnCSV();
-            JOptionPane.showMessageDialog(this, "Plato eliminado con éxito");
-        } else {
-            JOptionPane.showMessageDialog(this, "Debe seleccionar un plato para eliminar");
+        if (confirmacion == JOptionPane.YES_OPTION) {
+            try {
+                // Obtener la conexión a la base de datos
+                Connection con = Conexion.getInstance().getConnection();
+                
+                // Preparar la consulta SQL para eliminar
+                String sql = "DELETE FROM menu_platos WHERE ID = ?";
+                PreparedStatement pst = con.prepareStatement(sql);
+                pst.setString(1, idPlato);
+
+                // Ejecutar la consulta
+                int filasAfectadas = pst.executeUpdate();
+
+                if (filasAfectadas > 0) {
+                    // Eliminar la fila seleccionada en la tabla de la interfaz
+                    modelo.removeRow(filaSeleccionada);
+
+                    // Mensaje de éxito
+                    JOptionPane.showMessageDialog(this, "Plato eliminado con éxito de la base de datos.");
+                } else {
+                    JOptionPane.showMessageDialog(this, "No se encontró un plato con el ID especificado.");
+                }
+
+                // Cerrar el PreparedStatement
+                pst.close();
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(this, "Error al eliminar el plato en la base de datos: " + ex.getMessage());
+            }
         }
+    } else {
+        JOptionPane.showMessageDialog(this, "Debe seleccionar un plato para eliminar.");
+    }
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
@@ -447,43 +536,39 @@ public class MENÚ_PLATOS extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtIdDelPlatoMousePressed
 
-    private void guardarMenuEnCSV() {
-        try (PrintWriter pw = new PrintWriter(new File("Menu.csv"))) {
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < modelo.getRowCount(); i++) {
-                for (int j = 0; j < modelo.getColumnCount(); j++) {
-                    String value = modelo.getValueAt(i, j).toString();
-                    if (j == 2) { // Para la columna de ingredientes (columna 2)
-                        value = value.replace("\n", " | ");  // Reemplazar saltos de línea por |
-                    }
-                    sb.append(value);
-                    if (j < modelo.getColumnCount() - 1) {
-                        sb.append(",");
-                    }
-                }
-                sb.append("\n");
-            }
-            pw.write(sb.toString());
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
+    void ConsultarPlatos() {
+        String sql = "select * from menu_platos";
+        
+       try {
+           // Obtener la conexión utilizando el Singleton
+        conet = Conexion.getInstance().getConnection();
+        
+        // Crear el Statement y ejecutar la consulta
+        st = conet.createStatement();
+        rs = st.executeQuery(sql);
+        
+        // Crear un arreglo para almacenar los datos de cada empleado
+        Object[] menu_platos = new Object[4];
+        
+        // Iterar sobre los resultados y agregar los datos a la tabla
+        while (rs.next()) {
+            menu_platos[0] = rs.getInt("ID");
+            menu_platos[1] = rs.getString("MENU");
+            menu_platos[2] = rs.getString("INGREDIENTES");
+            menu_platos[3] = rs.getInt("COSTO");
+            
+            modelo.addRow(menu_platos);
         }
+        
+        // Asignar el modelo a la tabla
+        TablaMenuPlato.setModel(modelo);
+        
+    } catch (Exception e) {
+        // Mostrar el mensaje de error si algo falla
+        JOptionPane.showMessageDialog(this, "Error al consultar datos: " + e.getMessage());
     }
-
-    // Método para cargar los datos desde un archivo CSV
-    private void cargarMenuDesdeCSV() {
-        String line;
-        try (BufferedReader br = new BufferedReader(new FileReader("Menu.csv"))) {
-            while ((line = br.readLine()) != null) {
-                String[] data = line.split(",");
-                modelo.addRow(data);
-                idsPlatos.add(data[0]); // Agregar ID a HashSet
-                nombresPlatos.add(data[1]); // Agregar nombre a HashSet
-            }
-            ordenarTablaPorID();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
+    
     private void ordenarTablaPorID() {
     TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(modelo);
     TablaMenuPlato.setRowSorter(sorter);

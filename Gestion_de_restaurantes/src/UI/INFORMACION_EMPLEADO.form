@@ -122,6 +122,9 @@
           </Constraints>
         </Component>
         <Component class="javax.swing.JTextField" name="txtCorreo">
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtCorreoActionPerformed"/>
+          </Events>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
               <AbsoluteConstraints x="130" y="160" width="171" height="40"/>
@@ -308,8 +311,8 @@
                     <Column editable="true" title="CARGO" type="java.lang.Object"/>
                     <Column editable="true" title="NOMBRE" type="java.lang.Object"/>
                     <Column editable="true" title="GMAIL" type="java.lang.Object"/>
-                    <Column editable="true" title="DIRECCI&#xd3;N" type="java.lang.Object"/>
-                    <Column editable="true" title="TEL&#xc9;FONO" type="java.lang.Object"/>
+                    <Column editable="true" title="DIRECCION" type="java.lang.Object"/>
+                    <Column editable="true" title="TELEFONO" type="java.lang.Object"/>
                   </Table>
                 </Property>
               </Properties>

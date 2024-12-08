@@ -29,6 +29,7 @@ public class MENU_PRICIPAL extends javax.swing.JFrame {
     private void initComponents() {
 
         jButton5 = new javax.swing.JButton();
+        jYearChooser1 = new com.toedter.calendar.JYearChooser();
         jPanel1 = new javax.swing.JPanel();
         btnCliente = new javax.swing.JButton();
         btnMenu = new javax.swing.JButton();
@@ -36,6 +37,7 @@ public class MENU_PRICIPAL extends javax.swing.JFrame {
         btnEmpleados = new javax.swing.JButton();
         btnFactura = new javax.swing.JButton();
         btnSalir = new javax.swing.JButton();
+        btnReservaciones = new javax.swing.JButton();
 
         jButton5.setText("jButton5");
 
@@ -45,7 +47,6 @@ public class MENU_PRICIPAL extends javax.swing.JFrame {
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         btnCliente.setBackground(new java.awt.Color(255, 153, 0));
-        btnCliente.setForeground(new java.awt.Color(0, 0, 0));
         btnCliente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/users_group_customers_clients_icon-icons.com_72448.png"))); // NOI18N
         btnCliente.setText("CLIENTES");
         btnCliente.setBorder(null);
@@ -66,7 +67,6 @@ public class MENU_PRICIPAL extends javax.swing.JFrame {
         jPanel1.add(btnCliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 100, 440, 80));
 
         btnMenu.setBackground(new java.awt.Color(255, 153, 0));
-        btnMenu.setForeground(new java.awt.Color(0, 0, 0));
         btnMenu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/food_5115.png"))); // NOI18N
         btnMenu.setText("   MENU");
         btnMenu.setBorder(null);
@@ -87,7 +87,6 @@ public class MENU_PRICIPAL extends javax.swing.JFrame {
         jPanel1.add(btnMenu, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 440, 80));
 
         btnPedidos.setBackground(new java.awt.Color(255, 153, 0));
-        btnPedidos.setForeground(new java.awt.Color(0, 0, 0));
         btnPedidos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/waiter_food_5411.png"))); // NOI18N
         btnPedidos.setText("  PEDIDOS");
         btnPedidos.setBorder(null);
@@ -105,10 +104,9 @@ public class MENU_PRICIPAL extends javax.swing.JFrame {
                 btnPedidosActionPerformed(evt);
             }
         });
-        jPanel1.add(btnPedidos, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 190, 440, 80));
+        jPanel1.add(btnPedidos, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 280, 440, 80));
 
         btnEmpleados.setBackground(new java.awt.Color(255, 153, 0));
-        btnEmpleados.setForeground(new java.awt.Color(0, 0, 0));
         btnEmpleados.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/people_team_business_employees_prospective_selection_resource_human_management_icon_259235 (1).png"))); // NOI18N
         btnEmpleados.setText("  EMPLEADOS");
         btnEmpleados.setBorder(null);
@@ -126,10 +124,9 @@ public class MENU_PRICIPAL extends javax.swing.JFrame {
                 btnEmpleadosActionPerformed(evt);
             }
         });
-        jPanel1.add(btnEmpleados, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 370, 440, 80));
+        jPanel1.add(btnEmpleados, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 460, 440, 80));
 
         btnFactura.setBackground(new java.awt.Color(255, 153, 0));
-        btnFactura.setForeground(new java.awt.Color(0, 0, 0));
         btnFactura.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/invoice_bill_payment_request_billing_statement_financial_document_icon_262954.png"))); // NOI18N
         btnFactura.setText("        FACTURA");
         btnFactura.setBorder(null);
@@ -148,10 +145,9 @@ public class MENU_PRICIPAL extends javax.swing.JFrame {
                 btnFacturaActionPerformed(evt);
             }
         });
-        jPanel1.add(btnFactura, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 280, 440, 80));
+        jPanel1.add(btnFactura, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 370, 440, 80));
 
         btnSalir.setBackground(java.awt.Color.gray);
-        btnSalir.setForeground(new java.awt.Color(0, 0, 0));
         btnSalir.setText("SALIR");
         btnSalir.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnSalir.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -167,7 +163,15 @@ public class MENU_PRICIPAL extends javax.swing.JFrame {
                 btnSalirActionPerformed(evt);
             }
         });
-        jPanel1.add(btnSalir, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 460, 440, 40));
+        jPanel1.add(btnSalir, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 550, 440, 40));
+
+        btnReservaciones.setText("RESERVACIONES");
+        btnReservaciones.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnReservacionesActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnReservaciones, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 190, 440, 80));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -177,7 +181,7 @@ public class MENU_PRICIPAL extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 510, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 606, Short.MAX_VALUE)
         );
 
         pack();
@@ -273,6 +277,13 @@ public class MENU_PRICIPAL extends javax.swing.JFrame {
         btnCliente.setBackground(new Color(255, 153, 0));
     }//GEN-LAST:event_btnClienteMouseExited
 
+    private void btnReservacionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReservacionesActionPerformed
+        RESERVACION mRESERVACION = new RESERVACION();
+        mRESERVACION.setVisible(true);
+        mRESERVACION.setLocationRelativeTo(null);
+        this.dispose();
+    }//GEN-LAST:event_btnReservacionesActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -314,8 +325,10 @@ public class MENU_PRICIPAL extends javax.swing.JFrame {
     private javax.swing.JButton btnFactura;
     private javax.swing.JButton btnMenu;
     private javax.swing.JButton btnPedidos;
+    private javax.swing.JButton btnReservaciones;
     private javax.swing.JButton btnSalir;
     private javax.swing.JButton jButton5;
     private javax.swing.JPanel jPanel1;
+    private com.toedter.calendar.JYearChooser jYearChooser1;
     // End of variables declaration//GEN-END:variables
 }

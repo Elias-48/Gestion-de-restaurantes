@@ -4,9 +4,14 @@
  */
 package UI;
 
+import Clases.Conexion;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.sql.PreparedStatement;
+
 import java.awt.Color;
 import javax.swing.JOptionPane;
-import java.io.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -29,7 +34,9 @@ private DefaultTableModel model;
 private HashSet<String> idsClientes = new HashSet<>();
 private HashSet<String> correosClientes = new HashSet<>();
 private HashSet<String> telefonoSet = new HashSet<>();
-
+    Connection conet;
+    Statement st;
+    ResultSet rs;
     
 
     /**
@@ -39,7 +46,7 @@ private HashSet<String> telefonoSet = new HashSet<>();
     initComponents();
     
     // Inicializar el modelo de tabla con las columnas desde el inicio
-    model = new DefaultTableModel(new String[]{"ID", "Nombre", "Correo", "Dirección", "Teléfono", "Fecha"}, 0);
+    model = new DefaultTableModel(new String[]{"ID", "Nombre", "Correo", "Dirección", "Teléfono"}, 0);
     
     // Asignar el modelo a la tabla directamente
     TablaDeRegistro.setModel(model);
@@ -48,9 +55,8 @@ private HashSet<String> telefonoSet = new HashSet<>();
     idsClientes = new HashSet<>();
     correosClientes = new HashSet<>();
     telefonoSet = new HashSet<>();
-
-    // Cargar datos desde el CSV (solo filas) 
-    cargarDatosDesdeCSV();// Cargar datos cuando se abre el JFrame
+    ConsultarCliente();
+    
         // Agregar el evento para detectar clics en las filas
         TablaDeRegistro.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
@@ -62,19 +68,6 @@ private HashSet<String> telefonoSet = new HashSet<>();
                     txtCorreo.setText(model.getValueAt(filaSeleccionada, 2).toString());
                     txtDireccion.setText(model.getValueAt(filaSeleccionada, 3).toString());
                     txtTelefono.setText(model.getValueAt(filaSeleccionada, 4).toString());
-                    // Obtener la cadena de la tabla en formato de fecha
-                    String fechaEnTabla = model.getValueAt(filaSeleccionada, 5).toString();
-
-                    try {
-                        // Definir el formato en que está la fecha en la tabla
-                        SimpleDateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd");  // Ajusta el formato según tu necesidad
-                        Date fecha = formatoFecha.parse(fechaEnTabla);  // Convertir la cadena a un objeto Date
-
-                        // Establecer la fecha en el JDateChooser
-                        jDateFecha.setDate(fecha);
-                    } catch (ParseException ex) {
-                        JOptionPane.showMessageDialog(null, "Error al convertir la fecha: " + ex.getMessage());
-                    }
                 }
             }
         });
@@ -98,7 +91,6 @@ private HashSet<String> telefonoSet = new HashSet<>();
         jLabel8 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         TablaDeRegistro = new javax.swing.JTable();
         txtIdCLiente = new javax.swing.JTextField();
@@ -106,7 +98,6 @@ private HashSet<String> telefonoSet = new HashSet<>();
         txtCorreo = new javax.swing.JTextField();
         txtDireccion = new javax.swing.JTextField();
         txtTelefono = new javax.swing.JTextField();
-        jDateFecha = new com.toedter.calendar.JDateChooser();
         btnRegistrar = new javax.swing.JButton();
         btnAgregar = new javax.swing.JButton();
         btnEditar = new javax.swing.JButton();
@@ -133,44 +124,34 @@ private HashSet<String> telefonoSet = new HashSet<>();
         jPanel1.setBackground(new java.awt.Color(204, 204, 204));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel9.setForeground(new java.awt.Color(0, 0, 0));
         jLabel9.setText("ID DEL CLIENTE:");
         jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 10, 100, 40));
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(0, 0, 0));
         jLabel1.setText("REGISTRO DE CLIENTES");
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 20, -1, 30));
 
-        jLabel2.setForeground(new java.awt.Color(0, 0, 0));
         jLabel2.setText("NOMBRE DEL CLIENTE:");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 66, -1, 30));
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 80, -1, 30));
 
-        jLabel8.setForeground(new java.awt.Color(0, 0, 0));
         jLabel8.setText("CORREO ELECTRONICO:");
-        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 110, 150, 40));
+        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 130, 150, 40));
 
-        jLabel3.setForeground(new java.awt.Color(0, 0, 0));
         jLabel3.setText("DIRECCIÓN:");
-        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 160, -1, 40));
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 190, -1, 40));
 
-        jLabel4.setForeground(new java.awt.Color(0, 0, 0));
         jLabel4.setText("TELÉFONO:");
-        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 210, -1, 40));
-
-        jLabel7.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel7.setText("FECHA DE RESERVA:");
-        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 260, -1, 40));
+        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 250, -1, 40));
 
         TablaDeRegistro.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
-                "ID", "NOMBRE", "GMAIL", "DIRECCIÓN", "TELÉFONO", "FECHA RESERVADA"
+                "ID", "NOMBRE", "GMAIL", "DIRECCION", "TELEFONO"
             }
         ));
         jScrollPane2.setViewportView(TablaDeRegistro);
@@ -179,7 +160,7 @@ private HashSet<String> telefonoSet = new HashSet<>();
 
         txtIdCLiente.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
         jPanel1.add(txtIdCLiente, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 10, 174, 40));
-        jPanel1.add(txtNombreCliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 60, 174, 40));
+        jPanel1.add(txtNombreCliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 70, 174, 40));
 
         txtCorreo.setToolTipText("");
         txtCorreo.addActionListener(new java.awt.event.ActionListener() {
@@ -187,19 +168,17 @@ private HashSet<String> telefonoSet = new HashSet<>();
                 txtCorreoActionPerformed(evt);
             }
         });
-        jPanel1.add(txtCorreo, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 110, 174, 40));
+        jPanel1.add(txtCorreo, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 130, 174, 40));
 
         txtDireccion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtDireccionActionPerformed(evt);
             }
         });
-        jPanel1.add(txtDireccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 160, 174, 40));
-        jPanel1.add(txtTelefono, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 210, 174, 40));
-        jPanel1.add(jDateFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 260, 174, 40));
+        jPanel1.add(txtDireccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 190, 174, 40));
+        jPanel1.add(txtTelefono, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 250, 174, 40));
 
         btnRegistrar.setBackground(new java.awt.Color(255, 153, 0));
-        btnRegistrar.setForeground(new java.awt.Color(0, 0, 0));
         btnRegistrar.setText("REGISTRAR");
         btnRegistrar.setBorder(null);
         btnRegistrar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -219,7 +198,6 @@ private HashSet<String> telefonoSet = new HashSet<>();
         jPanel1.add(btnRegistrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 80, 110, 50));
 
         btnAgregar.setBackground(new java.awt.Color(255, 153, 0));
-        btnAgregar.setForeground(new java.awt.Color(0, 0, 0));
         btnAgregar.setText("AGREGAR");
         btnAgregar.setBorder(null);
         btnAgregar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -239,7 +217,6 @@ private HashSet<String> telefonoSet = new HashSet<>();
         jPanel1.add(btnAgregar, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 80, 110, 50));
 
         btnEditar.setBackground(new java.awt.Color(255, 153, 0));
-        btnEditar.setForeground(new java.awt.Color(0, 0, 0));
         btnEditar.setText("EDITAR");
         btnEditar.setBorder(null);
         btnEditar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -259,7 +236,6 @@ private HashSet<String> telefonoSet = new HashSet<>();
         jPanel1.add(btnEditar, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 160, 110, 50));
 
         btnEliminar.setBackground(new java.awt.Color(255, 153, 0));
-        btnEliminar.setForeground(new java.awt.Color(0, 0, 0));
         btnEliminar.setText("ELIMINAR");
         btnEliminar.setBorder(null);
         btnEliminar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -279,7 +255,6 @@ private HashSet<String> telefonoSet = new HashSet<>();
         jPanel1.add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 240, 110, 50));
 
         btnNuevoCliente.setBackground(new java.awt.Color(255, 153, 0));
-        btnNuevoCliente.setForeground(new java.awt.Color(0, 0, 0));
         btnNuevoCliente.setText("NUEVO CLIENTE");
         btnNuevoCliente.setBorder(null);
         btnNuevoCliente.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -299,7 +274,6 @@ private HashSet<String> telefonoSet = new HashSet<>();
         jPanel1.add(btnNuevoCliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 160, 110, 50));
 
         btnSalir.setBackground(java.awt.Color.gray);
-        btnSalir.setForeground(new java.awt.Color(0, 0, 0));
         btnSalir.setText("SALIR");
         btnSalir.setBorder(null);
         btnSalir.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -338,34 +312,52 @@ private HashSet<String> telefonoSet = new HashSet<>();
     }//GEN-LAST:event_txtDireccionActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
-        // Escoger una fila de la tabla para luego escribir en los campos y poder editar despues
-        int filaSeleccionada = TablaDeRegistro.getSelectedRow();
+        // Escoger una fila de la tabla para luego escribir en los campos y poder editar después
+    int filaSeleccionada = TablaDeRegistro.getSelectedRow();
 
-        if (filaSeleccionada >= 0) {
-            // Cambiar los valores de la tabla segun su enumeracion
-            model.setValueAt(txtIdCLiente.getText(), filaSeleccionada, 0);
-            model.setValueAt(txtNombreCliente.getText(), filaSeleccionada, 1);
-            model.setValueAt(txtCorreo.getText(), filaSeleccionada, 2);
-            model.setValueAt(txtDireccion.getText(), filaSeleccionada, 3);
-            model.setValueAt(txtTelefono.getText(), filaSeleccionada, 4);
-            // Obtener la fecha del JDateChooser
-            Date fecha = jDateFecha.getDate();
-            if (fecha != null) {
-                // Definir el formato de fecha que usarás en la tabla
-                SimpleDateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd");
-                String fechaFormateada = formatoFecha.format(fecha);
-                model.setValueAt(fechaFormateada, filaSeleccionada, 5);
+    if (filaSeleccionada >= 0) {
+        // Obtener los valores actuales de los campos de texto
+        String id = txtIdCLiente.getText().trim();
+        String nombre = txtNombreCliente.getText().trim();
+        String gmail = txtCorreo.getText().trim();
+        String direccion = txtDireccion.getText().trim();
+        String telefono = txtTelefono.getText().trim();
+
+        // Actualizar los valores en el modelo de la tabla
+        model.setValueAt(id, filaSeleccionada, 0);
+        model.setValueAt(nombre, filaSeleccionada, 1);
+        model.setValueAt(gmail, filaSeleccionada, 2);
+        model.setValueAt(direccion, filaSeleccionada, 3);
+        model.setValueAt(telefono, filaSeleccionada, 4);
+
+        // Realizar la actualización en la base de datos
+        String sql = "UPDATE registro_clientes SET NOMBRE = ?, GMAIL = ?, DIRECCION = ?, TELEFONO = ? WHERE ID = ?";
+        try (Connection con = Conexion.getInstance().getConnection(); 
+             PreparedStatement pst = con.prepareStatement(sql)) {
+
+            // Establecer los valores en la consulta SQL
+            pst.setString(1, nombre);
+            pst.setString(2, gmail);
+            pst.setString(3, direccion);
+            pst.setString(4, telefono);
+            pst.setString(5, id);
+
+            // Ejecutar la consulta
+            int filasActualizadas = pst.executeUpdate();
+            if (filasActualizadas > 0) {
+                JOptionPane.showMessageDialog(this, "Registro editado correctamente en la base de datos.");
             } else {
-                // Si no se seleccionó ninguna fecha, dejar el valor anterior o manejarlo como quieras
-                JOptionPane.showMessageDialog(this, "Por favor, seleccione una fecha válida.");
+                JOptionPane.showMessageDialog(this, "No se pudo editar el registro en la base de datos.");
             }
-
-            JOptionPane.showMessageDialog(this, "Registro editado correctamente.");
-            ordenarTablaPorID();  // Ordenar después de editar
-            guardarDatosEnCSV();  // Guardar los cambios después de editar
-        } else {
-            JOptionPane.showMessageDialog(this, "Por favor, seleccione una fila para editar.");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error al editar en la base de datos: " + e.getMessage());
         }
+
+        // Ordenar después de editar
+        ordenarTablaPorID();
+    } else {
+        JOptionPane.showMessageDialog(this, "Por favor, seleccione una fila para editar.");
+    }
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
@@ -381,55 +373,63 @@ private HashSet<String> telefonoSet = new HashSet<>();
     }//GEN-LAST:event_btnNuevoClienteActionPerformed
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
-        // Obtener la fecha del componente jDateFecha
-        Date mFecha = jDateFecha.getDate();
+    // Declarar variables para los campos de texto
+    String id = txtIdCLiente.getText().trim();
+    String nombre = txtNombreCliente.getText().trim();
+    String gmail = txtCorreo.getText().trim();
+    String direccion = txtDireccion.getText().trim();
+    String telefono = txtTelefono.getText().trim();
 
-        // Verificar si la fecha es nula
-        if (mFecha == null) {
-            JOptionPane.showMessageDialog(this, "Por favor, seleccione una fecha.");
-            return;  // Salir del método si la fecha no está seleccionada
-        }
-
-        long fecha = mFecha.getTime();
-        java.sql.Date fecha_sql = new java.sql.Date(fecha);
-        JOptionPane.showMessageDialog(null, fecha_sql);
-
-        // Declarar variables para los campos de texto
-        String id = txtIdCLiente.getText();
-        String nombre = txtNombreCliente.getText();
-        String gmail = txtCorreo.getText();
-        String direccion = txtDireccion.getText();
-        String telefono = txtTelefono.getText();
-        
- // Verificar duplicados
+    // Verificar duplicados
     if (idsClientes.contains(id)) {
-        JOptionPane.showMessageDialog(this, "El ID ya está registrado.Por favor, ingrese uno diferente.");
+        JOptionPane.showMessageDialog(this, "El ID ya está registrado. Por favor, ingrese uno diferente.");
         return;
     }
 
     if (correosClientes.contains(gmail)) {
-        JOptionPane.showMessageDialog(this, "El correo electrónico ya está registrado.Por favor, ingrese uno diferente.");
+        JOptionPane.showMessageDialog(this, "El correo electrónico ya está registrado. Por favor, ingrese uno diferente.");
         return;
     }
+
     if (telefonoSet.contains(telefono)) {
         JOptionPane.showMessageDialog(this, "El teléfono ya está registrado. Por favor, ingrese uno diferente.");
         return;
     }
-        // Validar que los campos no estén vacíos
-        if (id.isEmpty() || nombre.isEmpty() || gmail.isEmpty() || direccion.isEmpty() || telefono.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Por favor, complete todos los campos.");
-        } else {
-            // Agregar una nueva fila a la tabla si todo está correcto
-            model.addRow(new Object[]{id, nombre, gmail, direccion, telefono, fecha_sql});
-            // Agregar con treeset
+
+    // Validar que los campos no estén vacíos
+    if (id.isEmpty() || nombre.isEmpty() || gmail.isEmpty() || direccion.isEmpty() || telefono.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Por favor, complete todos los campos.");
+    } else {
+        // Agregar una nueva fila a la tabla si todo está correcto
+        model.addRow(new Object[]{id, nombre, gmail, direccion, telefono});
+
+        // Agregar a los conjuntos para evitar duplicados
         idsClientes.add(id);
         correosClientes.add(gmail);
         telefonoSet.add(telefono);
-        // Llamada al método para ordenar la tabla tras agregar el nuevo registro
-            ordenarTablaPorID();
-            guardarDatosEnCSV();  // Guardar los datos en el archivo CSV después de agregar un nuevo registro
-        
+
+        // Guardar los datos en la base de datos
+        String sql = "INSERT INTO registro_clientes (ID, NOMBRE, GMAIL, DIRECCION, TELEFONO) VALUES (?, ?, ?, ?, ?)";
+        try (Connection con = Conexion.getInstance().getConnection(); 
+             PreparedStatement pst = con.prepareStatement(sql)) {
+             
+            pst.setString(1, id);
+            pst.setString(2, nombre);
+            pst.setString(3, gmail);
+            pst.setString(4, direccion);
+            pst.setString(5, telefono);
+
+            int filasInsertadas = pst.executeUpdate();
+            if (filasInsertadas > 0) {
+                JOptionPane.showMessageDialog(this, "Cliente agregado correctamente a la base de datos.");
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error al guardar en la base de datos: " + e.getMessage());
         }
+
+        // Llamada al método para ordenar la tabla tras agregar el nuevo registro
+        ordenarTablaPorID();
+    }
     }//GEN-LAST:event_btnAgregarActionPerformed
 // Método para ordenar la tabla por ID en orden ascendente
     private void ordenarTablaPorID() {
@@ -489,26 +489,49 @@ private HashSet<String> telefonoSet = new HashSet<>();
 
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-        //Seleccionamos la fila que se quiera eliminar
-        int filaSeleccionada = TablaDeRegistro.getSelectedRow();
+        // Seleccionar la fila que se desea eliminar
+    int filaSeleccionada = TablaDeRegistro.getSelectedRow();
 
-        if (filaSeleccionada >= 0) {
-            // Obtener el ID y el correo de la fila seleccionada antes de eliminarla
+    if (filaSeleccionada >= 0) {
+        // Obtener el ID de la fila seleccionada
         String id = model.getValueAt(filaSeleccionada, 0).toString();
         String correo = model.getValueAt(filaSeleccionada, 2).toString();
         String telefono = model.getValueAt(filaSeleccionada, 4).toString();
-            // Eliminar la fila de la tabla
+
+        // Confirmar la eliminación
+        int confirmacion = JOptionPane.showConfirmDialog(this, "¿Está seguro de que desea eliminar este registro?", 
+                                                          "Confirmar eliminación", JOptionPane.YES_NO_OPTION);
+        if (confirmacion == JOptionPane.YES_OPTION) {
+            // Eliminar el registro de la tabla en la interfaz gráfica
             model.removeRow(filaSeleccionada);
-        // Remover el ID y el correo de los TreeSet
-        idsClientes.remove(id);
-        correosClientes.remove(correo);
-        telefonoSet.remove(telefono);
-            
-            JOptionPane.showMessageDialog(this, "Registro eliminado correctamente.");
-            guardarDatosEnCSV();  // Guardar los cambios después de editar
-        } else {
-            JOptionPane.showMessageDialog(this, "Por favor, seleccione una fila para eliminar.");
+
+            // Eliminar del TreeSet
+            idsClientes.remove(id);
+            correosClientes.remove(correo);
+            telefonoSet.remove(telefono);
+
+            // Realizar la eliminación en la base de datos
+            String sql = "DELETE FROM registro_clientes WHERE ID = ?";
+            try (Connection con = Conexion.getInstance().getConnection(); 
+                 PreparedStatement pst = con.prepareStatement(sql)) {
+
+                // Establecer el valor del ID en la consulta
+                pst.setString(1, id);
+
+                // Ejecutar la consulta
+                int filasEliminadas = pst.executeUpdate();
+                if (filasEliminadas > 0) {
+                    JOptionPane.showMessageDialog(this, "Registro eliminado correctamente de la base de datos.");
+                } else {
+                    JOptionPane.showMessageDialog(this, "No se encontró el registro en la base de datos.");
+                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Error al eliminar en la base de datos: " + e.getMessage());
+            }
         }
+    } else {
+        JOptionPane.showMessageDialog(this, "Por favor, seleccione una fila para eliminar.");
+    }
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void btnSalirMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSalirMouseEntered
@@ -563,39 +586,38 @@ private HashSet<String> telefonoSet = new HashSet<>();
         // TODO add your handling code here:
     }//GEN-LAST:event_txtCorreoActionPerformed
 
-    // Método para guardar los datos en un archivo CSV
-    private void guardarDatosEnCSV() {
-        try (PrintWriter pw = new PrintWriter(new File("clientes.csv"))) {
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < model.getRowCount(); i++) {
-                for (int j = 0; j < model.getColumnCount(); j++) {
-                    sb.append(model.getValueAt(i, j).toString());
-                    sb.append(",");
-                }
-                sb.append("\n");
-            }
-            pw.write(sb.toString());
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
+    void ConsultarCliente() {
+        String sql = "select * from registro_clientes";
+        
+       try {
+           // Obtener la conexión utilizando el Singleton
+        conet = Conexion.getInstance().getConnection();
+        
+        // Crear el Statement y ejecutar la consulta
+        st = conet.createStatement();
+        rs = st.executeQuery(sql);
+        
+        // Crear un arreglo para almacenar los datos de cada empleado
+        Object[] registro_clientes = new Object[5];
+        
+        // Iterar sobre los resultados y agregar los datos a la tabla
+        while (rs.next()) {
+            registro_clientes[0] = rs.getInt("ID");
+            registro_clientes[1] = rs.getString("NOMBRE");
+            registro_clientes[2] = rs.getString("GMAIL");
+            registro_clientes[3] = rs.getString("DIRECCION");
+            registro_clientes[4] = rs.getInt("TELEFONO");
+            
+            model.addRow(registro_clientes);
         }
+        
+        // Asignar el modelo a la tabla
+        TablaDeRegistro.setModel(model);
+        
+    } catch (Exception e) {
+        // Mostrar el mensaje de error si algo falla
+        JOptionPane.showMessageDialog(this, "Error al consultar datos: " + e.getMessage());
     }
-
-    // Método para cargar los datos desde un archivo CSV
-    private void cargarDatosDesdeCSV() {
-        String line;
-        try (BufferedReader br = new BufferedReader(new FileReader("clientes.csv"))) {
-            while ((line = br.readLine()) != null) {
-            String[] data = line.split(",");
-            model.addRow(data); // Agregar datos al modelo    
-            // Agregar datos no repetidos
-            idsClientes.add(data[0]);
-            correosClientes.add(data[2]);
-            telefonoSet.add(data[4]);
-            }
-            ordenarTablaPorID();  // Ordenar después de cargar los datos
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     private void limpiarCampos() {
@@ -605,8 +627,6 @@ private HashSet<String> telefonoSet = new HashSet<>();
         txtCorreo.setText("");
         txtDireccion.setText("");
         txtTelefono.setText("");
-        // Limpiar la fecha en el JDateChooser
-        jDateFecha.setDate(null);
     }
 
     /**
@@ -652,12 +672,10 @@ private HashSet<String> telefonoSet = new HashSet<>();
     private javax.swing.JButton btnNuevoCliente;
     private javax.swing.JButton btnRegistrar;
     private javax.swing.JButton btnSalir;
-    private com.toedter.calendar.JDateChooser jDateFecha;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;

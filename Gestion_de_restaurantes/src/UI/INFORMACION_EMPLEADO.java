@@ -4,10 +4,17 @@
  */
 package UI;
 
+import Clases.Conexion;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
 import java.awt.Color;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import java.io.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -25,7 +32,9 @@ public class INFORMACION_EMPLEADO extends javax.swing.JFrame {
     private HashSet<String> idsUnicos;
     private HashSet<String> correosUnicos;
     private HashSet<String> telefonosUnicos;
-
+    Connection conet;
+    Statement st;
+    ResultSet rs;
     /**
      * Creates new form INFORMACION_EMPLEADO
      */
@@ -42,8 +51,8 @@ public class INFORMACION_EMPLEADO extends javax.swing.JFrame {
         modelo1.addColumn("DIRECION");
         modelo1.addColumn("TELEFONO");
         TablaInformacionEmpleados.setModel(modelo1);
-        cargarInformacionDesdeCSV();
         ordenarTablaPorID();
+        ConsultarEmpleado();
         // Agregar el evento para detectar clics en las filas
         TablaInformacionEmpleados.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
@@ -99,12 +108,10 @@ public class INFORMACION_EMPLEADO extends javax.swing.JFrame {
         jPanel1.setBackground(new java.awt.Color(204, 204, 204));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel2.setForeground(new java.awt.Color(0, 0, 0));
         jLabel2.setText("ID EMPLEADO:");
         jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, -1, -1));
         jPanel1.add(txtIDEmpleado, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 10, 170, 40));
 
-        jLabel5.setForeground(new java.awt.Color(0, 0, 0));
         jLabel5.setText("CARGO:");
         jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(39, 70, -1, -1));
 
@@ -116,28 +123,29 @@ public class INFORMACION_EMPLEADO extends javax.swing.JFrame {
         });
         jPanel1.add(jComboBoxCargoDelEmpleado, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 60, 172, 40));
 
-        jLabel3.setForeground(new java.awt.Color(0, 0, 0));
         jLabel3.setText("NOMBRE:");
         jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 120, 60, -1));
         jPanel1.add(txtNombreEmpleado, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 110, 171, 40));
 
-        jLabel7.setForeground(new java.awt.Color(0, 0, 0));
         jLabel7.setText("CORREO ELECTRONICO:");
         jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 170, 140, -1));
+
+        txtCorreo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtCorreoActionPerformed(evt);
+            }
+        });
         jPanel1.add(txtCorreo, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 160, 171, 40));
 
-        jLabel4.setForeground(new java.awt.Color(0, 0, 0));
         jLabel4.setText("DIRECCIÓN:");
         jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(29, 220, -1, -1));
         jPanel1.add(txtDirecionEmpleado, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 210, 171, 40));
 
-        jLabel6.setForeground(new java.awt.Color(0, 0, 0));
         jLabel6.setText("TELÉFONO:");
         jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 270, 70, -1));
         jPanel1.add(txtTelefonoEmpleado, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 260, 171, 40));
 
         btnRegistrar.setBackground(new java.awt.Color(255, 153, 0));
-        btnRegistrar.setForeground(new java.awt.Color(0, 0, 0));
         btnRegistrar.setText("REGISTRAR");
         btnRegistrar.setBorder(null);
         btnRegistrar.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -156,7 +164,6 @@ public class INFORMACION_EMPLEADO extends javax.swing.JFrame {
         jPanel1.add(btnRegistrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 70, 114, 50));
 
         btnEditar.setBackground(new java.awt.Color(255, 153, 0));
-        btnEditar.setForeground(new java.awt.Color(0, 0, 0));
         btnEditar.setText("EDITAR");
         btnEditar.setBorder(null);
         btnEditar.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -175,7 +182,6 @@ public class INFORMACION_EMPLEADO extends javax.swing.JFrame {
         jPanel1.add(btnEditar, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 150, 114, 50));
 
         btnEliminar.setBackground(new java.awt.Color(255, 153, 0));
-        btnEliminar.setForeground(new java.awt.Color(0, 0, 0));
         btnEliminar.setText("ELIMINAR");
         btnEliminar.setBorder(null);
         btnEliminar.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -194,7 +200,6 @@ public class INFORMACION_EMPLEADO extends javax.swing.JFrame {
         jPanel1.add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 230, 114, 50));
 
         btnAgregar.setBackground(new java.awt.Color(255, 153, 0));
-        btnAgregar.setForeground(new java.awt.Color(0, 0, 0));
         btnAgregar.setText("AGREGAR");
         btnAgregar.setBorder(null);
         btnAgregar.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -213,7 +218,6 @@ public class INFORMACION_EMPLEADO extends javax.swing.JFrame {
         jPanel1.add(btnAgregar, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 70, 114, 50));
 
         btnNuevoEmpleado.setBackground(new java.awt.Color(255, 153, 0));
-        btnNuevoEmpleado.setForeground(new java.awt.Color(0, 0, 0));
         btnNuevoEmpleado.setText("NUEVO EMPLEADO");
         btnNuevoEmpleado.setBorder(null);
         btnNuevoEmpleado.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -232,7 +236,6 @@ public class INFORMACION_EMPLEADO extends javax.swing.JFrame {
         jPanel1.add(btnNuevoEmpleado, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 150, 114, 50));
 
         btnSalir.setBackground(java.awt.Color.gray);
-        btnSalir.setForeground(new java.awt.Color(0, 0, 0));
         btnSalir.setText("SALIR");
         btnSalir.setBorder(null);
         btnSalir.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -258,7 +261,7 @@ public class INFORMACION_EMPLEADO extends javax.swing.JFrame {
                 {null, null, null, null, null, null}
             },
             new String [] {
-                "ID", "CARGO", "NOMBRE", "GMAIL", "DIRECCIÓN", "TELÉFONO"
+                "ID", "CARGO", "NOMBRE", "GMAIL", "DIRECCION", "TELEFONO"
             }
         ));
         jScrollPane1.setViewportView(TablaInformacionEmpleados);
@@ -267,7 +270,6 @@ public class INFORMACION_EMPLEADO extends javax.swing.JFrame {
         jPanel1.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 50, 340, 10));
 
         jLabel8.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        jLabel8.setForeground(new java.awt.Color(0, 0, 0));
         jLabel8.setText("INFORMACION DE EMPLEADOS");
         jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 20, 340, 30));
 
@@ -352,12 +354,36 @@ public class INFORMACION_EMPLEADO extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "El teléfono ya está registrado. Ingrese un teléfono único.");
             return;
         }
-            modelo1.addRow(new Object[]{id, cargo, nombre, gmail, direccion, telefono});
-            idsUnicos.add(id);
-            correosUnicos.add(gmail);
-            telefonosUnicos.add(telefono);
-            guardarInformacionEnCSV();
-            ordenarTablaPorID();
+        // Guardar datos en la base de datos
+        try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/restaurante", "root", "")) {
+            String sql = "INSERT INTO informacion_empleado (id, cargo, nombre, gmail, direccion, telefono) VALUES (?, ?, ?, ?, ?, ?)";
+            PreparedStatement pst = con.prepareStatement(sql);
+            pst.setString(1, id);
+            pst.setString(2, cargo);
+            pst.setString(3, nombre);
+            pst.setString(4, gmail);
+            pst.setString(5, direccion);
+            pst.setString(6, telefono);
+
+            int filasAfectadas = pst.executeUpdate();
+            if (filasAfectadas > 0) {
+               JOptionPane.showMessageDialog(this, "Datos guardados correctamente en la base de datos.");
+            } else {
+               JOptionPane.showMessageDialog(this, "No se pudo guardar en la base de datos.");
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error al guardar en la base de datos: " + e.getMessage());
+          return;
+        }
+
+        // Agregar datos al HashSet y actualizar la tabla del JFrame
+        modelo1.addRow(new Object[]{id, cargo, nombre, gmail, direccion, telefono});
+        idsUnicos.add(id);
+        correosUnicos.add(gmail);
+        telefonosUnicos.add(telefono);
+
+        // Ordenar la tabla por ID
+        ordenarTablaPorID();
         
     }//GEN-LAST:event_btnAgregarActionPerformed
 private void ordenarTablaPorID() {
@@ -380,38 +406,87 @@ private void ordenarTablaPorID() {
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
         int filaSeleccionada = TablaInformacionEmpleados.getSelectedRow();
         if (filaSeleccionada != -1) {
-            modelo1.setValueAt(txtIDEmpleado.getText(), filaSeleccionada, 0);
-            modelo1.setValueAt(jComboBoxCargoDelEmpleado.getSelectedItem().toString(), filaSeleccionada, 1);
-            modelo1.setValueAt(txtNombreEmpleado.getText(), filaSeleccionada, 2);
-            modelo1.setValueAt(txtCorreo.getText(), filaSeleccionada, 3);
-            modelo1.setValueAt(txtDirecionEmpleado.getText(), filaSeleccionada, 4);
-            modelo1.setValueAt(txtTelefonoEmpleado.getText(), filaSeleccionada, 5);
-            guardarInformacionEnCSV();  // Guardar los cambios después de editar
-        } else {
-            JOptionPane.showMessageDialog(this, "Por favor, seleccione una fila para editar.");
+            // Obtener los nuevos valores
+        String id = txtIDEmpleado.getText();
+        String cargo = jComboBoxCargoDelEmpleado.getSelectedItem().toString();
+        String nombre = txtNombreEmpleado.getText();
+        String gmail = txtCorreo.getText();
+        String direccion = txtDirecionEmpleado.getText();
+        String telefono = txtTelefonoEmpleado.getText();
+
+        // Actualizar la fila de la tabla
+        modelo1.setValueAt(id, filaSeleccionada, 0);
+        modelo1.setValueAt(cargo, filaSeleccionada, 1);
+        modelo1.setValueAt(nombre, filaSeleccionada, 2);
+        modelo1.setValueAt(gmail, filaSeleccionada, 3);
+        modelo1.setValueAt(direccion, filaSeleccionada, 4);
+        modelo1.setValueAt(telefono, filaSeleccionada, 5);
+
+        // Actualizar en la base de datos
+        try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/restaurante", "root", "")) {
+            String sql = "UPDATE informacion_empleado SET cargo = ?, nombre = ?, gmail = ?, direccion = ?, telefono = ? WHERE id = ?";
+            PreparedStatement pst = con.prepareStatement(sql);
+            pst.setString(6, id);    // Parametro 6: id (donde se hace la comparación)
+            pst.setString(1, cargo);
+            pst.setString(2, nombre);
+            pst.setString(3, gmail);
+            pst.setString(4, direccion);
+            pst.setString(5, telefono);
+
+            int filasAfectadas = pst.executeUpdate();
+            if (filasAfectadas > 0) {
+                JOptionPane.showMessageDialog(this, "Empleado actualizado correctamente.");
+            } else {
+                JOptionPane.showMessageDialog(this, "No se pudo actualizar el empleado.");
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Error al actualizar en la base de datos: " + e.getMessage());
         }
+    } else {
+        JOptionPane.showMessageDialog(this, "Por favor, seleccione una fila para editar.");
+    }
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
         int filaSeleccionada = TablaInformacionEmpleados.getSelectedRow();
         if (filaSeleccionada != -1) {
-            int confirmacion = JOptionPane.showConfirmDialog(this, "¿Estás seguro de que deseas eliminar este empleado?", "Confirmación", JOptionPane.YES_NO_OPTION);
-            if (confirmacion == JOptionPane.YES_OPTION) {
-                String id = modelo1.getValueAt(filaSeleccionada, 0).toString();
-                String correo = modelo1.getValueAt(filaSeleccionada, 3).toString();
-                String telefono = modelo1.getValueAt(filaSeleccionada, 5).toString();
+            // Confirmación de eliminación
+        int confirmacion = JOptionPane.showConfirmDialog(this, "¿Estás seguro de que deseas eliminar este empleado?", "Confirmación", JOptionPane.YES_NO_OPTION);
+        if (confirmacion == JOptionPane.YES_OPTION) {
+            // Obtener el id, correo y teléfono del empleado a eliminar
+            String id = modelo1.getValueAt(filaSeleccionada, 0).toString();
+            String gmail = modelo1.getValueAt(filaSeleccionada, 3).toString();
+            String telefono = modelo1.getValueAt(filaSeleccionada, 5).toString();
 
-                idsUnicos.remove(id);
-                correosUnicos.remove(correo);
-                telefonosUnicos.remove(telefono);
+            // Eliminar de los HashSets
+            idsUnicos.remove(id);
+            correosUnicos.remove(gmail);
+            telefonosUnicos.remove(telefono);
 
-                modelo1.removeRow(filaSeleccionada);
-                JOptionPane.showMessageDialog(this, "Empleado eliminado.");
-                guardarInformacionEnCSV();
+            // Eliminar de la tabla
+            modelo1.removeRow(filaSeleccionada);
+
+            // Eliminar del SQL
+            try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/restaurante", "root", "")) {
+                String sql = "DELETE FROM informacion_empleado WHERE id = ?";
+                PreparedStatement pst = con.prepareStatement(sql);
+                pst.setString(1, id);
+
+                int filasAfectadas = pst.executeUpdate();
+                if (filasAfectadas > 0) {
+                    JOptionPane.showMessageDialog(this, "Empleado eliminado correctamente de la base de datos.");
+                } else {
+                    JOptionPane.showMessageDialog(this, "No se pudo eliminar el empleado de la base de datos.");
+                }
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(this, "Error al eliminar en la base de datos: " + e.getMessage());
             }
-        } else {
-            JOptionPane.showMessageDialog(this, "Por favor, seleccione una fila para eliminar.");
+
+            JOptionPane.showMessageDialog(this, "Empleado eliminado.");
         }
+    } else {
+        JOptionPane.showMessageDialog(this, "Por favor, seleccione una fila para eliminar.");
+    }
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void btnNuevoEmpleadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoEmpleadoActionPerformed
@@ -466,39 +541,43 @@ private void ordenarTablaPorID() {
         btnEditar.setBackground(new Color(255, 153, 0));
     }//GEN-LAST:event_btnEditarMouseExited
 
-    // Método para guardar los datos en un archivo CSV
-    private void guardarInformacionEnCSV() {
-        try (PrintWriter pw = new PrintWriter(new File("Empleado.csv"))) {
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < modelo1.getRowCount(); i++) {
-                for (int j = 0; j < modelo1.getColumnCount(); j++) {
-                    sb.append(modelo1.getValueAt(i, j).toString());
-                    sb.append(",");
-                }
-                sb.append("\n");
-            }
-            pw.write(sb.toString());
-        } catch (FileNotFoundException e) {
-            JOptionPane.showMessageDialog(this, "Error al guardar en CSV: Archivo no encontrado.");
-            e.printStackTrace();
-        }
-    }
+    private void txtCorreoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCorreoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCorreoActionPerformed
 
-    // Método para cargar los datos desde un archivo CSV
-    private void cargarInformacionDesdeCSV() {
-        String line;
-        try (BufferedReader br = new BufferedReader(new FileReader("Empleado.csv"))) {
-            while ((line = br.readLine()) != null) {
-                String[] data = line.split(",");
-                modelo1.addRow(data);
-                idsUnicos.add(data[0]);
-                correosUnicos.add(data[3]);
-                telefonosUnicos.add(data[5]);
-            }
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(this, "Error al cargar datos desde CSV.");
-            e.printStackTrace();
+    void ConsultarEmpleado() {
+        String sql = "select * from informacion_empleado";
+        
+       try {
+           // Obtener la conexión utilizando el Singleton
+        conet = Conexion.getInstance().getConnection();
+        
+        // Crear el Statement y ejecutar la consulta
+        st = conet.createStatement();
+        rs = st.executeQuery(sql);
+        
+        // Crear un arreglo para almacenar los datos de cada empleado
+        Object[] informacion_empleado = new Object[6];
+        
+        // Iterar sobre los resultados y agregar los datos a la tabla
+        while (rs.next()) {
+            informacion_empleado[0] = rs.getInt("ID");
+            informacion_empleado[1] = rs.getString("CARGO");
+            informacion_empleado[2] = rs.getString("NOMBRE");
+            informacion_empleado[3] = rs.getString("GMAIL");
+            informacion_empleado[4] = rs.getString("DIRECCION");
+            informacion_empleado[5] = rs.getInt("TELEFONO");
+            
+            modelo1.addRow(informacion_empleado);
         }
+        
+        // Asignar el modelo a la tabla
+        TablaInformacionEmpleados.setModel(modelo1);
+        
+    } catch (Exception e) {
+        // Mostrar el mensaje de error si algo falla
+        JOptionPane.showMessageDialog(this, "Error al consultar datos: " + e.getMessage());
+    }
     }
 
     private void limpiarCampos() {

@@ -4,10 +4,16 @@
  */
 package UI;
 
+import Clases.Conexion;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
 import java.awt.Color;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import java.io.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -26,6 +32,9 @@ public class FACTURA extends javax.swing.JFrame {
     private DefaultTableModel modelo2;  
     private HashSet<String> idFacturas;  
     private HashSet<String> idClientes;
+    Connection conet;
+    Statement st;
+    ResultSet rs;
     /**
      * Creates new form FACTURA
      */
@@ -40,7 +49,7 @@ public class FACTURA extends javax.swing.JFrame {
         modelo2.addColumn("FECHA RESERVADA");
         modelo2.addColumn("PRECIO TOTAL");
         TablaFactura.setModel(modelo2);
-        cargarFacturasDesdeCSV();
+        ConsultarFactura();
         ordenarTablaPorIDFactura();
         // Agregar el evento para detectar clics en las filas
         TablaFactura.addMouseListener(new MouseAdapter() {
@@ -323,41 +332,74 @@ public class FACTURA extends javax.swing.JFrame {
         String idfactura = txtIDFactura.getText();
         String idcliente = txtIdCliente.getText();
 
-        // Verifica ID de factura  
-        if (idFacturas.contains(idfactura)) {  
-            JOptionPane.showMessageDialog(this, "Este ID de factura ya existe.");  
-            return;  
-        }  
+    // Verifica ID de factura  
+    if (idFacturas.contains(idfactura)) {  
+        JOptionPane.showMessageDialog(this, "Este ID de factura ya existe.");  
+        return;  
+    }  
 
-        // Verifica ID de cliente  
-        if (idClientes.contains(idcliente)) {  
-            JOptionPane.showMessageDialog(this, "Este ID de cliente ya existe.");  
-            return;  
-            
-        }
-        if (idfactura.isEmpty() || idcliente.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Por favor, complete todos los campos.");
-        } else {
-            // Busca el nombre del cliente en el archivo CSV según el número de mesa
-            String[] clienteData = buscarClientePorIdCliente(idcliente);
-            if (clienteData != null) {
-                String nombreCliente = clienteData[0];
-                String fechaReservada = clienteData[1];
+    // Verifica ID de cliente  
+    if (idClientes.contains(idcliente)) {  
+        JOptionPane.showMessageDialog(this, "Este ID de cliente ya existe.");  
+        return;  
+    }
+
+    if (idfactura.isEmpty() || idcliente.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Por favor, complete todos los campos.");
+    } else {
+        // Busca el nombre del cliente y la fecha de la reserva desde la base de datos
+        String[] clienteData = buscarClientePorIdCliente(idcliente);
+        if (clienteData != null) {
+            String nombreCliente = clienteData[0];
+            String fechaReservada = obtenerFechaReservaPorIdCliente(idcliente); // Recuperamos la fecha de la reserva desde la base de datos
+            if (fechaReservada != null) {
                 // Buscar el total del precio del cliente en la tabla Ingreso_Pedidos
                 double precioTotal = obtenerPrecioTotalPorCliente(idcliente);
 
                 // Agrega los datos a la tabla, incluyendo el nombre, la fecha y el precio total
                 modelo2.addRow(new Object[]{idfactura, idcliente, nombreCliente, fechaReservada, precioTotal});
-                // Aquí se guardaría la nueva factura  
+                
+                try {
+                    // Obtener la conexión a la base de datos
+                    Connection con = Conexion.getInstance().getConnection();
+
+                    // Consulta SQL para insertar la nueva factura
+                    String sql = "INSERT INTO factura (id_factura, id_cliente, nombre, fecha_reservada, precio_total) VALUES (?, ?, ?, ?, ?)";
+                    PreparedStatement pst = con.prepareStatement(sql);
+
+                    // Asignar los parámetros a la consulta SQL
+                    pst.setString(1, idfactura);
+                    pst.setString(2, idcliente);
+                    pst.setString(3, nombreCliente);
+                    pst.setString(4, fechaReservada);
+                    pst.setDouble(5, precioTotal);
+
+                    // Ejecutar la consulta
+                    int filasAfectadas = pst.executeUpdate();
+
+                    if (filasAfectadas > 0) {
+                        JOptionPane.showMessageDialog(this, "Factura guardada con éxito en la base de datos.");
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Error al guardar la factura en la base de datos.");
+                    }
+
+                    pst.close(); // Cerrar el PreparedStatement
+                } catch (SQLException e) {
+                    JOptionPane.showMessageDialog(this, "Error al guardar la factura: " + e.getMessage());
+                    e.printStackTrace();
+                }
+
+                // Aquí se guardaría la nueva factura en las listas internas
                 idFacturas.add(idfactura);  
                 idClientes.add(idcliente);
-                // Guardar la tabla en el archivo CSV después de agregar los datos
-                guardarFacturaEnCSV();
                 ordenarTablaPorIDFactura();
             } else {
-                JOptionPane.showMessageDialog(this, "No se encontró un cliente con ese ID.");
+                JOptionPane.showMessageDialog(this, "No se encontró una fecha de reserva para este cliente.");
             }
+        } else {
+            JOptionPane.showMessageDialog(this, "No se encontró un cliente con ese ID.");
         }
+    }
     }//GEN-LAST:event_btnMostrarActionPerformed
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
@@ -383,17 +425,49 @@ public class FACTURA extends javax.swing.JFrame {
     }//GEN-LAST:event_btnNuevoComprobanteActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-        //Seleccionamos la fila que se quiera eliminar
-        int filaSeleccionada = TablaFactura.getSelectedRow();
+        // Seleccionamos la fila que se quiera eliminar
+    int filaSeleccionada = TablaFactura.getSelectedRow();
 
-        if (filaSeleccionada >= 0) {
-            // Eliminar la fila de la tabla
-            modelo2.removeRow(filaSeleccionada);
-            JOptionPane.showMessageDialog(this, "Registro eliminado correctamente.");
-            guardarFacturaEnCSV();  // Guardar los cambios después de editar
-        } else {
-            JOptionPane.showMessageDialog(this, "Por favor, seleccione una fila para eliminar.");
+    if (filaSeleccionada >= 0) {
+        // Obtener el ID de la factura (por ejemplo, en la primera columna)
+        String idFactura = modelo2.getValueAt(filaSeleccionada, 0).toString();
+
+        // Confirmación para eliminar el registro
+        int confirmacion = JOptionPane.showConfirmDialog(this, 
+            "¿Estás seguro de que deseas eliminar esta factura?", 
+            "Confirmación", 
+            JOptionPane.YES_NO_OPTION);
+
+        if (confirmacion == JOptionPane.YES_OPTION) {
+            try {
+                // Conexión a la base de datos
+                Connection con = Conexion.getInstance().getConnection();
+                // Consulta SQL para eliminar el registro de la base de datos
+                String sql = "DELETE FROM factura WHERE ID_FACTURA = ?";
+                PreparedStatement pst = con.prepareStatement(sql);
+                pst.setString(1, idFactura); // Asignamos el ID de la factura
+
+                // Ejecutar la consulta
+                int filasAfectadas = pst.executeUpdate();
+                
+                if (filasAfectadas > 0) {
+                    // Eliminar la fila de la tabla en la interfaz gráfica
+                    modelo2.removeRow(filaSeleccionada);
+                    JOptionPane.showMessageDialog(this, "Registro eliminado correctamente.");
+                } else {
+                    JOptionPane.showMessageDialog(this, "No se pudo eliminar el registro.");
+                }
+
+                // Cerrar el PreparedStatement
+                pst.close();
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(this, "Error al eliminar el registro en la base de datos: " + ex.getMessage());
+                ex.printStackTrace();
+            }
         }
+    } else {
+        JOptionPane.showMessageDialog(this, "Por favor, seleccione una fila para eliminar.");
+    }
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void txtIdClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIdClienteActionPerformed
@@ -480,70 +554,117 @@ public class FACTURA extends javax.swing.JFrame {
             txtIDFactura.setForeground(Color.gray);
         }
     }//GEN-LAST:event_txtIdClienteMousePressed
-    private String[] buscarClientePorIdCliente(String Idcliente) {
-        String line;
-        try (BufferedReader br = new BufferedReader(new FileReader("clientes.csv"))) {
-            while ((line = br.readLine()) != null) {
-                String[] data = line.split(",");
-                // En el CSV, la posición 0 es el ID del Cliente, y el 1 es el nombre del cliente
-                if (data[0].equals(Idcliente)) {
-                    return new String[]{data[1], data[5]}; // Retorna el nombre del cliente y la fecha
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+    private String[] buscarClientePorIdCliente(String idCliente) {
+    String[] clienteInfo = null;
+    try {
+        // Obtener la conexión a la base de datos
+        Connection con = Conexion.getInstance().getConnection();
+        
+        // Consulta SQL para buscar el cliente por su ID
+        String sql = "SELECT nombre FROM registro_clientes WHERE id = ?";
+        PreparedStatement pst = con.prepareStatement(sql);
+        pst.setString(1, idCliente); // Asignar el parámetro del ID del cliente
+
+        // Ejecutar la consulta
+        ResultSet rs = pst.executeQuery();
+        
+        if (rs.next()) {
+            // Recuperar el nombre del cliente
+            clienteInfo = new String[]{rs.getString("nombre")};
         }
-        return null; // Si no se encuentra el cliente
+        
+        rs.close(); // Cerrar el ResultSet
+        pst.close(); // Cerrar el PreparedStatement
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(null, "Error al buscar el cliente: " + e.getMessage());
+        e.printStackTrace();
+    }
+    
+    return clienteInfo; // Retorna los datos del cliente o null si no se encontró
+}
+
+    private String obtenerFechaReservaPorIdCliente(String idCliente) {
+    String fechaReserva = null;
+    try {
+        // Obtener la conexión a la base de datos
+        Connection con = Conexion.getInstance().getConnection();
+        
+        // Consulta SQL para obtener la fecha de reserva del cliente
+        String sql = "SELECT fecha FROM reservaciones WHERE id_cliente = ?";
+        PreparedStatement pst = con.prepareStatement(sql);
+        pst.setString(1, idCliente); // Asignar el parámetro del ID del cliente
+
+        // Ejecutar la consulta
+        ResultSet rs = pst.executeQuery();
+        
+        if (rs.next()) {
+            // Recuperar la fecha de la reserva
+            fechaReserva = rs.getString("fecha");
+        }
+        
+        rs.close(); // Cerrar el ResultSet
+        pst.close(); // Cerrar el PreparedStatement
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(null, "Error al obtener la fecha de la reserva: " + e.getMessage());
+        e.printStackTrace();
+    }
+    
+    return fechaReserva; // Retorna la fecha de la reserva o null si no se encontró
+}
+    
+    private double obtenerPrecioTotalPorCliente(String idCliente) {
+    double precioTotal = 0.0;
+
+    try {
+        // Obtener la conexión a la base de datos
+        Connection con = Conexion.getInstance().getConnection();
+        
+        // Consulta SQL para obtener el total del precio de los pedidos por cliente
+        String sql = "SELECT SUM(total) AS total FROM ingreso_pedidos WHERE idcliente = ?";
+        PreparedStatement pst = con.prepareStatement(sql);
+        pst.setString(1, idCliente); // Asignar el parámetro del ID del cliente
+
+        // Ejecutar la consulta
+        ResultSet rs = pst.executeQuery();
+        
+        if (rs.next()) {
+            // Recuperar el total de precio sumado de los pedidos del cliente
+            precioTotal = rs.getDouble("total");
+        }
+        
+        rs.close(); // Cerrar el ResultSet
+        pst.close(); // Cerrar el PreparedStatement
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(null, "Error al obtener el precio total del cliente: " + e.getMessage());
+        e.printStackTrace();
     }
 
-    private double obtenerPrecioTotalPorCliente(String idcliente) {
-        double precioTotal = 0.0;
-        String line;
+    return precioTotal; // Retorna el precio total o 0 si no se encuentra el cliente
+}
 
-        try (BufferedReader br = new BufferedReader(new FileReader("Pedidos.csv"))) {
-            while ((line = br.readLine()) != null) {
-                String[] data = line.split(",");
+    void ConsultarFactura() {
+        String sql = "SELECT * FROM factura";
+    try {
+        conet = Conexion.getInstance().getConnection();
+        st = conet.createStatement();
+        rs = st.executeQuery(sql);
 
-                // El ID del cliente está en la posición 0 y el total del precio en la posición 6
-                if (data[0].equals(idcliente)) {
-                    double totalPrecio = Double.parseDouble(data[6]);
-                    precioTotal += totalPrecio; // Sumar el total del precio si hay más de un pedido
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+        // Crear un arreglo para almacenar los datos
+        Object[] factura = new Object[5]; // Ahora hay 7 columnas
+
+        while (rs.next()) {
+            factura[0] = rs.getInt("ID_FACTURA");
+            factura[1] = rs.getInt("ID_CLIENTE");
+            factura[2] = rs.getString("NOMBRE");
+            factura[3] = rs.getString("FECHA_RESERVADA");
+            factura[4] = rs.getInt("PRECIO_TOTAL");
+            modelo2.addRow(factura);
         }
 
-        return precioTotal; // Devolver el total sumado
+        TablaFactura.setModel(modelo2);
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Error al consultar datos: " + e.getMessage());
     }
-
-    private void guardarFacturaEnCSV() {
-        try (PrintWriter pw = new PrintWriter(new File("facturas.csv"))) {
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < modelo2.getRowCount(); i++) {
-                for (int j = 0; j < modelo2.getColumnCount(); j++) {
-                    sb.append(modelo2.getValueAt(i, j).toString());
-                    sb.append(",");
-                }
-                sb.append("\n");
-            }
-            pw.write(sb.toString());
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void cargarFacturasDesdeCSV() {
-        String line;
-        try (BufferedReader br = new BufferedReader(new FileReader("facturas.csv"))) {
-            while ((line = br.readLine()) != null) {
-                String[] data = line.split(",");
-                modelo2.addRow(data);
-            }
-            ordenarTablaPorIDFactura();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     private void limpiarCampos() {
