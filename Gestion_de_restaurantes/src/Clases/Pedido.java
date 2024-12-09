@@ -9,47 +9,47 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class Pedido {
-    private int idPedido;
-    private Date fechaPedido;
-    private ArrayList<Plato> platos;
+    private int s_idPedido;
+    private Date s_fechaPedido;
+    private ArrayList<Plato> s_platos;
 
-    public Pedido(int idPedido, Date fechaPedido) {
-        this.idPedido = idPedido;
-        this.fechaPedido = fechaPedido;
-        this.platos = new ArrayList<>();
+    public Pedido(int s_idPedido, Date s_fechaPedido) {
+        this.s_idPedido = s_idPedido;
+        this.s_fechaPedido = s_fechaPedido;
+        this.s_platos = new ArrayList<>();
     }
 
     public int getIdPedido() {
-        return idPedido;
+        return s_idPedido;
     }
 
-    public void setIdPedido(int idPedido) {
-        this.idPedido = idPedido;
+    public void setIdPedido(int s_idPedido) {
+        this.s_idPedido = s_idPedido;
     }
 
     public Date getFechaPedido() {
-        return fechaPedido;
+        return s_fechaPedido;
     }
 
-    public void setFechaPedido(Date fechaPedido) {
-        this.fechaPedido = fechaPedido;
+    public void setFechaPedido(Date s_fechaPedido) {
+        this.s_fechaPedido = s_fechaPedido;
     }
 
     public ArrayList<Plato> getPlatos() {
-        return platos;
+        return s_platos;
     }
 
-    public void agregarPlato(Plato plato) {
-        platos.add(plato);
+    public void agregarPlato(Plato s_plato) {
+        s_platos.add(s_plato);
     }
 
-    public void eliminarPlato(Plato plato) {
-        platos.remove(plato);
+    public void eliminarPlato(Plato s_plato) {
+        s_platos.remove(s_plato);
     }
 
     public double calcularTotal() {
         double total = 0;
-        for (Plato plato : platos) {
+        for (Plato plato : s_platos) {
             total += plato.getPrecio();
         }
         return total;

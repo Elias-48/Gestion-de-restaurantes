@@ -6,29 +6,29 @@ package Clases;
  * @author ELIAS RIVERA ULLOA
  */
 public class Empleado extends Persona {
-    private int idEmpleado;
-    private String cargo;
+    private int s_idEmpleado;
+    private String s_cargo;
 
-    public Empleado(String nombre, String direccion, String telefono, int idEmpleado, String cargo) {
-        super(nombre, direccion, telefono);
-        this.idEmpleado = idEmpleado;
-        this.cargo = cargo;
+    public Empleado(String s_nombre, String s_direccion, String s_telefono, int s_idEmpleado, String s_cargo) {
+        super(s_nombre, s_direccion, s_telefono);
+        this.s_idEmpleado = s_idEmpleado;
+        this.s_cargo = s_cargo;
     }
 
     public int getIdEmpleado() {
-        return idEmpleado;
+        return s_idEmpleado;
     }
 
-    public void setIdEmpleado(int idEmpleado) {
-        this.idEmpleado = idEmpleado;
+    public void setIdEmpleado(int s_idEmpleado) {
+        this.s_idEmpleado = s_idEmpleado;
     }
 
     public String getCargo() {
-        return cargo;
+        return s_cargo;
     }
 
     public void setCargo(String cargo) {
-        this.cargo = cargo;
+        this.s_cargo = cargo;
     }
 }
 

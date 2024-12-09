@@ -4,7 +4,7 @@
  */
 package UI;
 
-import Clases.Conexion;
+import Clases.Singleton;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -30,8 +30,8 @@ import javax.swing.table.TableRowSorter;
 public class MENÚ_PLATOS extends javax.swing.JFrame {
 
     private DefaultTableModel modelo;
-    private HashSet<String> idsPlatos;
-    private HashSet<String> nombresPlatos;
+    private HashSet<String> s_idsPlatos;
+    private HashSet<String> s_nombresPlatos;
     Connection conet;
     Statement st;
     ResultSet rs;
@@ -41,8 +41,8 @@ public class MENÚ_PLATOS extends javax.swing.JFrame {
     public MENÚ_PLATOS() {
     modelo = new DefaultTableModel(); // Inicializar el modelo de tabla
     initComponents();
-    idsPlatos = new HashSet<>();
-    nombresPlatos = new HashSet<>();
+    s_idsPlatos = new HashSet<>();
+    s_nombresPlatos = new HashSet<>();
     modelo.addColumn("ID");
     modelo.addColumn("MENÚ");
     modelo.addColumn("INGREDIENTES");
@@ -309,34 +309,34 @@ public class MENÚ_PLATOS extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSalirActionPerformed
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
-    String idplato = txtIdDelPlato.getText().trim();
-    String menu = txtNombreDelPlato.getText().trim();
-    String ingredientes = jTextAreaIngredientes.getText().replace("\n", " | ").trim();
-    String costo = txtPrecioDelPlato.getText().trim();
+    String s_idplato = txtIdDelPlato.getText().trim();
+    String s_menu = txtNombreDelPlato.getText().trim();
+    String s_ingredientes = jTextAreaIngredientes.getText().replace("\n", " | ").trim();
+    String s_costo = txtPrecioDelPlato.getText().trim();
 
-    if (idplato.isEmpty() || menu.isEmpty() || ingredientes.isEmpty() || costo.isEmpty()) {
+    if (s_idplato.isEmpty() || s_menu.isEmpty() || s_ingredientes.isEmpty() || s_costo.isEmpty()) {
         JOptionPane.showMessageDialog(this, "Todos los campos deben estar completos");
-    } else if (idsPlatos.contains(idplato)) {
+    } else if (s_idsPlatos.contains(s_idplato)) {
         JOptionPane.showMessageDialog(this, "El ID del plato ya existe. Ingrese un ID diferente.");
-    } else if (nombresPlatos.contains(menu)) {
+    } else if (s_nombresPlatos.contains(s_menu)) {
         JOptionPane.showMessageDialog(this, "El nombre del plato ya existe. Ingrese un nombre diferente.");
     } else {
         try {
             // Guardar en la base de datos
-            Connection con = Conexion.getInstance().getConnection(); // Obtener la conexión
+            Connection con = Singleton.getInstance().getConnection(); // Obtener la conexión
             String sql = "INSERT INTO menu_platos (ID, MENU, INGREDIENTES, COSTO) VALUES (?, ?, ?, ?)";
             PreparedStatement pst = con.prepareStatement(sql);
-            pst.setString(1, idplato);
-            pst.setString(2, menu);
-            pst.setString(3, ingredientes);
-            pst.setString(4, costo);
+            pst.setString(1, s_idplato);
+            pst.setString(2, s_menu);
+            pst.setString(3, s_ingredientes);
+            pst.setString(4, s_costo);
             
             int filasAfectadas = pst.executeUpdate();
             if (filasAfectadas > 0) {
                 // Guardar en la tabla si la inserción fue exitosa
-                idsPlatos.add(idplato);
-                nombresPlatos.add(menu);
-                modelo.addRow(new Object[]{idplato, menu, ingredientes, costo});
+                s_idsPlatos.add(s_idplato);
+                s_nombresPlatos.add(s_menu);
+                modelo.addRow(new Object[]{s_idplato, s_menu, s_ingredientes, s_costo});
                 JOptionPane.showMessageDialog(this, "Plato registrado con éxito en la base de datos y en la tabla.");
                 
                 ordenarTablaPorID(); // Ordenar la tabla después de agregar un nuevo plato
@@ -356,37 +356,37 @@ public class MENÚ_PLATOS extends javax.swing.JFrame {
 
         if (filaSeleccionada >= 0) {
             // Obtener los valores del formulario
-        String idPlato = txtIdDelPlato.getText().trim();
-        String menu = txtNombreDelPlato.getText().trim();
-        String ingredientes = jTextAreaIngredientes.getText().replace("\n", " | ").trim();
-        String costo = txtPrecioDelPlato.getText().trim();
+        String s_idPlato = txtIdDelPlato.getText().trim();
+        String s_menu = txtNombreDelPlato.getText().trim();
+        String s_ingredientes = jTextAreaIngredientes.getText().replace("\n", " | ").trim();
+        String s_costo = txtPrecioDelPlato.getText().trim();
 
-        if (idPlato.isEmpty() || menu.isEmpty() || ingredientes.isEmpty() || costo.isEmpty()) {
+        if (s_idPlato.isEmpty() || s_menu.isEmpty() || s_ingredientes.isEmpty() || s_costo.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Todos los campos deben estar completos.");
             return;
         }
 
         try {
             // Obtener la conexión a la base de datos
-            Connection con = Conexion.getInstance().getConnection();
+            Connection con = Singleton.getInstance().getConnection();
             
             // Preparar la consulta SQL para actualizar
             String sql = "UPDATE menu_platos SET MENU = ?, INGREDIENTES = ?, COSTO = ? WHERE ID = ?";
             PreparedStatement pst = con.prepareStatement(sql);
-            pst.setString(1, menu);
-            pst.setString(2, ingredientes);
-            pst.setString(3, costo);
-            pst.setString(4, idPlato);
+            pst.setString(1, s_menu);
+            pst.setString(2, s_ingredientes);
+            pst.setString(3, s_costo);
+            pst.setString(4, s_idPlato);
 
             // Ejecutar la consulta
             int filasAfectadas = pst.executeUpdate();
 
             if (filasAfectadas > 0) {
                 // Actualizar los datos en la tabla de la interfaz
-                modelo.setValueAt(idPlato, filaSeleccionada, 0);
-                modelo.setValueAt(menu, filaSeleccionada, 1);
-                modelo.setValueAt(ingredientes, filaSeleccionada, 2);
-                modelo.setValueAt(costo, filaSeleccionada, 3);
+                modelo.setValueAt(s_idPlato, filaSeleccionada, 0);
+                modelo.setValueAt(s_menu, filaSeleccionada, 1);
+                modelo.setValueAt(s_ingredientes, filaSeleccionada, 2);
+                modelo.setValueAt(s_costo, filaSeleccionada, 3);
 
                 JOptionPane.showMessageDialog(this, "Plato editado con éxito en la base de datos.");
             } else {
@@ -408,7 +408,7 @@ public class MENÚ_PLATOS extends javax.swing.JFrame {
 
         if (filaSeleccionada >= 0) {
             // Obtener el ID del plato seleccionado
-        String idPlato = modelo.getValueAt(filaSeleccionada, 0).toString();
+        String s_idPlato = modelo.getValueAt(filaSeleccionada, 0).toString();
 
         // Confirmar eliminación
         int confirmacion = JOptionPane.showConfirmDialog(this, 
@@ -419,12 +419,12 @@ public class MENÚ_PLATOS extends javax.swing.JFrame {
         if (confirmacion == JOptionPane.YES_OPTION) {
             try {
                 // Obtener la conexión a la base de datos
-                Connection con = Conexion.getInstance().getConnection();
+                Connection con = Singleton.getInstance().getConnection();
                 
                 // Preparar la consulta SQL para eliminar
                 String sql = "DELETE FROM menu_platos WHERE ID = ?";
                 PreparedStatement pst = con.prepareStatement(sql);
-                pst.setString(1, idPlato);
+                pst.setString(1, s_idPlato);
 
                 // Ejecutar la consulta
                 int filasAfectadas = pst.executeUpdate();
@@ -451,10 +451,10 @@ public class MENÚ_PLATOS extends javax.swing.JFrame {
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
-        String idPlato = txtIdDelPlato.getText().trim();
-    String nombrePlato = txtNombreDelPlato.getText().trim();
+        String s_idPlato = txtIdDelPlato.getText().trim();
+    String s_nombrePlato = txtNombreDelPlato.getText().trim();
 
-    if (validarIDPlato(idPlato) && validarNombre(nombrePlato) &&
+    if (validarIDPlato(s_idPlato) && validarNombre(s_nombrePlato) &&
         validarIngredientes(jTextAreaIngredientes.getText().trim()) &&
         validarPrecio(txtPrecioDelPlato.getText().trim())) {
 
@@ -541,7 +541,7 @@ public class MENÚ_PLATOS extends javax.swing.JFrame {
         
        try {
            // Obtener la conexión utilizando el Singleton
-        conet = Conexion.getInstance().getConnection();
+        conet = Singleton.getInstance().getConnection();
         
         // Crear el Statement y ejecutar la consulta
         st = conet.createStatement();

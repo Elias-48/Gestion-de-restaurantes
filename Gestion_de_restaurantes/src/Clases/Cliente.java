@@ -7,35 +7,35 @@ package Clases;
 import java.util.ArrayList;
 
 public class Cliente extends Persona {
-    private int idCliente;
-    private ArrayList<Pedido> historialPedidos;
-    private String correo;
+    private int s_idCliente;
+    private ArrayList<Pedido> s_historialPedidos;
+    private String s_correo;
 
-    public Cliente(String nombre, String direccion, String telefono, int idCliente, String correo) {
-        super(nombre, direccion, telefono);
-        this.idCliente = idCliente;
-        this.historialPedidos = new ArrayList<>();
-        this.correo = correo;
+    public Cliente(String s_nombre, String s_direccion, String s_telefono, int s_idCliente, String s_correo) {
+        super(s_nombre, s_direccion, s_telefono);
+        this.s_idCliente = s_idCliente;
+        this.s_historialPedidos = new ArrayList<>();
+        this.s_correo = s_correo;
     }
 
     public int getIdCliente() {
-        return idCliente;
+        return s_idCliente;
     }
 
-    public void setIdCliente(int idCliente) {
-        this.idCliente = idCliente;
+    public void setIdCliente(int s_idCliente) {
+        this.s_idCliente = s_idCliente;
     }
     
         public String getCorreo() {
-        return correo;
+        return s_correo;
     }
 
-    public void setCorreo(String correo) {
-        this.correo = correo;
+    public void setCorreo(String s_correo) {
+        this.s_correo = s_correo;
     }
 
     public ArrayList<Pedido> getHistorialPedidos() {
-        return historialPedidos;
+        return s_historialPedidos;
     }
     
 
@@ -44,12 +44,12 @@ public class Cliente extends Persona {
         if (this == obj) return true;
         if (!(obj instanceof Cliente)) return false;
         Cliente otro = (Cliente) obj;
-        return this.idCliente == otro.idCliente || this.correo.equals(otro.correo) || this.getTelefono().equals(otro.getTelefono());
+        return this.s_idCliente == otro.s_idCliente || this.s_correo.equals(otro.s_correo) || this.getTelefono().equals(otro.getTelefono());
     }
 
     @Override
     public int hashCode() {
-        return this.idCliente + this.correo.hashCode() + this.getTelefono().hashCode();
+        return this.s_idCliente + this.s_correo.hashCode() + this.getTelefono().hashCode();
     }
 }
 

@@ -4,7 +4,7 @@
  */
 package UI;
 
-import Clases.Conexion;
+import Clases.Singleton;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -31,9 +31,9 @@ public class REGISTRO_CLIENTES extends javax.swing.JFrame {
 
     // Declaración de HashSet
 private DefaultTableModel model;
-private HashSet<String> idsClientes = new HashSet<>();
-private HashSet<String> correosClientes = new HashSet<>();
-private HashSet<String> telefonoSet = new HashSet<>();
+private HashSet<String> s_idsClientes = new HashSet<>();
+private HashSet<String> s_correosClientes = new HashSet<>();
+private HashSet<String> s_telefonoSet = new HashSet<>();
     Connection conet;
     Statement st;
     ResultSet rs;
@@ -52,9 +52,9 @@ private HashSet<String> telefonoSet = new HashSet<>();
     TablaDeRegistro.setModel(model);
 
     // Inicializar conjuntos de validación
-    idsClientes = new HashSet<>();
-    correosClientes = new HashSet<>();
-    telefonoSet = new HashSet<>();
+    s_idsClientes = new HashSet<>();
+    s_correosClientes = new HashSet<>();
+    s_telefonoSet = new HashSet<>();
     ConsultarCliente();
     
         // Agregar el evento para detectar clics en las filas
@@ -317,30 +317,30 @@ private HashSet<String> telefonoSet = new HashSet<>();
 
     if (filaSeleccionada >= 0) {
         // Obtener los valores actuales de los campos de texto
-        String id = txtIdCLiente.getText().trim();
-        String nombre = txtNombreCliente.getText().trim();
-        String gmail = txtCorreo.getText().trim();
-        String direccion = txtDireccion.getText().trim();
-        String telefono = txtTelefono.getText().trim();
+        String s_id = txtIdCLiente.getText().trim();
+        String s_nombre = txtNombreCliente.getText().trim();
+        String s_gmail = txtCorreo.getText().trim();
+        String s_direccion = txtDireccion.getText().trim();
+        String s_telefono = txtTelefono.getText().trim();
 
         // Actualizar los valores en el modelo de la tabla
-        model.setValueAt(id, filaSeleccionada, 0);
-        model.setValueAt(nombre, filaSeleccionada, 1);
-        model.setValueAt(gmail, filaSeleccionada, 2);
-        model.setValueAt(direccion, filaSeleccionada, 3);
-        model.setValueAt(telefono, filaSeleccionada, 4);
+        model.setValueAt(s_id, filaSeleccionada, 0);
+        model.setValueAt(s_nombre, filaSeleccionada, 1);
+        model.setValueAt(s_gmail, filaSeleccionada, 2);
+        model.setValueAt(s_direccion, filaSeleccionada, 3);
+        model.setValueAt(s_telefono, filaSeleccionada, 4);
 
         // Realizar la actualización en la base de datos
         String sql = "UPDATE registro_clientes SET NOMBRE = ?, GMAIL = ?, DIRECCION = ?, TELEFONO = ? WHERE ID = ?";
-        try (Connection con = Conexion.getInstance().getConnection(); 
+        try (Connection con = Singleton.getInstance().getConnection(); 
              PreparedStatement pst = con.prepareStatement(sql)) {
 
             // Establecer los valores en la consulta SQL
-            pst.setString(1, nombre);
-            pst.setString(2, gmail);
-            pst.setString(3, direccion);
-            pst.setString(4, telefono);
-            pst.setString(5, id);
+            pst.setString(1, s_nombre);
+            pst.setString(2, s_gmail);
+            pst.setString(3, s_direccion);
+            pst.setString(4, s_telefono);
+            pst.setString(5, s_id);
 
             // Ejecutar la consulta
             int filasActualizadas = pst.executeUpdate();
@@ -374,50 +374,50 @@ private HashSet<String> telefonoSet = new HashSet<>();
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
     // Declarar variables para los campos de texto
-    String id = txtIdCLiente.getText().trim();
-    String nombre = txtNombreCliente.getText().trim();
-    String gmail = txtCorreo.getText().trim();
-    String direccion = txtDireccion.getText().trim();
-    String telefono = txtTelefono.getText().trim();
+    String s_id = txtIdCLiente.getText().trim();
+    String s_nombre = txtNombreCliente.getText().trim();
+    String s_gmail = txtCorreo.getText().trim();
+    String s_direccion = txtDireccion.getText().trim();
+    String s_telefono = txtTelefono.getText().trim();
 
     // Verificar duplicados
-    if (idsClientes.contains(id)) {
+    if (s_idsClientes.contains(s_id)) {
         JOptionPane.showMessageDialog(this, "El ID ya está registrado. Por favor, ingrese uno diferente.");
         return;
     }
 
-    if (correosClientes.contains(gmail)) {
+    if (s_correosClientes.contains(s_gmail)) {
         JOptionPane.showMessageDialog(this, "El correo electrónico ya está registrado. Por favor, ingrese uno diferente.");
         return;
     }
 
-    if (telefonoSet.contains(telefono)) {
+    if (s_telefonoSet.contains(s_telefono)) {
         JOptionPane.showMessageDialog(this, "El teléfono ya está registrado. Por favor, ingrese uno diferente.");
         return;
     }
 
     // Validar que los campos no estén vacíos
-    if (id.isEmpty() || nombre.isEmpty() || gmail.isEmpty() || direccion.isEmpty() || telefono.isEmpty()) {
+    if (s_id.isEmpty() || s_nombre.isEmpty() || s_gmail.isEmpty() || s_direccion.isEmpty() || s_telefono.isEmpty()) {
         JOptionPane.showMessageDialog(this, "Por favor, complete todos los campos.");
     } else {
         // Agregar una nueva fila a la tabla si todo está correcto
-        model.addRow(new Object[]{id, nombre, gmail, direccion, telefono});
+        model.addRow(new Object[]{s_id, s_nombre, s_gmail, s_direccion, s_telefono});
 
         // Agregar a los conjuntos para evitar duplicados
-        idsClientes.add(id);
-        correosClientes.add(gmail);
-        telefonoSet.add(telefono);
+        s_idsClientes.add(s_id);
+        s_correosClientes.add(s_gmail);
+        s_telefonoSet.add(s_telefono);
 
         // Guardar los datos en la base de datos
         String sql = "INSERT INTO registro_clientes (ID, NOMBRE, GMAIL, DIRECCION, TELEFONO) VALUES (?, ?, ?, ?, ?)";
-        try (Connection con = Conexion.getInstance().getConnection(); 
+        try (Connection con = Singleton.getInstance().getConnection(); 
              PreparedStatement pst = con.prepareStatement(sql)) {
              
-            pst.setString(1, id);
-            pst.setString(2, nombre);
-            pst.setString(3, gmail);
-            pst.setString(4, direccion);
-            pst.setString(5, telefono);
+            pst.setString(1, s_id);
+            pst.setString(2, s_nombre);
+            pst.setString(3, s_gmail);
+            pst.setString(4, s_direccion);
+            pst.setString(5, s_telefono);
 
             int filasInsertadas = pst.executeUpdate();
             if (filasInsertadas > 0) {
@@ -506,13 +506,13 @@ private HashSet<String> telefonoSet = new HashSet<>();
             model.removeRow(filaSeleccionada);
 
             // Eliminar del TreeSet
-            idsClientes.remove(id);
-            correosClientes.remove(correo);
-            telefonoSet.remove(telefono);
+            s_idsClientes.remove(id);
+            s_correosClientes.remove(correo);
+            s_telefonoSet.remove(telefono);
 
             // Realizar la eliminación en la base de datos
             String sql = "DELETE FROM registro_clientes WHERE ID = ?";
-            try (Connection con = Conexion.getInstance().getConnection(); 
+            try (Connection con = Singleton.getInstance().getConnection(); 
                  PreparedStatement pst = con.prepareStatement(sql)) {
 
                 // Establecer el valor del ID en la consulta
@@ -591,7 +591,7 @@ private HashSet<String> telefonoSet = new HashSet<>();
         
        try {
            // Obtener la conexión utilizando el Singleton
-        conet = Conexion.getInstance().getConnection();
+        conet = Singleton.getInstance().getConnection();
         
         // Crear el Statement y ejecutar la consulta
         st = conet.createStatement();

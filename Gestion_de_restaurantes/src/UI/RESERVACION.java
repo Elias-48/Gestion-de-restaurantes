@@ -4,7 +4,7 @@
  */
 package UI;
 
-import Clases.Conexion;
+import Clases.Singleton;
 import java.awt.Color;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -338,17 +338,17 @@ public class RESERVACION extends javax.swing.JFrame {
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
         // Obtener los datos de los campos
-        String idCliente = txtIDCliente.getText().trim();
-        String mesa = jComboBoxNumDeMesa.getSelectedItem().toString();
-        String sillas = jComboBoxNumDeSillas.getSelectedItem().toString();
-        Date fecha = jDateFecha.getDate();
-        String horaInicio = txtHoraReservaIniciada.getText().trim();
-        String horaFin = txtHoraReservaFinalizada.getText().trim();
+        String s_idCliente = txtIDCliente.getText().trim();
+        String s_mesa = jComboBoxNumDeMesa.getSelectedItem().toString();
+        String s_sillas = jComboBoxNumDeSillas.getSelectedItem().toString();
+        Date s_fecha = jDateFecha.getDate();
+        String s_horaInicio = txtHoraReservaIniciada.getText().trim();
+        String s_horaFin = txtHoraReservaFinalizada.getText().trim();
 
         // Validar los campos antes de registrar
-        if (validarIDCliente(idCliente) && validarMesa(mesa) && validarSillas(sillas) && validarHora(horaInicio, horaFin) && fecha != null) {
+        if (validarIDCliente(s_idCliente) && validarMesa(s_mesa) && validarSillas(s_sillas) && validarHora(s_horaInicio, s_horaFin) && s_fecha != null) {
             // Validar si hay conflicto de horarios en la misma mesa
-            if (validarConflictoDeHorario(fecha, horaInicio, horaFin, mesa)) {
+            if (validarConflictoDeHorario(s_fecha, s_horaInicio, s_horaFin, s_mesa)) {
                 JOptionPane.showMessageDialog(this, "El horario seleccionado para esta mesa ya está ocupado.");
             } else {
                 JOptionPane.showMessageDialog(this, "Reserva registrada con éxito.");
@@ -370,27 +370,27 @@ public class RESERVACION extends javax.swing.JFrame {
         return !datos.equals("SIN MESA"); // Validación para asegurarse de que se haya seleccionado un número de sillas
     }
 
-    public static boolean validarHora(String horaInicio, String horaFin) {
+    public static boolean validarHora(String s_horaInicio, String s_horaFin) {
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
         try {
             // Validar que las horas estén en formato correcto
-            sdf.parse(horaInicio);
-            sdf.parse(horaFin);
+            sdf.parse(s_horaInicio);
+            sdf.parse(s_horaFin);
 
             // Validar que la hora de inicio sea antes de la hora de fin
-            return sdf.parse(horaInicio).before(sdf.parse(horaFin));
+            return sdf.parse(s_horaInicio).before(sdf.parse(s_horaFin));
         } catch (ParseException e) {
             return false; // Si no es un formato correcto, retorna false
         }
     }
 
-    private boolean validarConflictoDeHorario(Date fecha, String horaInicio, String horaFin, String mesa) {
+    private boolean validarConflictoDeHorario(Date s_fecha, String s_horaInicio, String s_horaFin, String s_mesa) {
         SimpleDateFormat sdfHora = new SimpleDateFormat("HH:mm");
         SimpleDateFormat sdfFecha = new SimpleDateFormat("yy-MM-dd"); // Ajusta el formato de la fecha si es necesario
 
         try {
-            Date inicio = sdfHora.parse(horaInicio);
-            Date fin = sdfHora.parse(horaFin);
+            Date inicio = sdfHora.parse(s_horaInicio);
+            Date fin = sdfHora.parse(s_horaFin);
 
             for (int i = 0; i < modelo4.getRowCount(); i++) {
                 String fechaReservadaStr = modelo4.getValueAt(i, 3).toString(); // Fecha como String
@@ -400,7 +400,7 @@ public class RESERVACION extends javax.swing.JFrame {
                 String horaInicioReservada = modelo4.getValueAt(i, 4).toString();
                 String horaFinReservada = modelo4.getValueAt(i, 5).toString();
 
-                if (fecha.equals(fechaReservada) && mesa.equals(mesaReservada)) {
+                if (s_fecha.equals(fechaReservada) && s_mesa.equals(mesaReservada)) {
                     Date inicioReservado = sdfHora.parse(horaInicioReservada);
                     Date finReservado = sdfHora.parse(horaFinReservada);
 
@@ -428,46 +428,46 @@ public class RESERVACION extends javax.swing.JFrame {
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
         // Obtener los valores ingresados
-        String idCliente = txtIDCliente.getText().trim();
-        String mesa = jComboBoxNumDeMesa.getSelectedItem().toString();
-        String sillas = jComboBoxNumDeSillas.getSelectedItem().toString();
-        Date fecha = jDateFecha.getDate();
-        String horaInicio = txtHoraReservaIniciada.getText().trim();
-        String horaFin = txtHoraReservaFinalizada.getText().trim();
+        String s_idCliente = txtIDCliente.getText().trim();
+        String s_mesa = jComboBoxNumDeMesa.getSelectedItem().toString();
+        String s_sillas = jComboBoxNumDeSillas.getSelectedItem().toString();
+        Date s_fecha = jDateFecha.getDate();
+        String s_horaInicio = txtHoraReservaIniciada.getText().trim();
+        String s_horaFin = txtHoraReservaFinalizada.getText().trim();
 
-        if (idCliente.isEmpty() || mesa.equals("SIN MESA") || sillas.equals("SIN MESA")
-                || horaInicio.isEmpty() || horaFin.isEmpty() || fecha == null) {
+        if (s_idCliente.isEmpty() || s_mesa.equals("SIN MESA") || s_sillas.equals("SIN MESA")
+                || s_horaInicio.isEmpty() || s_horaFin.isEmpty() || s_fecha == null) {
             JOptionPane.showMessageDialog(this, "Todos los campos deben estar completos.");
             return;
         }
 
         // Convertir la fecha al formato "yyyy-MM-dd" para la base de datos
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        String fechaFormateada = sdf.format(fecha);
+        String s_fechaFormateada = sdf.format(s_fecha);
 
         // Validar conflictos de horario
-        if (validarConflictoDeHorario(fechaFormateada, horaInicio, horaFin, mesa)) {
+        if (validarConflictoDeHorario(s_fechaFormateada, s_horaInicio, s_horaFin, s_mesa)) {
             JOptionPane.showMessageDialog(this, "El horario seleccionado para esta mesa ya está ocupado.");
             return;
         }
 
         try {
             // Insertar los datos en la base de datos
-            Connection con = Conexion.getInstance().getConnection();
+            Connection con = Singleton.getInstance().getConnection();
             String sql = "INSERT INTO reservaciones (id_cliente, mesa, asientos, fecha, hora_inicio, hora_fin) VALUES (?, ?, ?, ?, ?, ?)";
             PreparedStatement pst = con.prepareStatement(sql);
-            pst.setString(1, idCliente); // ID Cliente
-            pst.setString(2, mesa); // Número de Mesa
-            pst.setString(3, sillas); // Número de Sillas
-            pst.setString(4, fechaFormateada); // Fecha de la reserva
-            pst.setString(5, horaInicio); // Hora de inicio
-            pst.setString(6, horaFin); // Hora de fin
+            pst.setString(1, s_idCliente); // ID Cliente
+            pst.setString(2, s_mesa); // Número de Mesa
+            pst.setString(3, s_sillas); // Número de Sillas
+            pst.setString(4, s_fechaFormateada); // Fecha de la reserva
+            pst.setString(5, s_horaInicio); // Hora de inicio
+            pst.setString(6, s_horaFin); // Hora de fin
 
             // Ejecutar la consulta
             int filasAfectadas = pst.executeUpdate();
             if (filasAfectadas > 0) {
                 // Agregar a la tabla en el JFrame
-                modelo4.addRow(new Object[]{idCliente, mesa, sillas, fechaFormateada, horaInicio, horaFin});
+                modelo4.addRow(new Object[]{s_idCliente, s_mesa, s_sillas, s_fechaFormateada, s_horaInicio, s_horaFin});
                 JOptionPane.showMessageDialog(this, "Reserva agregada con éxito.");
             } else {
                 JOptionPane.showMessageDialog(this, "Error al guardar la reserva en la base de datos.");
@@ -482,53 +482,53 @@ public class RESERVACION extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAgregarActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
-        int filaSeleccionada = TablaReservacion.getSelectedRow();
-        if (filaSeleccionada >= 0) {
+        int s_filaSeleccionada = TablaReservacion.getSelectedRow();
+        if (s_filaSeleccionada >= 0) {
             // Obtener los datos del formulario
-            String idCliente = txtIDCliente.getText().trim();
-            String mesa = jComboBoxNumDeMesa.getSelectedItem().toString();
-            String sillas = jComboBoxNumDeSillas.getSelectedItem().toString();
-            Date fecha = jDateFecha.getDate();
-            String horaInicio = txtHoraReservaIniciada.getText().trim();
-            String horaFin = txtHoraReservaFinalizada.getText().trim();
+            String s_idCliente = txtIDCliente.getText().trim();
+            String s_mesa = jComboBoxNumDeMesa.getSelectedItem().toString();
+            String s_sillas = jComboBoxNumDeSillas.getSelectedItem().toString();
+            Date s_fecha = jDateFecha.getDate();
+            String s_horaInicio = txtHoraReservaIniciada.getText().trim();
+            String s_horaFin = txtHoraReservaFinalizada.getText().trim();
 
-            if (idCliente.isEmpty() || mesa.equals("SIN MESA") || sillas.equals("SIN MESA")
-                    || horaInicio.isEmpty() || horaFin.isEmpty() || fecha == null) {
+            if (s_idCliente.isEmpty() || s_mesa.equals("SIN MESA") || s_sillas.equals("SIN MESA")
+                    || s_horaInicio.isEmpty() || s_horaFin.isEmpty() || s_fecha == null) {
                 JOptionPane.showMessageDialog(this, "Todos los campos deben estar completos.");
                 return;
             }
 
             // Convertir la fecha al formato "yyyy-MM-dd" para la base de datos
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            String fechaFormateada = sdf.format(fecha);
+            String s_fechaFormateada = sdf.format(s_fecha);
 
             // Validar conflictos de horario
-            if (validarConflictoDeHorario(fechaFormateada, horaInicio, horaFin, mesa, filaSeleccionada)) {
+            if (validarConflictoDeHorario(s_fechaFormateada, s_horaInicio, s_horaFin, s_mesa, s_filaSeleccionada)) {
                 JOptionPane.showMessageDialog(this, "El horario seleccionado ya está ocupado.");
                 return;
             }
 
             try {
                 // Actualizar en la base de datos
-                Connection con = Conexion.getInstance().getConnection();
+                Connection con = Singleton.getInstance().getConnection();
                 String sql = "UPDATE reservaciones SET mesa = ?, asientos = ?, fecha = ?, hora_inicio = ?, hora_fin = ? WHERE id_cliente = ?";
                 PreparedStatement pst = con.prepareStatement(sql);
-                pst.setString(1, mesa); // Número de Mesa
-                pst.setString(2, sillas); // Número de Sillas
-                pst.setString(3, fechaFormateada); // Fecha
-                pst.setString(4, horaInicio); // Hora de inicio
-                pst.setString(5, horaFin); // Hora de fin
-                pst.setString(6, idCliente); // ID de la reserva
+                pst.setString(1, s_mesa); // Número de Mesa
+                pst.setString(2, s_sillas); // Número de Sillas
+                pst.setString(3, s_fechaFormateada); // Fecha
+                pst.setString(4, s_horaInicio); // Hora de inicio
+                pst.setString(5, s_horaFin); // Hora de fin
+                pst.setString(6, s_idCliente); // ID de la reserva
 
                 int filasAfectadas = pst.executeUpdate();
                 if (filasAfectadas > 0) {
                     // Actualizar en el JTable
-                    modelo4.setValueAt(idCliente, filaSeleccionada, 0);
-                    modelo4.setValueAt(mesa, filaSeleccionada, 1);
-                    modelo4.setValueAt(sillas, filaSeleccionada, 2);
-                    modelo4.setValueAt(fechaFormateada, filaSeleccionada, 3);
-                    modelo4.setValueAt(horaInicio, filaSeleccionada, 4);
-                    modelo4.setValueAt(horaFin, filaSeleccionada, 5);
+                    modelo4.setValueAt(s_idCliente, s_filaSeleccionada, 0);
+                    modelo4.setValueAt(s_mesa, s_filaSeleccionada, 1);
+                    modelo4.setValueAt(s_sillas, s_filaSeleccionada, 2);
+                    modelo4.setValueAt(s_fechaFormateada, s_filaSeleccionada, 3);
+                    modelo4.setValueAt(s_horaInicio, s_filaSeleccionada, 4);
+                    modelo4.setValueAt(s_horaFin, s_filaSeleccionada, 5);
 
                     JOptionPane.showMessageDialog(this, "Reserva actualizada con éxito.");
                 } else {
@@ -546,28 +546,28 @@ public class RESERVACION extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnEditarActionPerformed
 
-    private boolean validarConflictoDeHorario(String fecha, String horaInicio, String horaFin, String mesa) {
-        return validarConflictoDeHorario(fecha, horaInicio, horaFin, mesa, -1);
+    private boolean validarConflictoDeHorario(String s_fecha, String s_horaInicio, String s_horaFin, String s_mesa) {
+        return validarConflictoDeHorario(s_fecha, s_horaInicio, s_horaFin, s_mesa, -1);
     }
 
-    private boolean validarConflictoDeHorario(String fecha, String horaInicio, String horaFin, String mesa, int filaExcluir) {
+    private boolean validarConflictoDeHorario(String s_fecha, String s_horaInicio, String s_horaFin, String s_mesa, int s_filaExcluir) {
         SimpleDateFormat sdfHora = new SimpleDateFormat("HH:mm");
         try {
-            Date inicio = sdfHora.parse(horaInicio);
-            Date fin = sdfHora.parse(horaFin);
+            Date inicio = sdfHora.parse(s_horaInicio);
+            Date fin = sdfHora.parse(s_horaFin);
 
             for (int i = 0; i < modelo4.getRowCount(); i++) {
-                if (i == filaExcluir) {
+                if (i == s_filaExcluir) {
                     continue; // Excluir la fila actual
                 }
-                String fechaReservada = modelo4.getValueAt(i, 3).toString();
-                String mesaReservada = modelo4.getValueAt(i, 1).toString();
-                String horaInicioReservada = modelo4.getValueAt(i, 4).toString();
-                String horaFinReservada = modelo4.getValueAt(i, 5).toString();
+                String s_fechaReservada = modelo4.getValueAt(i, 3).toString();
+                String s_mesaReservada = modelo4.getValueAt(i, 1).toString();
+                String s_horaInicioReservada = modelo4.getValueAt(i, 4).toString();
+                String s_horaFinReservada = modelo4.getValueAt(i, 5).toString();
 
-                if (fecha.equals(fechaReservada) && mesa.equals(mesaReservada)) {
-                    Date inicioReservado = sdfHora.parse(horaInicioReservada);
-                    Date finReservado = sdfHora.parse(horaFinReservada);
+                if (s_fecha.equals(s_fechaReservada) && s_mesa.equals(s_mesaReservada)) {
+                    Date inicioReservado = sdfHora.parse(s_horaInicioReservada);
+                    Date finReservado = sdfHora.parse(s_horaFinReservada);
 
                     if ((inicio.before(finReservado) && inicio.after(inicioReservado))
                             || (fin.after(inicioReservado) && fin.before(finReservado))
@@ -584,10 +584,10 @@ public class RESERVACION extends javax.swing.JFrame {
     }
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-        int filaSeleccionada = TablaReservacion.getSelectedRow();
-        if (filaSeleccionada >= 0) {
+        int s_filaSeleccionada = TablaReservacion.getSelectedRow();
+        if (s_filaSeleccionada >= 0) {
             // Obtener el ID de la reserva desde la tabla (suponiendo que está en la última columna)
-            String idCliente = modelo4.getValueAt(filaSeleccionada, 0).toString(); // Cambia "6" al índice correcto si es necesario
+            String idCliente = modelo4.getValueAt(s_filaSeleccionada, 0).toString(); // Cambia "6" al índice correcto si es necesario
 
             int confirmacion = JOptionPane.showConfirmDialog(this,
                     "¿Estás seguro de que deseas eliminar esta reserva?",
@@ -597,7 +597,7 @@ public class RESERVACION extends javax.swing.JFrame {
             if (confirmacion == JOptionPane.YES_OPTION) {
                 try {
                     // Conexión a la base de datos
-                    Connection con = Conexion.getInstance().getConnection();
+                    Connection con = Singleton.getInstance().getConnection();
                     String sql = "DELETE FROM reservaciones WHERE id_cliente = ?";
                     PreparedStatement pst = con.prepareStatement(sql);
                     pst.setString(1, idCliente); // Asigna el ID de la reserva
@@ -605,7 +605,7 @@ public class RESERVACION extends javax.swing.JFrame {
                     int filasAfectadas = pst.executeUpdate();
                     if (filasAfectadas > 0) {
                         // Eliminar del JTable
-                        modelo4.removeRow(filaSeleccionada);
+                        modelo4.removeRow(s_filaSeleccionada);
                         JOptionPane.showMessageDialog(this, "Reserva eliminada con éxito.");
                     } else {
                         JOptionPane.showMessageDialog(this, "No se pudo eliminar la reserva de la base de datos.");
@@ -680,7 +680,7 @@ public class RESERVACION extends javax.swing.JFrame {
 
         try {
             // Obtener la conexión utilizando el Singleton
-            conet = Conexion.getInstance().getConnection();
+            conet = Singleton.getInstance().getConnection();
 
             // Crear el Statement y ejecutar la consulta
             st = conet.createStatement();

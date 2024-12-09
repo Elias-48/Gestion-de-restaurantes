@@ -4,7 +4,7 @@
  */
 package UI;
 
-import Clases.Conexion;
+import Clases.Singleton;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -53,14 +53,14 @@ public class INGRESO_PEDIDOS extends javax.swing.JFrame {
         // Agregar el evento para detectar clics en las filas
         TablaIngresoDePedidos.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                int filaSeleccionada = TablaIngresoDePedidos.getSelectedRow();
-                if (filaSeleccionada >= 0) {
+                int s_filaSeleccionada = TablaIngresoDePedidos.getSelectedRow();
+                if (s_filaSeleccionada >= 0) {
                     // Obtener los valores de la fila seleccionada y colocarlos en los campos de texto
-                    txtPedido.setText(modelo3.getValueAt(filaSeleccionada, 0).toString());
-                    txtCliente.setText(modelo3.getValueAt(filaSeleccionada, 1).toString());
-                    txtNombreDelPlato.setText(modelo3.getValueAt(filaSeleccionada, 2).toString());
-                    txtNumDePlato.setText(modelo3.getValueAt(filaSeleccionada, 4).toString());
-                    TextAreaDetalleDelPlato.setText(modelo3.getValueAt(filaSeleccionada, 6).toString());
+                    txtPedido.setText(modelo3.getValueAt(s_filaSeleccionada, 0).toString());
+                    txtCliente.setText(modelo3.getValueAt(s_filaSeleccionada, 1).toString());
+                    txtNombreDelPlato.setText(modelo3.getValueAt(s_filaSeleccionada, 2).toString());
+                    txtNumDePlato.setText(modelo3.getValueAt(s_filaSeleccionada, 4).toString());
+                    TextAreaDetalleDelPlato.setText(modelo3.getValueAt(s_filaSeleccionada, 6).toString());
                 }
             }
         });
@@ -329,41 +329,41 @@ public class INGRESO_PEDIDOS extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSalirActionPerformed
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
-        String idpedido = txtPedido.getText().trim();
-        String idcliente = txtCliente.getText().trim();
-        String nombrePlato = txtNombreDelPlato.getText().trim();
-        String cantidadplato = txtNumDePlato.getText().trim();
-        String detalle = TextAreaDetalleDelPlato.getText().trim();
+        String s_idpedido = txtPedido.getText().trim();
+        String s_idcliente = txtCliente.getText().trim();
+        String s_nombrePlato = txtNombreDelPlato.getText().trim();
+        String s_cantidadplato = txtNumDePlato.getText().trim();
+        String s_detalle = TextAreaDetalleDelPlato.getText().trim();
 
-    if (idpedido.isEmpty() || idcliente.isEmpty() || nombrePlato.isEmpty() || cantidadplato.isEmpty() || detalle.isEmpty()) {
+    if (s_idpedido.isEmpty() || s_idcliente.isEmpty() || s_nombrePlato.isEmpty() || s_cantidadplato.isEmpty() || s_detalle.isEmpty()) {
         JOptionPane.showMessageDialog(this, "Todos los campos deben estar completos");
     } else {
         // Buscar el precio del plato
-        String precioUni = buscarPrecioPorNombrePlato(nombrePlato);
+        String s_precioUni = buscarPrecioPorNombrePlato(s_nombrePlato);
 
-        if (precioUni != null) {
+        if (s_precioUni != null) {
             try {
                 // Calcular el total (cantidad * precio unitario)
-                int cantidad = Integer.parseInt(cantidadplato);
-                double precio = Double.parseDouble(precioUni);
-                double total = cantidad * precio;
+                int s_cantidad = Integer.parseInt(s_cantidadplato);
+                double s_precio = Double.parseDouble(s_precioUni);
+                double s_total = s_cantidad * s_precio;
 
                 // Guardar en la base de datos
-                Connection con = Conexion.getInstance().getConnection(); // Obtener la conexión
+                Connection con = Singleton.getInstance().getConnection(); // Obtener la conexión
                 String sql = "INSERT INTO ingreso_pedidos (idpedido, idcliente, menu, precio_uni, cantidad, total, detalle) VALUES (?, ?, ?, ?, ?, ?, ?)";
                 PreparedStatement pst = con.prepareStatement(sql);
-                pst.setString(1, idpedido);
-                pst.setString(2, idcliente);
-                pst.setString(3, nombrePlato);
-                pst.setDouble(4, precio);
-                pst.setInt(5, cantidad);
-                pst.setDouble(6, total);
-                pst.setString(7, detalle);
+                pst.setString(1, s_idpedido);
+                pst.setString(2, s_idcliente);
+                pst.setString(3, s_nombrePlato);
+                pst.setDouble(4, s_precio);
+                pst.setInt(5, s_cantidad);
+                pst.setDouble(6, s_total);
+                pst.setString(7, s_detalle);
 
                 int filasAfectadas = pst.executeUpdate();
                 if (filasAfectadas > 0) {
                     // Guardar en la tabla si la inserción fue exitosa
-                    modelo3.addRow(new Object[]{idpedido, idcliente, nombrePlato, precioUni, cantidadplato, total, detalle});
+                    modelo3.addRow(new Object[]{s_idpedido, s_idcliente, s_nombrePlato, s_precioUni, s_cantidadplato, s_total, s_detalle});
                     JOptionPane.showMessageDialog(this, "Pedido registrado con éxito en la base de datos y en la tabla.");
                 } else {
                     JOptionPane.showMessageDialog(this, "Error al registrar el pedido en la base de datos.");
@@ -380,29 +380,29 @@ public class INGRESO_PEDIDOS extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAgregarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-        int filaSeleccionada = TablaIngresoDePedidos.getSelectedRow();
-    if (filaSeleccionada != -1) {
+        int s_filaSeleccionada = TablaIngresoDePedidos.getSelectedRow();
+    if (s_filaSeleccionada != -1) {
         // Confirmar eliminación
-        int confirmacion = JOptionPane.showConfirmDialog(this, 
+        int s_confirmacion = JOptionPane.showConfirmDialog(this, 
                 "¿Estás seguro de que deseas eliminar este registro?", 
                 "Confirmación de eliminación", 
                 JOptionPane.YES_NO_OPTION);
 
-        if (confirmacion == JOptionPane.YES_OPTION) {
+        if (s_confirmacion == JOptionPane.YES_OPTION) {
             try {
                 // Obtener el identificador único del pedido (suponiendo que es la primera columna)
-                String idpedido = modelo3.getValueAt(filaSeleccionada, 0).toString();
+                String idpedido = modelo3.getValueAt(s_filaSeleccionada, 0).toString();
 
                 // Eliminar el registro de la base de datos
-                Connection con = Conexion.getInstance().getConnection();
+                Connection con = Singleton.getInstance().getConnection();
                 String sql = "DELETE FROM ingreso_pedidos WHERE idpedido = ?";
                 PreparedStatement pst = con.prepareStatement(sql);
                 pst.setString(1, idpedido);
 
-                int filasAfectadas = pst.executeUpdate();
-                if (filasAfectadas > 0) {
+                int s_filasAfectadas = pst.executeUpdate();
+                if (s_filasAfectadas > 0) {
                     // Eliminar la fila de la tabla visual
-                    modelo3.removeRow(filaSeleccionada);
+                    modelo3.removeRow(s_filaSeleccionada);
                     JOptionPane.showMessageDialog(this, "Registro eliminado correctamente.");
                 } else {
                     JOptionPane.showMessageDialog(this, "No se pudo eliminar el registro en la base de datos.");
@@ -425,47 +425,47 @@ public class INGRESO_PEDIDOS extends javax.swing.JFrame {
     }//GEN-LAST:event_btnNuevoPedidoActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
-        int filaSeleccionada = TablaIngresoDePedidos.getSelectedRow();
-    if (filaSeleccionada != -1) {
+        int s_filaSeleccionada = TablaIngresoDePedidos.getSelectedRow();
+    if (s_filaSeleccionada != -1) {
         // Obtener los datos del formulario
-        String idpedido = txtPedido.getText();
-        String idCliente = txtCliente.getText();
-        String nombrePlato = txtNombreDelPlato.getText();
-        String precioPlato = buscarPrecioPorNombrePlato(nombrePlato);
+        String s_idpedido = txtPedido.getText();
+        String s_idCliente = txtCliente.getText();
+        String s_nombrePlato = txtNombreDelPlato.getText();
+        String s_precioPlato = buscarPrecioPorNombrePlato(s_nombrePlato);
 
-        if (precioPlato != null) {
+        if (s_precioPlato != null) {
             try {
                 // Calcular el total
-                int cantidad = Integer.parseInt(txtNumDePlato.getText());
-                double precio = Double.parseDouble(precioPlato);
-                double total = cantidad * precio;
+                int s_cantidad = Integer.parseInt(txtNumDePlato.getText());
+                double s_precio = Double.parseDouble(s_precioPlato);
+                double s_total = s_cantidad * s_precio;
 
                 // Detalle del plato
-                String detalle = TextAreaDetalleDelPlato.getText();
+                String s_detalle = TextAreaDetalleDelPlato.getText();
 
                 // Actualizar en la tabla (JTable)
-                modelo3.setValueAt(idpedido, filaSeleccionada, 0); // Pedido
-                modelo3.setValueAt(idCliente, filaSeleccionada, 1); // Cliente
-                modelo3.setValueAt(nombrePlato, filaSeleccionada, 2); // Nombre del plato
-                modelo3.setValueAt(precioPlato, filaSeleccionada, 3); // Precio unitario
-                modelo3.setValueAt(txtNumDePlato.getText(), filaSeleccionada, 4); // Cantidad de platos
-                modelo3.setValueAt(total, filaSeleccionada, 5); // Total
-                modelo3.setValueAt(detalle, filaSeleccionada, 6); // Detalle
+                modelo3.setValueAt(s_idpedido, s_filaSeleccionada, 0); // Pedido
+                modelo3.setValueAt(s_idCliente, s_filaSeleccionada, 1); // Cliente
+                modelo3.setValueAt(s_nombrePlato, s_filaSeleccionada, 2); // Nombre del plato
+                modelo3.setValueAt(s_precioPlato, s_filaSeleccionada, 3); // Precio unitario
+                modelo3.setValueAt(txtNumDePlato.getText(), s_filaSeleccionada, 4); // Cantidad de platos
+                modelo3.setValueAt(s_total, s_filaSeleccionada, 5); // Total
+                modelo3.setValueAt(s_detalle, s_filaSeleccionada, 6); // Detalle
 
                 // Actualizar en la base de datos
-                Connection con = Conexion.getInstance().getConnection();
-                String sql = "UPDATE ingreso_pedidos SET idcliente = ?, menu = ?, precio_uni = ?, cantidad = ?, total = ?, detalle = ? WHERE idpedido = ?";
+                Connection con = Singleton.getInstance().getConnection();
+                String sql = "UPDATE ingreso_pedidos SET s_idcliente = ?, menu = ?, precio_uni = ?, cantidad = ?, total = ?, detalle = ? WHERE idpedido = ?";
                 PreparedStatement pst = con.prepareStatement(sql);
-                pst.setString(1, idCliente); // ID del cliente
-                pst.setString(2, nombrePlato); // Nombre del plato
-                pst.setDouble(3, precio); // Precio unitario
-                pst.setInt(4, cantidad); // Cantidad
-                pst.setDouble(5, total); // Total
-                pst.setString(6, detalle); // Detalle
-                pst.setString(7, idpedido); // ID del pedido
+                pst.setString(1, s_idCliente); // ID del cliente
+                pst.setString(2, s_nombrePlato); // Nombre del plato
+                pst.setDouble(3, s_precio); // Precio unitario
+                pst.setInt(4, s_cantidad); // Cantidad
+                pst.setDouble(5, s_total); // Total
+                pst.setString(6, s_detalle); // Detalle
+                pst.setString(7, s_idpedido); // ID del pedido
 
-                int filasAfectadas = pst.executeUpdate();
-                if (filasAfectadas > 0) {
+                int s_filasAfectadas = pst.executeUpdate();
+                if (s_filasAfectadas > 0) {
                     JOptionPane.showMessageDialog(this, "Pedido actualizado correctamente en la base de datos.");
                 } else {
                     JOptionPane.showMessageDialog(this, "No se pudo actualizar el pedido en la base de datos.");
@@ -542,10 +542,10 @@ public class INGRESO_PEDIDOS extends javax.swing.JFrame {
 
     
     private String buscarPrecioPorNombrePlato(String nombrePlato) {
-    String precio = null;
+    String s_precio = null;
     try {
         // Obtener la conexión a la base de datos
-        Connection con = Conexion.getInstance().getConnection();
+        Connection con = Singleton.getInstance().getConnection();
         // Consulta SQL para buscar el precio del plato por su nombre
         String sql = "SELECT costo FROM menu_platos WHERE menu = ?";
         PreparedStatement pst = con.prepareStatement(sql);
@@ -555,7 +555,7 @@ public class INGRESO_PEDIDOS extends javax.swing.JFrame {
         ResultSet rs = pst.executeQuery();
         if (rs.next()) {
             // Recuperar el precio si se encuentra el plato
-            precio = rs.getString("costo");
+            s_precio = rs.getString("costo");
         }
         rs.close(); // Cerrar el ResultSet
         pst.close(); // Cerrar el PreparedStatement
@@ -563,13 +563,13 @@ public class INGRESO_PEDIDOS extends javax.swing.JFrame {
         JOptionPane.showMessageDialog(null, "Error al buscar el costo del plato: " + e.getMessage());
         e.printStackTrace();
     }
-    return precio; // Retorna el precio o null si no se encontró
+    return s_precio; // Retorna el precio o null si no se encontró
     }
 
     void ConsultarPedidos() {
         String sql = "SELECT * FROM ingreso_pedidos";
     try {
-        conet = Conexion.getInstance().getConnection();
+        conet = Singleton.getInstance().getConnection();
         st = conet.createStatement();
         rs = st.executeQuery(sql);
 

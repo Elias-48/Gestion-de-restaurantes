@@ -4,7 +4,7 @@
  */
 package UI;
 
-import Clases.Conexion;
+import Clases.Singleton;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -29,9 +29,9 @@ import java.util.List;
 public class INFORMACION_EMPLEADO extends javax.swing.JFrame {
 
     private DefaultTableModel modelo1;
-    private HashSet<String> idsUnicos;
-    private HashSet<String> correosUnicos;
-    private HashSet<String> telefonosUnicos;
+    private HashSet<String> s_idsUnicos;
+    private HashSet<String> s_correosUnicos;
+    private HashSet<String> s_telefonosUnicos;
     Connection conet;
     Statement st;
     ResultSet rs;
@@ -41,9 +41,9 @@ public class INFORMACION_EMPLEADO extends javax.swing.JFrame {
     public INFORMACION_EMPLEADO() {
         initComponents();
         modelo1 = new DefaultTableModel();
-        idsUnicos = new HashSet<>();
-        correosUnicos = new HashSet<>();
-        telefonosUnicos = new HashSet<>();
+        s_idsUnicos = new HashSet<>();
+        s_correosUnicos = new HashSet<>();
+        s_telefonosUnicos = new HashSet<>();
         modelo1.addColumn("ID");
         modelo1.addColumn("CARGO");
         modelo1.addColumn("NOMBRE");
@@ -329,28 +329,28 @@ public class INFORMACION_EMPLEADO extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSalirActionPerformed
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
-        String id = txtIDEmpleado.getText();
-        String cargo = jComboBoxCargoDelEmpleado.getSelectedItem().toString();
-        String nombre = txtNombreEmpleado.getText();
-        String gmail = txtCorreo.getText();
-        String direccion = txtDirecionEmpleado.getText();
-        String telefono = txtTelefonoEmpleado.getText();
+        String s_id = txtIDEmpleado.getText();
+        String s_cargo = jComboBoxCargoDelEmpleado.getSelectedItem().toString();
+        String s_nombre = txtNombreEmpleado.getText();
+        String s_gmail = txtCorreo.getText();
+        String s_direccion = txtDirecionEmpleado.getText();
+        String s_telefono = txtTelefonoEmpleado.getText();
 
-        if (id.isEmpty() || cargo.equals("SIN CARGO") || nombre.isEmpty() || gmail.isEmpty() || direccion.isEmpty() || telefono.isEmpty()) {
+        if (s_id.isEmpty() || s_cargo.equals("SIN CARGO") || s_nombre.isEmpty() || s_gmail.isEmpty() || s_direccion.isEmpty() || s_telefono.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Por favor, complete todos los campos.");
         return;
         }
 
         // Validación de duplicados usando HashSet
-        if (idsUnicos.contains(id)) {
+        if (s_idsUnicos.contains(s_id)) {
             JOptionPane.showMessageDialog(this, "El ID ya está registrado. Ingrese un ID único.");
             return;
         }
-        if (correosUnicos.contains(gmail)) {
+        if (s_correosUnicos.contains(s_gmail)) {
             JOptionPane.showMessageDialog(this, "El correo ya está registrado. Ingrese un correo único.");
             return;
         }
-        if (telefonosUnicos.contains(telefono)) {
+        if (s_telefonosUnicos.contains(s_telefono)) {
             JOptionPane.showMessageDialog(this, "El teléfono ya está registrado. Ingrese un teléfono único.");
             return;
         }
@@ -358,15 +358,15 @@ public class INFORMACION_EMPLEADO extends javax.swing.JFrame {
         try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/restaurante", "root", "")) {
             String sql = "INSERT INTO informacion_empleado (id, cargo, nombre, gmail, direccion, telefono) VALUES (?, ?, ?, ?, ?, ?)";
             PreparedStatement pst = con.prepareStatement(sql);
-            pst.setString(1, id);
-            pst.setString(2, cargo);
-            pst.setString(3, nombre);
-            pst.setString(4, gmail);
-            pst.setString(5, direccion);
-            pst.setString(6, telefono);
+            pst.setString(1, s_id);
+            pst.setString(2, s_cargo);
+            pst.setString(3, s_nombre);
+            pst.setString(4, s_gmail);
+            pst.setString(5, s_direccion);
+            pst.setString(6, s_telefono);
 
-            int filasAfectadas = pst.executeUpdate();
-            if (filasAfectadas > 0) {
+            int s_filasAfectadas = pst.executeUpdate();
+            if (s_filasAfectadas > 0) {
                JOptionPane.showMessageDialog(this, "Datos guardados correctamente en la base de datos.");
             } else {
                JOptionPane.showMessageDialog(this, "No se pudo guardar en la base de datos.");
@@ -377,64 +377,64 @@ public class INFORMACION_EMPLEADO extends javax.swing.JFrame {
         }
 
         // Agregar datos al HashSet y actualizar la tabla del JFrame
-        modelo1.addRow(new Object[]{id, cargo, nombre, gmail, direccion, telefono});
-        idsUnicos.add(id);
-        correosUnicos.add(gmail);
-        telefonosUnicos.add(telefono);
+        modelo1.addRow(new Object[]{s_id, s_cargo, s_nombre, s_gmail, s_direccion, s_telefono});
+        s_idsUnicos.add(s_id);
+        s_correosUnicos.add(s_gmail);
+        s_telefonosUnicos.add(s_telefono);
 
         // Ordenar la tabla por ID
         ordenarTablaPorID();
         
     }//GEN-LAST:event_btnAgregarActionPerformed
 private void ordenarTablaPorID() {
-        List<Object[]> filas = new ArrayList<>();
+        List<Object[]> s_filas = new ArrayList<>();
         for (int i = 0; i < modelo1.getRowCount(); i++) {
-            filas.add(new Object[]{
+            s_filas.add(new Object[]{
                 modelo1.getValueAt(i, 0), modelo1.getValueAt(i, 1),
                 modelo1.getValueAt(i, 2), modelo1.getValueAt(i, 3),
                 modelo1.getValueAt(i, 4), modelo1.getValueAt(i, 5)
             });
         }
         
-        filas.sort(Comparator.comparingInt(o -> Integer.parseInt(o[0].toString())));
+        s_filas.sort(Comparator.comparingInt(o -> Integer.parseInt(o[0].toString())));
 
         modelo1.setRowCount(0);  // Limpiar tabla antes de reordenar
-        for (Object[] fila : filas) {
+        for (Object[] fila : s_filas) {
             modelo1.addRow(fila);
         }
     }
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
-        int filaSeleccionada = TablaInformacionEmpleados.getSelectedRow();
-        if (filaSeleccionada != -1) {
+        int s_filaSeleccionada = TablaInformacionEmpleados.getSelectedRow();
+        if (s_filaSeleccionada != -1) {
             // Obtener los nuevos valores
-        String id = txtIDEmpleado.getText();
-        String cargo = jComboBoxCargoDelEmpleado.getSelectedItem().toString();
-        String nombre = txtNombreEmpleado.getText();
-        String gmail = txtCorreo.getText();
-        String direccion = txtDirecionEmpleado.getText();
-        String telefono = txtTelefonoEmpleado.getText();
+        String s_id = txtIDEmpleado.getText();
+        String s_cargo = jComboBoxCargoDelEmpleado.getSelectedItem().toString();
+        String s_nombre = txtNombreEmpleado.getText();
+        String s_gmail = txtCorreo.getText();
+        String s_direccion = txtDirecionEmpleado.getText();
+        String s_telefono = txtTelefonoEmpleado.getText();
 
         // Actualizar la fila de la tabla
-        modelo1.setValueAt(id, filaSeleccionada, 0);
-        modelo1.setValueAt(cargo, filaSeleccionada, 1);
-        modelo1.setValueAt(nombre, filaSeleccionada, 2);
-        modelo1.setValueAt(gmail, filaSeleccionada, 3);
-        modelo1.setValueAt(direccion, filaSeleccionada, 4);
-        modelo1.setValueAt(telefono, filaSeleccionada, 5);
+        modelo1.setValueAt(s_id, s_filaSeleccionada, 0);
+        modelo1.setValueAt(s_cargo, s_filaSeleccionada, 1);
+        modelo1.setValueAt(s_nombre, s_filaSeleccionada, 2);
+        modelo1.setValueAt(s_gmail, s_filaSeleccionada, 3);
+        modelo1.setValueAt(s_direccion, s_filaSeleccionada, 4);
+        modelo1.setValueAt(s_telefono, s_filaSeleccionada, 5);
 
         // Actualizar en la base de datos
         try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/restaurante", "root", "")) {
             String sql = "UPDATE informacion_empleado SET cargo = ?, nombre = ?, gmail = ?, direccion = ?, telefono = ? WHERE id = ?";
             PreparedStatement pst = con.prepareStatement(sql);
-            pst.setString(6, id);    // Parametro 6: id (donde se hace la comparación)
-            pst.setString(1, cargo);
-            pst.setString(2, nombre);
-            pst.setString(3, gmail);
-            pst.setString(4, direccion);
-            pst.setString(5, telefono);
+            pst.setString(6, s_id);    // Parametro 6: id (donde se hace la comparación)
+            pst.setString(1, s_cargo);
+            pst.setString(2, s_nombre);
+            pst.setString(3, s_gmail);
+            pst.setString(4, s_direccion);
+            pst.setString(5, s_telefono);
 
-            int filasAfectadas = pst.executeUpdate();
-            if (filasAfectadas > 0) {
+            int s_filasAfectadas = pst.executeUpdate();
+            if (s_filasAfectadas > 0) {
                 JOptionPane.showMessageDialog(this, "Empleado actualizado correctamente.");
             } else {
                 JOptionPane.showMessageDialog(this, "No se pudo actualizar el empleado.");
@@ -448,32 +448,32 @@ private void ordenarTablaPorID() {
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-        int filaSeleccionada = TablaInformacionEmpleados.getSelectedRow();
-        if (filaSeleccionada != -1) {
+        int s_filaSeleccionada = TablaInformacionEmpleados.getSelectedRow();
+        if (s_filaSeleccionada != -1) {
             // Confirmación de eliminación
-        int confirmacion = JOptionPane.showConfirmDialog(this, "¿Estás seguro de que deseas eliminar este empleado?", "Confirmación", JOptionPane.YES_NO_OPTION);
-        if (confirmacion == JOptionPane.YES_OPTION) {
+        int s_confirmacion = JOptionPane.showConfirmDialog(this, "¿Estás seguro de que deseas eliminar este empleado?", "Confirmación", JOptionPane.YES_NO_OPTION);
+        if (s_confirmacion == JOptionPane.YES_OPTION) {
             // Obtener el id, correo y teléfono del empleado a eliminar
-            String id = modelo1.getValueAt(filaSeleccionada, 0).toString();
-            String gmail = modelo1.getValueAt(filaSeleccionada, 3).toString();
-            String telefono = modelo1.getValueAt(filaSeleccionada, 5).toString();
+            String s_id = modelo1.getValueAt(s_filaSeleccionada, 0).toString();
+            String s_gmail = modelo1.getValueAt(s_filaSeleccionada, 3).toString();
+            String s_telefono = modelo1.getValueAt(s_filaSeleccionada, 5).toString();
 
             // Eliminar de los HashSets
-            idsUnicos.remove(id);
-            correosUnicos.remove(gmail);
-            telefonosUnicos.remove(telefono);
+            s_idsUnicos.remove(s_id);
+            s_correosUnicos.remove(s_gmail);
+            s_telefonosUnicos.remove(s_telefono);
 
             // Eliminar de la tabla
-            modelo1.removeRow(filaSeleccionada);
+            modelo1.removeRow(s_filaSeleccionada);
 
             // Eliminar del SQL
             try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/restaurante", "root", "")) {
                 String sql = "DELETE FROM informacion_empleado WHERE id = ?";
                 PreparedStatement pst = con.prepareStatement(sql);
-                pst.setString(1, id);
+                pst.setString(1, s_id);
 
-                int filasAfectadas = pst.executeUpdate();
-                if (filasAfectadas > 0) {
+                int s_filasAfectadas = pst.executeUpdate();
+                if (s_filasAfectadas > 0) {
                     JOptionPane.showMessageDialog(this, "Empleado eliminado correctamente de la base de datos.");
                 } else {
                     JOptionPane.showMessageDialog(this, "No se pudo eliminar el empleado de la base de datos.");
@@ -550,7 +550,7 @@ private void ordenarTablaPorID() {
         
        try {
            // Obtener la conexión utilizando el Singleton
-        conet = Conexion.getInstance().getConnection();
+        conet = Singleton.getInstance().getConnection();
         
         // Crear el Statement y ejecutar la consulta
         st = conet.createStatement();

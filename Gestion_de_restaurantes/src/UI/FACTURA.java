@@ -4,7 +4,7 @@
  */
 package UI;
 
-import Clases.Conexion;
+import Clases.Singleton;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -30,8 +30,8 @@ import java.util.List;
 public class FACTURA extends javax.swing.JFrame {
 
     private DefaultTableModel modelo2;  
-    private HashSet<String> idFacturas;  
-    private HashSet<String> idClientes;
+    private HashSet<String> s_idFacturas;  
+    private HashSet<String> s_idClientes;
     Connection conet;
     Statement st;
     ResultSet rs;
@@ -41,8 +41,8 @@ public class FACTURA extends javax.swing.JFrame {
     public FACTURA() {
         initComponents();
         modelo2 = new DefaultTableModel();
-        idFacturas = new HashSet<>();  
-        idClientes = new HashSet<>();
+        s_idFacturas = new HashSet<>();  
+        s_idClientes = new HashSet<>();
         modelo2.addColumn("ID FACTURA");
         modelo2.addColumn("ID CLIENTE");
         modelo2.addColumn("NOMBRE CLIENTE");
@@ -75,7 +75,7 @@ public class FACTURA extends javax.swing.JFrame {
         tableData.add(row);  
     }  
 
-    // Ordenar la lista por el primer elemento (IDFactura)  
+    // Ordenar la lista por la IDFactura  
     Collections.sort(tableData, new Comparator<Object[]>() {  
         @Override  
         public int compare(Object[] row1, Object[] row2) {  
@@ -296,9 +296,9 @@ public class FACTURA extends javax.swing.JFrame {
 
     private void btnGenerarComprobanteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarComprobanteActionPerformed
         // Verificar si se ha seleccionado una fila
-        int filaSeleccionada = TablaFactura.getSelectedRow();
+        int s_filaSeleccionada = TablaFactura.getSelectedRow();
 
-        if (filaSeleccionada == -1) {
+        if (s_filaSeleccionada == -1) {
             // Si no hay fila seleccionada, mostrar un mensaje de error
             JOptionPane.showMessageDialog(this, "Por favor, seleccione una fila de la tabla para generar el comprobante.");
         } else {
@@ -311,10 +311,10 @@ public class FACTURA extends javax.swing.JFrame {
             // Recopilar datos de la fila seleccionada
             StringBuilder sb = new StringBuilder();
 
-            sb.append("Factura N°: ").append(TablaFactura.getValueAt(filaSeleccionada, 0)).append("\n");
-            sb.append("Nombre Cliente: ").append(TablaFactura.getValueAt(filaSeleccionada, 2)).append("\n");
-            sb.append("Fecha Reservada: ").append(TablaFactura.getValueAt(filaSeleccionada, 3)).append("\n");
-            sb.append("Precio Total: ").append(TablaFactura.getValueAt(filaSeleccionada, 4)).append("\n");
+            sb.append("Factura N°: ").append(TablaFactura.getValueAt(s_filaSeleccionada, 0)).append("\n");
+            sb.append("Nombre Cliente: ").append(TablaFactura.getValueAt(s_filaSeleccionada, 2)).append("\n");
+            sb.append("Fecha Reservada: ").append(TablaFactura.getValueAt(s_filaSeleccionada, 3)).append("\n");
+            sb.append("Precio Total: ").append(TablaFactura.getValueAt(s_filaSeleccionada, 4)).append("\n");
             sb.append("------------------------------\n");
             // Pasar los datos al TextArea del JFrame Comprobante
             mCOMPROBANTE.getTextAreaComprobante().setText(sb.toString());
@@ -329,55 +329,55 @@ public class FACTURA extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSalirActionPerformed
 
     private void btnMostrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMostrarActionPerformed
-        String idfactura = txtIDFactura.getText();
-        String idcliente = txtIdCliente.getText();
+        String s_idfactura = txtIDFactura.getText();
+        String s_idcliente = txtIdCliente.getText();
 
     // Verifica ID de factura  
-    if (idFacturas.contains(idfactura)) {  
+    if (s_idFacturas.contains(s_idfactura)) {  
         JOptionPane.showMessageDialog(this, "Este ID de factura ya existe.");  
         return;  
     }  
 
     // Verifica ID de cliente  
-    if (idClientes.contains(idcliente)) {  
+    if (s_idClientes.contains(s_idcliente)) {  
         JOptionPane.showMessageDialog(this, "Este ID de cliente ya existe.");  
         return;  
     }
 
-    if (idfactura.isEmpty() || idcliente.isEmpty()) {
+    if (s_idfactura.isEmpty() || s_idcliente.isEmpty()) {
         JOptionPane.showMessageDialog(this, "Por favor, complete todos los campos.");
     } else {
         // Busca el nombre del cliente y la fecha de la reserva desde la base de datos
-        String[] clienteData = buscarClientePorIdCliente(idcliente);
+        String[] clienteData = buscarClientePorIdCliente(s_idcliente);
         if (clienteData != null) {
-            String nombreCliente = clienteData[0];
-            String fechaReservada = obtenerFechaReservaPorIdCliente(idcliente); // Recuperamos la fecha de la reserva desde la base de datos
-            if (fechaReservada != null) {
+            String s_nombreCliente = clienteData[0];
+            String s_fechaReservada = obtenerFechaReservaPorIdCliente(s_idcliente); // Recuperamos la fecha de la reserva desde la base de datos
+            if (s_fechaReservada != null) {
                 // Buscar el total del precio del cliente en la tabla Ingreso_Pedidos
-                double precioTotal = obtenerPrecioTotalPorCliente(idcliente);
+                double s_precioTotal = obtenerPrecioTotalPorCliente(s_idcliente);
 
                 // Agrega los datos a la tabla, incluyendo el nombre, la fecha y el precio total
-                modelo2.addRow(new Object[]{idfactura, idcliente, nombreCliente, fechaReservada, precioTotal});
+                modelo2.addRow(new Object[]{s_idfactura, s_idcliente, s_nombreCliente, s_fechaReservada, s_precioTotal});
                 
                 try {
                     // Obtener la conexión a la base de datos
-                    Connection con = Conexion.getInstance().getConnection();
+                    Connection con = Singleton.getInstance().getConnection();
 
                     // Consulta SQL para insertar la nueva factura
                     String sql = "INSERT INTO factura (id_factura, id_cliente, nombre, fecha_reservada, precio_total) VALUES (?, ?, ?, ?, ?)";
                     PreparedStatement pst = con.prepareStatement(sql);
 
                     // Asignar los parámetros a la consulta SQL
-                    pst.setString(1, idfactura);
-                    pst.setString(2, idcliente);
-                    pst.setString(3, nombreCliente);
-                    pst.setString(4, fechaReservada);
-                    pst.setDouble(5, precioTotal);
+                    pst.setString(1, s_idfactura);
+                    pst.setString(2, s_idcliente);
+                    pst.setString(3, s_nombreCliente);
+                    pst.setString(4, s_fechaReservada);
+                    pst.setDouble(5, s_precioTotal);
 
                     // Ejecutar la consulta
-                    int filasAfectadas = pst.executeUpdate();
+                    int s_filasAfectadas = pst.executeUpdate();
 
-                    if (filasAfectadas > 0) {
+                    if (s_filasAfectadas > 0) {
                         JOptionPane.showMessageDialog(this, "Factura guardada con éxito en la base de datos.");
                     } else {
                         JOptionPane.showMessageDialog(this, "Error al guardar la factura en la base de datos.");
@@ -390,8 +390,8 @@ public class FACTURA extends javax.swing.JFrame {
                 }
 
                 // Aquí se guardaría la nueva factura en las listas internas
-                idFacturas.add(idfactura);  
-                idClientes.add(idcliente);
+                s_idFacturas.add(s_idfactura);  
+                s_idClientes.add(s_idcliente);
                 ordenarTablaPorIDFactura();
             } else {
                 JOptionPane.showMessageDialog(this, "No se encontró una fecha de reserva para este cliente.");
@@ -426,33 +426,33 @@ public class FACTURA extends javax.swing.JFrame {
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
         // Seleccionamos la fila que se quiera eliminar
-    int filaSeleccionada = TablaFactura.getSelectedRow();
+    int s_filaSeleccionada = TablaFactura.getSelectedRow();
 
-    if (filaSeleccionada >= 0) {
+    if (s_filaSeleccionada >= 0) {
         // Obtener el ID de la factura (por ejemplo, en la primera columna)
-        String idFactura = modelo2.getValueAt(filaSeleccionada, 0).toString();
+        String s_idFactura = modelo2.getValueAt(s_filaSeleccionada, 0).toString();
 
         // Confirmación para eliminar el registro
-        int confirmacion = JOptionPane.showConfirmDialog(this, 
+        int s_confirmacion = JOptionPane.showConfirmDialog(this, 
             "¿Estás seguro de que deseas eliminar esta factura?", 
             "Confirmación", 
             JOptionPane.YES_NO_OPTION);
 
-        if (confirmacion == JOptionPane.YES_OPTION) {
+        if (s_confirmacion == JOptionPane.YES_OPTION) {
             try {
                 // Conexión a la base de datos
-                Connection con = Conexion.getInstance().getConnection();
+                Connection con = Singleton.getInstance().getConnection();
                 // Consulta SQL para eliminar el registro de la base de datos
                 String sql = "DELETE FROM factura WHERE ID_FACTURA = ?";
                 PreparedStatement pst = con.prepareStatement(sql);
-                pst.setString(1, idFactura); // Asignamos el ID de la factura
+                pst.setString(1, s_idFactura); // Asignamos el ID de la factura
 
                 // Ejecutar la consulta
-                int filasAfectadas = pst.executeUpdate();
+                int s_filasAfectadas = pst.executeUpdate();
                 
-                if (filasAfectadas > 0) {
+                if (s_filasAfectadas > 0) {
                     // Eliminar la fila de la tabla en la interfaz gráfica
-                    modelo2.removeRow(filaSeleccionada);
+                    modelo2.removeRow(s_filaSeleccionada);
                     JOptionPane.showMessageDialog(this, "Registro eliminado correctamente.");
                 } else {
                     JOptionPane.showMessageDialog(this, "No se pudo eliminar el registro.");
@@ -471,10 +471,10 @@ public class FACTURA extends javax.swing.JFrame {
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void txtIdClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIdClienteActionPerformed
-        String Idcliente = txtIdCliente.getText();
-        String[] clienteData = buscarClientePorIdCliente(Idcliente);
+        String s_Idcliente = txtIdCliente.getText();
+        String[] s_clienteData = buscarClientePorIdCliente(s_Idcliente);
 
-        if (clienteData != null) {
+        if (s_clienteData != null) {
             // Procesar la información del cliente
         } else {
             JOptionPane.showMessageDialog(this, "No se encontró un cliente con ese ID.");
@@ -555,10 +555,10 @@ public class FACTURA extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_txtIdClienteMousePressed
     private String[] buscarClientePorIdCliente(String idCliente) {
-    String[] clienteInfo = null;
+    String[] s_clienteInfo = null;
     try {
         // Obtener la conexión a la base de datos
-        Connection con = Conexion.getInstance().getConnection();
+        Connection con = Singleton.getInstance().getConnection();
         
         // Consulta SQL para buscar el cliente por su ID
         String sql = "SELECT nombre FROM registro_clientes WHERE id = ?";
@@ -570,7 +570,7 @@ public class FACTURA extends javax.swing.JFrame {
         
         if (rs.next()) {
             // Recuperar el nombre del cliente
-            clienteInfo = new String[]{rs.getString("nombre")};
+            s_clienteInfo = new String[]{rs.getString("nombre")};
         }
         
         rs.close(); // Cerrar el ResultSet
@@ -580,14 +580,14 @@ public class FACTURA extends javax.swing.JFrame {
         e.printStackTrace();
     }
     
-    return clienteInfo; // Retorna los datos del cliente o null si no se encontró
+    return s_clienteInfo; // Retorna los datos del cliente o null si no se encontró
 }
 
     private String obtenerFechaReservaPorIdCliente(String idCliente) {
-    String fechaReserva = null;
+    String s_fechaReserva = null;
     try {
         // Obtener la conexión a la base de datos
-        Connection con = Conexion.getInstance().getConnection();
+        Connection con = Singleton.getInstance().getConnection();
         
         // Consulta SQL para obtener la fecha de reserva del cliente
         String sql = "SELECT fecha FROM reservaciones WHERE id_cliente = ?";
@@ -599,7 +599,7 @@ public class FACTURA extends javax.swing.JFrame {
         
         if (rs.next()) {
             // Recuperar la fecha de la reserva
-            fechaReserva = rs.getString("fecha");
+            s_fechaReserva = rs.getString("fecha");
         }
         
         rs.close(); // Cerrar el ResultSet
@@ -609,15 +609,15 @@ public class FACTURA extends javax.swing.JFrame {
         e.printStackTrace();
     }
     
-    return fechaReserva; // Retorna la fecha de la reserva o null si no se encontró
+    return s_fechaReserva; // Retorna la fecha de la reserva o null si no se encontró
 }
     
     private double obtenerPrecioTotalPorCliente(String idCliente) {
-    double precioTotal = 0.0;
+    double s_precioTotal = 0.0;
 
     try {
         // Obtener la conexión a la base de datos
-        Connection con = Conexion.getInstance().getConnection();
+        Connection con = Singleton.getInstance().getConnection();
         
         // Consulta SQL para obtener el total del precio de los pedidos por cliente
         String sql = "SELECT SUM(total) AS total FROM ingreso_pedidos WHERE idcliente = ?";
@@ -629,7 +629,7 @@ public class FACTURA extends javax.swing.JFrame {
         
         if (rs.next()) {
             // Recuperar el total de precio sumado de los pedidos del cliente
-            precioTotal = rs.getDouble("total");
+            s_precioTotal = rs.getDouble("total");
         }
         
         rs.close(); // Cerrar el ResultSet
@@ -639,13 +639,13 @@ public class FACTURA extends javax.swing.JFrame {
         e.printStackTrace();
     }
 
-    return precioTotal; // Retorna el precio total o 0 si no se encuentra el cliente
+    return s_precioTotal; // Retorna el precio total o 0 si no se encuentra el cliente
 }
 
     void ConsultarFactura() {
         String sql = "SELECT * FROM factura";
     try {
-        conet = Conexion.getInstance().getConnection();
+        conet = Singleton.getInstance().getConnection();
         st = conet.createStatement();
         rs = st.executeQuery(sql);
 

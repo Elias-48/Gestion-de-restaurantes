@@ -8,7 +8,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public class Conexion {
+public class Singleton {
     // Parámetros de conexión
     private final String url = "jdbc:mysql://localhost:3306/restaurante?useSSL=false&serverTimezone=UTC";
     private final String usuario = "root";
@@ -16,15 +16,15 @@ public class Conexion {
     private Connection con;
 
     // Instancia única de la clase Conexion (Singleton)
-    private static Conexion instancia;
+    private static Singleton instancia;
 
     // Constructor privado para evitar la creación directa de instancias
-    private Conexion() {}
+    private Singleton() {}
 
     // Método para obtener la instancia de Conexion
-    public static Conexion getInstance() {
+    public static Singleton getInstance() {
         if (instancia == null) {
-            instancia = new Conexion();
+            instancia = new Singleton();
         }
         return instancia;
     }

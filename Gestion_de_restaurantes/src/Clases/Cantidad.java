@@ -6,51 +6,51 @@ package Clases;
  * @author ELIAS RIVERA ULLOA
  */
 public class Cantidad {
-    private int idCantidad;
-    private double cantidad;
-    private Ingrediente ingrediente;
+    private int s_idCantidad;
+    private double s_cantidad;
+    private Ingrediente s_ingrediente;
 
-    public Cantidad(int idCantidad, double cantidad, Ingrediente ingrediente) {
-        this.idCantidad = idCantidad;
-        this.cantidad = cantidad;
-        this.ingrediente = ingrediente;
+    public Cantidad(int s_idCantidad, double s_cantidad, Ingrediente s_ingrediente) {
+        this.s_idCantidad = s_idCantidad;
+        this.s_cantidad = s_cantidad;
+        this.s_ingrediente = s_ingrediente;
     }
 
     public int getIdCantidad() {
-        return idCantidad;
+        return s_idCantidad;
     }
 
-    public void setIdCantidad(int idCantidad) {
-        this.idCantidad = idCantidad;
+    public void setIdCantidad(int s_idCantidad) {
+        this.s_idCantidad = s_idCantidad;
     }
 
     public double getCantidad() {
-        return cantidad;
+        return s_cantidad;
     }
 
-    public void setCantidad(double cantidad) {
-        this.cantidad = cantidad;
+    public void setCantidad(double s_cantidad) {
+        this.s_cantidad = s_cantidad;
     }
 
     public Ingrediente getIngrediente() {
-        return ingrediente;
+        return s_ingrediente;
     }
 
-    public void setIngrediente(Ingrediente ingrediente) {
-        this.ingrediente = ingrediente;
+    public void setIngrediente(Ingrediente s_ingrediente) {
+        this.s_ingrediente = s_ingrediente;
     }
 
-    public void asignarIngrediente(Ingrediente ingrediente, double cantidad) {
-        this.ingrediente = ingrediente;
-        this.cantidad = cantidad;
+    public void asignarIngrediente(Ingrediente s_ingrediente, double s_cantidad) {
+        this.s_ingrediente = s_ingrediente;
+        this.s_cantidad = s_cantidad;
     }
 
-    public void modificarCantidad(double nuevaCantidad) {
-        this.cantidad = nuevaCantidad;
+    public void modificarCantidad(double s_nuevaCantidad) {
+        this.s_cantidad = s_nuevaCantidad;
     }
 
     public double obtenerCantidad() {
-        return cantidad;
+        return s_cantidad;
     }
 
     public void mostrarInformacion() {

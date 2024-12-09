@@ -8,51 +8,51 @@ package Clases;
 import java.util.ArrayList;
 
 public class Plato {
-    private int idPlato;
-    private String nombre;
-    private ArrayList<Ingrediente> ingredientes;
-    private double precio;
+    private int s_idPlato;
+    private String s_nombre;
+    private ArrayList<Ingrediente> s_ingredientes;
+    private double s_precio;
 
-    public Plato(int idPlato, String nombre, double precio) {
-        this.idPlato = idPlato;
-        this.nombre = nombre;
-        this.ingredientes = new ArrayList<>();
-        this.precio = precio;
+    public Plato(int s_idPlato, String s_nombre, double s_precio) {
+        this.s_idPlato = s_idPlato;
+        this.s_nombre = s_nombre;
+        this.s_ingredientes = new ArrayList<>();
+        this.s_precio = s_precio;
     }
 
     public int getIdPlato() {
-        return idPlato;
+        return s_idPlato;
     }
 
-    public void setIdPlato(int idPlato) {
-        this.idPlato = idPlato;
+    public void setIdPlato(int s_idPlato) {
+        this.s_idPlato = s_idPlato;
     }
 
     public String getNombre() {
-        return nombre;
+        return s_nombre;
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+    public void setNombre(String s_nombre) {
+        this.s_nombre = s_nombre;
     }
 
     public double getPrecio() {
-        return precio;
+        return s_precio;
     }
 
-    public void setPrecio(double precio) {
-        this.precio = precio;
+    public void setPrecio(double s_precio) {
+        this.s_precio = s_precio;
     }
 
     public ArrayList<Ingrediente> getIngredientes() {
-        return ingredientes;
+        return s_ingredientes;
     }
 
     public void mostrarInformacion() {
     }
 
     public boolean verificarDisponibilidad() {
-        for (Ingrediente ingrediente : ingredientes) {
+        for (Ingrediente ingrediente : s_ingredientes) {
             if (!ingrediente.verificarStock()) {
                 return false;
             }

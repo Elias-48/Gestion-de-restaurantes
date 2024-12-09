@@ -5,37 +5,37 @@ package Clases;
  */
 public class Persona {
 
-    protected String nombre;
-    protected String direccion;
-    protected String telefono;
+    protected String s_nombre;
+    protected String s_direccion;
+    protected String s_telefono;
 
-    public Persona(String nombre, String direccion, String telefono) {
-        this.nombre = nombre;
-        this.direccion = direccion;
-        this.telefono = telefono;
+    public Persona(String s_nombre, String s_direccion, String s_telefono) {
+        this.s_nombre = s_nombre;
+        this.s_direccion = s_direccion;
+        this.s_telefono = s_telefono;
     }
 
     public String getNombre() {
-        return nombre;
+        return s_nombre;
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+    public void setNombre(String s_nombre) {
+        this.s_nombre = s_nombre;
     }
 
     public String getDireccion() {
-        return direccion;
+        return s_direccion;
     }
 
-    public void setDireccion(String direccion) {
-        this.direccion = direccion;
+    public void setDireccion(String s_direccion) {
+        this.s_direccion = s_direccion;
     }
 
     public String getTelefono() {
-        return telefono;
+        return s_telefono;
     }
 
-    public void setTelefono(String telefono) {
-        this.telefono = telefono;
+    public void setTelefono(String s_telefono) {
+        this.s_telefono = s_telefono;
     }
 }
