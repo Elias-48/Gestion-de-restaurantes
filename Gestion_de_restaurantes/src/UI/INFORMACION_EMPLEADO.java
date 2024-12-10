@@ -4,7 +4,7 @@
  */
 package UI;
 
-import Clases.Singleton;
+import PatronesDeDiseño.Singleton;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -12,15 +12,13 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+import PatronesDeDiseño.EmpleadoAdapter;
+
 import java.awt.Color;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.List;
 
 /**
  *
@@ -29,9 +27,7 @@ import java.util.List;
 public class INFORMACION_EMPLEADO extends javax.swing.JFrame {
 
     private DefaultTableModel modelo1;
-    private HashSet<String> s_idsUnicos;
-    private HashSet<String> s_correosUnicos;
-    private HashSet<String> s_telefonosUnicos;
+    EmpleadoAdapter empleadoAdapter;
     Connection conet;
     Statement st;
     ResultSet rs;
@@ -41,9 +37,6 @@ public class INFORMACION_EMPLEADO extends javax.swing.JFrame {
     public INFORMACION_EMPLEADO() {
         initComponents();
         modelo1 = new DefaultTableModel();
-        s_idsUnicos = new HashSet<>();
-        s_correosUnicos = new HashSet<>();
-        s_telefonosUnicos = new HashSet<>();
         modelo1.addColumn("ID");
         modelo1.addColumn("CARGO");
         modelo1.addColumn("NOMBRE");
@@ -51,7 +44,7 @@ public class INFORMACION_EMPLEADO extends javax.swing.JFrame {
         modelo1.addColumn("DIRECION");
         modelo1.addColumn("TELEFONO");
         TablaInformacionEmpleados.setModel(modelo1);
-        ordenarTablaPorID();
+        empleadoAdapter = new EmpleadoAdapter(modelo1);
         ConsultarEmpleado();
         // Agregar el evento para detectar clics en las filas
         TablaInformacionEmpleados.addMouseListener(new MouseAdapter() {
@@ -341,19 +334,6 @@ public class INFORMACION_EMPLEADO extends javax.swing.JFrame {
         return;
         }
 
-        // Validación de duplicados usando HashSet
-        if (s_idsUnicos.contains(s_id)) {
-            JOptionPane.showMessageDialog(this, "El ID ya está registrado. Ingrese un ID único.");
-            return;
-        }
-        if (s_correosUnicos.contains(s_gmail)) {
-            JOptionPane.showMessageDialog(this, "El correo ya está registrado. Ingrese un correo único.");
-            return;
-        }
-        if (s_telefonosUnicos.contains(s_telefono)) {
-            JOptionPane.showMessageDialog(this, "El teléfono ya está registrado. Ingrese un teléfono único.");
-            return;
-        }
         // Guardar datos en la base de datos
         try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/restaurante", "root", "")) {
             String sql = "INSERT INTO informacion_empleado (id, cargo, nombre, gmail, direccion, telefono) VALUES (?, ?, ?, ?, ?, ?)";
@@ -374,35 +354,16 @@ public class INFORMACION_EMPLEADO extends javax.swing.JFrame {
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error al guardar en la base de datos: " + e.getMessage());
           return;
-        }
-
-        // Agregar datos al HashSet y actualizar la tabla del JFrame
-        modelo1.addRow(new Object[]{s_id, s_cargo, s_nombre, s_gmail, s_direccion, s_telefono});
-        s_idsUnicos.add(s_id);
-        s_correosUnicos.add(s_gmail);
-        s_telefonosUnicos.add(s_telefono);
-
-        // Ordenar la tabla por ID
-        ordenarTablaPorID();
-        
+        }  
+        empleadoAdapter.agregarEmpleado(txtIDEmpleado.getText(),jComboBoxCargoDelEmpleado.getSelectedItem().toString(),
+            txtNombreEmpleado.getText(),
+            txtCorreo.getText(),
+            txtDirecionEmpleado.getText(),
+            txtTelefonoEmpleado.getText()
+        );
+        JOptionPane.showMessageDialog(this, "Empleado agregado con éxito.");
     }//GEN-LAST:event_btnAgregarActionPerformed
-private void ordenarTablaPorID() {
-        List<Object[]> s_filas = new ArrayList<>();
-        for (int i = 0; i < modelo1.getRowCount(); i++) {
-            s_filas.add(new Object[]{
-                modelo1.getValueAt(i, 0), modelo1.getValueAt(i, 1),
-                modelo1.getValueAt(i, 2), modelo1.getValueAt(i, 3),
-                modelo1.getValueAt(i, 4), modelo1.getValueAt(i, 5)
-            });
-        }
-        
-        s_filas.sort(Comparator.comparingInt(o -> Integer.parseInt(o[0].toString())));
 
-        modelo1.setRowCount(0);  // Limpiar tabla antes de reordenar
-        for (Object[] fila : s_filas) {
-            modelo1.addRow(fila);
-        }
-    }
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
         int s_filaSeleccionada = TablaInformacionEmpleados.getSelectedRow();
         if (s_filaSeleccionada != -1) {
@@ -415,12 +376,12 @@ private void ordenarTablaPorID() {
         String s_telefono = txtTelefonoEmpleado.getText();
 
         // Actualizar la fila de la tabla
-        modelo1.setValueAt(s_id, s_filaSeleccionada, 0);
-        modelo1.setValueAt(s_cargo, s_filaSeleccionada, 1);
-        modelo1.setValueAt(s_nombre, s_filaSeleccionada, 2);
-        modelo1.setValueAt(s_gmail, s_filaSeleccionada, 3);
-        modelo1.setValueAt(s_direccion, s_filaSeleccionada, 4);
-        modelo1.setValueAt(s_telefono, s_filaSeleccionada, 5);
+        empleadoAdapter.editarEmpleado(s_filaSeleccionada, txtIDEmpleado.getText(), jComboBoxCargoDelEmpleado.getSelectedItem().toString(),
+                txtNombreEmpleado.getText(),
+                txtCorreo.getText(),
+                txtDirecionEmpleado.getText(),
+                txtTelefonoEmpleado.getText()
+            );
 
         // Actualizar en la base de datos
         try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/restaurante", "root", "")) {
@@ -455,16 +416,8 @@ private void ordenarTablaPorID() {
         if (s_confirmacion == JOptionPane.YES_OPTION) {
             // Obtener el id, correo y teléfono del empleado a eliminar
             String s_id = modelo1.getValueAt(s_filaSeleccionada, 0).toString();
-            String s_gmail = modelo1.getValueAt(s_filaSeleccionada, 3).toString();
-            String s_telefono = modelo1.getValueAt(s_filaSeleccionada, 5).toString();
-
-            // Eliminar de los HashSets
-            s_idsUnicos.remove(s_id);
-            s_correosUnicos.remove(s_gmail);
-            s_telefonosUnicos.remove(s_telefono);
-
             // Eliminar de la tabla
-            modelo1.removeRow(s_filaSeleccionada);
+            empleadoAdapter.eliminarEmpleado(s_filaSeleccionada);
 
             // Eliminar del SQL
             try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/restaurante", "root", "")) {

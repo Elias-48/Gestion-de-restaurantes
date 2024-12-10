@@ -4,13 +4,15 @@
  */
 package UI;
 
-import Clases.Singleton;
+import PatronesDeDiseño.Singleton;
 import java.awt.Color;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+
+import PatronesDeDiseño.ReservacionAdapter;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -27,6 +29,7 @@ import java.util.Date;
 public class RESERVACION extends javax.swing.JFrame {
 
     DefaultTableModel modelo4 = new DefaultTableModel();
+    ReservacionAdapter reservacionAdapter;
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
     Connection conet;
     Statement st;
@@ -44,6 +47,10 @@ public class RESERVACION extends javax.swing.JFrame {
         modelo4.addColumn("HORA INICIO");
         modelo4.addColumn("HORA FIN");
         TablaReservacion.setModel(modelo4);
+        
+        // Inicializamos el adaptador con el modelo
+        reservacionAdapter = new ReservacionAdapter(modelo4);
+        
         ConsultarReservacion();
 
         // Agregar el evento para detectar clics en las filas
@@ -467,8 +474,10 @@ public class RESERVACION extends javax.swing.JFrame {
             int filasAfectadas = pst.executeUpdate();
             if (filasAfectadas > 0) {
                 // Agregar a la tabla en el JFrame
-                modelo4.addRow(new Object[]{s_idCliente, s_mesa, s_sillas, s_fechaFormateada, s_horaInicio, s_horaFin});
-                JOptionPane.showMessageDialog(this, "Reserva agregada con éxito.");
+                // Usar el adaptador para agregar la reservación
+        reservacionAdapter.addReservacion(s_idCliente, s_mesa, s_sillas, s_fechaFormateada, s_horaInicio, s_horaFin);
+
+        JOptionPane.showMessageDialog(this, "Reserva agregada con éxito.");
             } else {
                 JOptionPane.showMessageDialog(this, "Error al guardar la reserva en la base de datos.");
             }
@@ -523,12 +532,7 @@ public class RESERVACION extends javax.swing.JFrame {
                 int filasAfectadas = pst.executeUpdate();
                 if (filasAfectadas > 0) {
                     // Actualizar en el JTable
-                    modelo4.setValueAt(s_idCliente, s_filaSeleccionada, 0);
-                    modelo4.setValueAt(s_mesa, s_filaSeleccionada, 1);
-                    modelo4.setValueAt(s_sillas, s_filaSeleccionada, 2);
-                    modelo4.setValueAt(s_fechaFormateada, s_filaSeleccionada, 3);
-                    modelo4.setValueAt(s_horaInicio, s_filaSeleccionada, 4);
-                    modelo4.setValueAt(s_horaFin, s_filaSeleccionada, 5);
+                    reservacionAdapter.updateReservacion(s_filaSeleccionada, s_idCliente, s_mesa, s_sillas, s_fechaFormateada, s_horaInicio, s_horaFin);
 
                     JOptionPane.showMessageDialog(this, "Reserva actualizada con éxito.");
                 } else {
@@ -605,7 +609,7 @@ public class RESERVACION extends javax.swing.JFrame {
                     int filasAfectadas = pst.executeUpdate();
                     if (filasAfectadas > 0) {
                         // Eliminar del JTable
-                        modelo4.removeRow(s_filaSeleccionada);
+                        reservacionAdapter.removeReservacion(s_filaSeleccionada);
                         JOptionPane.showMessageDialog(this, "Reserva eliminada con éxito.");
                     } else {
                         JOptionPane.showMessageDialog(this, "No se pudo eliminar la reserva de la base de datos.");

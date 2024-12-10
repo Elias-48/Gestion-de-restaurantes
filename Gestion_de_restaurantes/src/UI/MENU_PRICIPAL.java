@@ -169,6 +169,7 @@ public class MENU_PRICIPAL extends javax.swing.JFrame {
         btnReservaciones.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENES/table_chair_icon_137131.png"))); // NOI18N
         btnReservaciones.setText("   RESERVACIONES");
         btnReservaciones.setBorder(null);
+        btnReservaciones.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnReservaciones.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 btnReservacionesMouseEntered(evt);
@@ -300,7 +301,7 @@ public class MENU_PRICIPAL extends javax.swing.JFrame {
     }//GEN-LAST:event_btnReservacionesMouseEntered
 
     private void btnReservacionesMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnReservacionesMouseExited
-        btnPedidos.setBackground(new Color(255, 153, 0));
+        btnCliente.setBackground(new Color(255, 153, 0));
     }//GEN-LAST:event_btnReservacionesMouseExited
 
     /**

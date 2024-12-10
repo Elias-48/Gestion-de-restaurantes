@@ -4,12 +4,14 @@
  */
 package UI;
 
-import Clases.Singleton;
+import PatronesDeDiseño.Singleton;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+
+import PatronesDeDiseño.MenuPlatosAdapter;
 
 import java.awt.Color;
 import javax.swing.JOptionPane;
@@ -32,6 +34,7 @@ public class MENÚ_PLATOS extends javax.swing.JFrame {
     private DefaultTableModel modelo;
     private HashSet<String> s_idsPlatos;
     private HashSet<String> s_nombresPlatos;
+    MenuPlatosAdapter menuPlatosAdapter;
     Connection conet;
     Statement st;
     ResultSet rs;
@@ -48,6 +51,7 @@ public class MENÚ_PLATOS extends javax.swing.JFrame {
     modelo.addColumn("INGREDIENTES");
     modelo.addColumn("COSTO");
     TablaMenuPlato.setModel(modelo);
+    menuPlatosAdapter = new MenuPlatosAdapter(modelo);
     ConsultarPlatos();
     ordenarTablaPorID();   // Solo ordena la visualización de la tabla, no el modelo
 
@@ -58,12 +62,13 @@ public class MENÚ_PLATOS extends javax.swing.JFrame {
             if (filaVisual >= 0) {
                 // Convertir el índice visual al índice del modelo para acceder correctamente a los datos
                 int filaModelo = TablaMenuPlato.convertRowIndexToModel(filaVisual);
-                
-                // Llenar los campos de texto con los valores de la fila seleccionada
-                txtIdDelPlato.setText(modelo.getValueAt(filaModelo, 0).toString());
-                txtNombreDelPlato.setText(modelo.getValueAt(filaModelo, 1).toString());
-                jTextAreaIngredientes.setText(modelo.getValueAt(filaModelo, 2).toString());
-                txtPrecioDelPlato.setText(modelo.getValueAt(filaModelo, 3).toString());
+                Object[] rowData = menuPlatosAdapter.getRow(filaModelo);
+                if (rowData != null) {
+                    txtIdDelPlato.setText(rowData[0].toString());
+                    txtNombreDelPlato.setText(rowData[1].toString());
+                    jTextAreaIngredientes.setText(rowData[2].toString());
+                    txtPrecioDelPlato.setText(rowData[3].toString());
+                }
             }
         }
     });
@@ -336,7 +341,8 @@ public class MENÚ_PLATOS extends javax.swing.JFrame {
                 // Guardar en la tabla si la inserción fue exitosa
                 s_idsPlatos.add(s_idplato);
                 s_nombresPlatos.add(s_menu);
-                modelo.addRow(new Object[]{s_idplato, s_menu, s_ingredientes, s_costo});
+                Object[] rowData = {s_idplato, s_menu, s_ingredientes, s_costo};
+                menuPlatosAdapter.addRow(rowData); // Usar el adaptador para agregar la fila
                 JOptionPane.showMessageDialog(this, "Plato registrado con éxito en la base de datos y en la tabla.");
                 
                 ordenarTablaPorID(); // Ordenar la tabla después de agregar un nuevo plato
@@ -356,6 +362,7 @@ public class MENÚ_PLATOS extends javax.swing.JFrame {
 
         if (filaSeleccionada >= 0) {
             // Obtener los valores del formulario
+        int filaModelo = TablaMenuPlato.convertRowIndexToModel(filaSeleccionada);
         String s_idPlato = txtIdDelPlato.getText().trim();
         String s_menu = txtNombreDelPlato.getText().trim();
         String s_ingredientes = jTextAreaIngredientes.getText().replace("\n", " | ").trim();
@@ -383,10 +390,8 @@ public class MENÚ_PLATOS extends javax.swing.JFrame {
 
             if (filasAfectadas > 0) {
                 // Actualizar los datos en la tabla de la interfaz
-                modelo.setValueAt(s_idPlato, filaSeleccionada, 0);
-                modelo.setValueAt(s_menu, filaSeleccionada, 1);
-                modelo.setValueAt(s_ingredientes, filaSeleccionada, 2);
-                modelo.setValueAt(s_costo, filaSeleccionada, 3);
+                Object[] rowData = {s_idPlato, s_menu, s_ingredientes, s_costo};
+                menuPlatosAdapter.updateRow(filaModelo, rowData); // Usar el adaptador para actualizar
 
                 JOptionPane.showMessageDialog(this, "Plato editado con éxito en la base de datos.");
             } else {
@@ -431,7 +436,8 @@ public class MENÚ_PLATOS extends javax.swing.JFrame {
 
                 if (filasAfectadas > 0) {
                     // Eliminar la fila seleccionada en la tabla de la interfaz
-                    modelo.removeRow(filaSeleccionada);
+                     int filaModelo = TablaMenuPlato.convertRowIndexToModel(filaSeleccionada);
+                     menuPlatosAdapter.removeRow(filaModelo); // Usar el adaptador para eliminar
 
                     // Mensaje de éxito
                     JOptionPane.showMessageDialog(this, "Plato eliminado con éxito de la base de datos.");

@@ -1,13 +1,16 @@
-
-package Clases;
-/**
- *
- * @author JUAN CARLOS HENRY
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
+package PatronesDeDiseño;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-
+/**
+ *
+ * @author Henry
+ */
 public class Singleton {
     // Parámetros de conexión
     private final String url = "jdbc:mysql://localhost:3306/restaurante?useSSL=false&serverTimezone=UTC";
@@ -16,15 +19,15 @@ public class Singleton {
     private Connection con;
 
     // Instancia única de la clase Conexion (Singleton)
-    private static Singleton instancia;
+    private static PatronesDeDiseño.Singleton instancia;
 
     // Constructor privado para evitar la creación directa de instancias
     private Singleton() {}
 
     // Método para obtener la instancia de Conexion
-    public static Singleton getInstance() {
+    public static PatronesDeDiseño.Singleton getInstance() {
         if (instancia == null) {
-            instancia = new Singleton();
+            instancia = new PatronesDeDiseño.Singleton();
         }
         return instancia;
     }

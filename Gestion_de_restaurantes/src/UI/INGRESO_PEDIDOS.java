@@ -4,12 +4,14 @@
  */
 package UI;
 
-import Clases.Singleton;
+import PatronesDeDiseño.Singleton;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+
+import PatronesDeDiseño.PedidosAdapter;
 
 import java.awt.Color;
 import javax.swing.JOptionPane;
@@ -30,6 +32,7 @@ public class INGRESO_PEDIDOS extends javax.swing.JFrame {
     private TableRowSorter<DefaultTableModel> sorter;
 
     DefaultTableModel modelo3 = new DefaultTableModel();
+    PedidosAdapter pedidosAdapter;
     Connection conet;
     Statement st;
     ResultSet rs;
@@ -48,6 +51,9 @@ public class INGRESO_PEDIDOS extends javax.swing.JFrame {
         modelo3.addColumn("TOTAL");
         modelo3.addColumn("DETALLE");
         TablaIngresoDePedidos.setModel(modelo3);
+        // Inicializar el adapter
+        pedidosAdapter = new PedidosAdapter(modelo3);
+        
         ConsultarPedidos();
         ordenarTablaPorID();
         // Agregar el evento para detectar clics en las filas
@@ -363,7 +369,7 @@ public class INGRESO_PEDIDOS extends javax.swing.JFrame {
                 int filasAfectadas = pst.executeUpdate();
                 if (filasAfectadas > 0) {
                     // Guardar en la tabla si la inserción fue exitosa
-                    modelo3.addRow(new Object[]{s_idpedido, s_idcliente, s_nombrePlato, s_precioUni, s_cantidadplato, s_total, s_detalle});
+                    pedidosAdapter.agregarPedido(s_idpedido, s_idcliente, s_nombrePlato, String.valueOf(s_precioUni), s_cantidadplato, String.valueOf(s_total), s_detalle);
                     JOptionPane.showMessageDialog(this, "Pedido registrado con éxito en la base de datos y en la tabla.");
                 } else {
                     JOptionPane.showMessageDialog(this, "Error al registrar el pedido en la base de datos.");
@@ -402,7 +408,7 @@ public class INGRESO_PEDIDOS extends javax.swing.JFrame {
                 int s_filasAfectadas = pst.executeUpdate();
                 if (s_filasAfectadas > 0) {
                     // Eliminar la fila de la tabla visual
-                    modelo3.removeRow(s_filaSeleccionada);
+                    pedidosAdapter.eliminarPedido(s_filaSeleccionada);
                     JOptionPane.showMessageDialog(this, "Registro eliminado correctamente.");
                 } else {
                     JOptionPane.showMessageDialog(this, "No se pudo eliminar el registro en la base de datos.");
@@ -431,6 +437,7 @@ public class INGRESO_PEDIDOS extends javax.swing.JFrame {
         String s_idpedido = txtPedido.getText();
         String s_idCliente = txtCliente.getText();
         String s_nombrePlato = txtNombreDelPlato.getText();
+        String s_cantidadplato = txtNumDePlato.getText().trim();
         String s_precioPlato = buscarPrecioPorNombrePlato(s_nombrePlato);
 
         if (s_precioPlato != null) {
@@ -444,17 +451,11 @@ public class INGRESO_PEDIDOS extends javax.swing.JFrame {
                 String s_detalle = TextAreaDetalleDelPlato.getText();
 
                 // Actualizar en la tabla (JTable)
-                modelo3.setValueAt(s_idpedido, s_filaSeleccionada, 0); // Pedido
-                modelo3.setValueAt(s_idCliente, s_filaSeleccionada, 1); // Cliente
-                modelo3.setValueAt(s_nombrePlato, s_filaSeleccionada, 2); // Nombre del plato
-                modelo3.setValueAt(s_precioPlato, s_filaSeleccionada, 3); // Precio unitario
-                modelo3.setValueAt(txtNumDePlato.getText(), s_filaSeleccionada, 4); // Cantidad de platos
-                modelo3.setValueAt(s_total, s_filaSeleccionada, 5); // Total
-                modelo3.setValueAt(s_detalle, s_filaSeleccionada, 6); // Detalle
+                pedidosAdapter.editarPedido(s_filaSeleccionada, s_idpedido, s_idCliente, s_nombrePlato, String.valueOf(s_precio), s_cantidadplato, String.valueOf(s_total), s_detalle);
 
                 // Actualizar en la base de datos
                 Connection con = Singleton.getInstance().getConnection();
-                String sql = "UPDATE ingreso_pedidos SET s_idcliente = ?, menu = ?, precio_uni = ?, cantidad = ?, total = ?, detalle = ? WHERE idpedido = ?";
+                String sql = "UPDATE ingreso_pedidos SET idcliente = ?, menu = ?, precio_uni = ?, cantidad = ?, total = ?, detalle = ? WHERE idpedido = ?";
                 PreparedStatement pst = con.prepareStatement(sql);
                 pst.setString(1, s_idCliente); // ID del cliente
                 pst.setString(2, s_nombrePlato); // Nombre del plato

@@ -4,22 +4,21 @@
  */
 package UI;
 
-import Clases.Singleton;
+import PatronesDeDiseño.Singleton;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.sql.PreparedStatement;
+
+import PatronesDeDiseño.ClienteAdapter;
 
 import java.awt.Color;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
 import java.util.HashSet;
 
@@ -34,6 +33,7 @@ private DefaultTableModel model;
 private HashSet<String> s_idsClientes = new HashSet<>();
 private HashSet<String> s_correosClientes = new HashSet<>();
 private HashSet<String> s_telefonoSet = new HashSet<>();
+ClienteAdapter clienteAdapter;
     Connection conet;
     Statement st;
     ResultSet rs;
@@ -55,6 +55,8 @@ private HashSet<String> s_telefonoSet = new HashSet<>();
     s_idsClientes = new HashSet<>();
     s_correosClientes = new HashSet<>();
     s_telefonoSet = new HashSet<>();
+    
+    clienteAdapter = new ClienteAdapter(model);
     ConsultarCliente();
     
         // Agregar el evento para detectar clics en las filas
@@ -324,11 +326,7 @@ private HashSet<String> s_telefonoSet = new HashSet<>();
         String s_telefono = txtTelefono.getText().trim();
 
         // Actualizar los valores en el modelo de la tabla
-        model.setValueAt(s_id, filaSeleccionada, 0);
-        model.setValueAt(s_nombre, filaSeleccionada, 1);
-        model.setValueAt(s_gmail, filaSeleccionada, 2);
-        model.setValueAt(s_direccion, filaSeleccionada, 3);
-        model.setValueAt(s_telefono, filaSeleccionada, 4);
+        clienteAdapter.updateCliente(filaSeleccionada, s_id, s_nombre, s_gmail, s_direccion, s_telefono);
 
         // Realizar la actualización en la base de datos
         String sql = "UPDATE registro_clientes SET NOMBRE = ?, GMAIL = ?, DIRECCION = ?, TELEFONO = ? WHERE ID = ?";
@@ -401,7 +399,7 @@ private HashSet<String> s_telefonoSet = new HashSet<>();
         JOptionPane.showMessageDialog(this, "Por favor, complete todos los campos.");
     } else {
         // Agregar una nueva fila a la tabla si todo está correcto
-        model.addRow(new Object[]{s_id, s_nombre, s_gmail, s_direccion, s_telefono});
+        clienteAdapter.addCliente(s_id, s_nombre, s_gmail, s_direccion, s_telefono);
 
         // Agregar a los conjuntos para evitar duplicados
         s_idsClientes.add(s_id);
@@ -503,7 +501,7 @@ private HashSet<String> s_telefonoSet = new HashSet<>();
                                                           "Confirmar eliminación", JOptionPane.YES_NO_OPTION);
         if (confirmacion == JOptionPane.YES_OPTION) {
             // Eliminar el registro de la tabla en la interfaz gráfica
-            model.removeRow(filaSeleccionada);
+            clienteAdapter.removeCliente(filaSeleccionada);
 
             // Eliminar del TreeSet
             s_idsClientes.remove(id);
